@@ -1,0 +1,38 @@
+#+TITLE: Imageboard
+#+SUBTITLE: A Linkspace Application Tutorial
+#+AUTHOR: Anton Sol
+
+#+SETUPFILE: ../org-utils.org
+
+#+BEGIN_VERSE
+Available in the [[https://github.com/AntonSol919/linkspace/releases][pkg]] or in repository/examples
+#+END_VERSE
+
+#+begin_ctabs
+#+begin_sh
+
+- placing images
+#+INCLUDE: "../../linkspace/examples/imageboard/imageboard.place.sh" src bash
+
+- viewing images
+#+INCLUDE: "../../linkspace/examples/imageboard/imageboard.view.sh" src bash
+
+- streaming images
+#+INCLUDE: "../../linkspace/examples/imageboard/imageboard.stream.sh" src bash
+#+end_sh
+
+
+#+begin_py
+This is a straight-up translation of the bash script.
+It works, but it could be done better by having only a single python instance running.
+- placing images
+#+INCLUDE: "../../linkspace/examples/imageboard/imageboard.place.py" src bash
+
+- viewing images
+#+INCLUDE: "../../linkspace/examples/imageboard/imageboard.view.py" src bash
+
+- streaming images
+#+INCLUDE: "../../linkspace/examples/imageboard/imageboard.stream.py" src bash
+#+end_py
+
+#+end_ctabs
