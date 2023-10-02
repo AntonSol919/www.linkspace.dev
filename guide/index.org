@@ -7,7 +7,7 @@
 
 #+BEGIN_VERSE
 This document is kept up to date on a best effort basis.
-Sometimes the Rust [[../cargo-doc/linkspace/index.html][linkspace]] docs is ahead of this guide.
+Sometimes the Rust [[../docs/rust/linkspace/index.html][linkspace]] docs is ahead of this guide.
 #+END_VERSE
 
 This is a technical document describing the linkspace packet format, and software library to create, query, and process packets.
@@ -109,7 +109,7 @@ It consists of the following:
 :END:
 
 #+BEGIN_VERSE
-[[../cargo-doc/linkspace/point/index.html][Rust docs]]
+[[../docs/rust/linkspace/point/index.html][Rust docs]]
 #+END_VERSE
 
 Points are the basic units in linkspace.
@@ -388,7 +388,7 @@ In the latter, an application does not have to deal with IO sockets directly.
 :END:
 
 #+BEGIN_VERSE
-[[../cargo-doc/linkspace/abe/index.html][Rust docs]]
+[[../docs/rust/linkspace/abe/index.html][Rust docs]]
 #+END_VERSE
 
 ABE (Ascii-Byte-Expr) is a tiny language-agnostic byte templating engine.
@@ -800,7 +800,7 @@ By default [[lk_key]] sets up the ~[@:me:local]~ identity.
 
 
 #+BEGIN_VERSE
-[[../cargo-doc/linkspace/query/index.html][Rust docs]]
+[[../docs/rust/linkspace/query/index.html][Rust docs]]
 #+END_VERSE
 
 A query is a list of predicates and options used to define a set of packets.
@@ -1049,8 +1049,8 @@ The full list of options and predicates:
 #+begin_ctabs
 #+begin_rs
 
-Current set of [[../cargo-doc/linkspace/query/enum.PredicateType.html][predicates]] and 
-[[../cargo-doc/linkspace/query/enum.KnownOptions.html][options]].
+Current set of [[../docs/rust/linkspace/query/enum.PredicateType.html][predicates]] and 
+[[../docs/rust/linkspace/query/enum.KnownOptions.html][options]].
 
 Unknown options are added but ignored by most library functions.
 This allows other processes to add additional options it understands.
@@ -1082,7 +1082,7 @@ If you expect the value to be known locally [[lk_get_hash]] is faster.
 :CUSTOM_ID: runtime 
 :END:
 #+BEGIN_VERSE
-[[../cargo-doc/linkspace/linkspace/index.html][Rust docs]]
+[[../docs/rust/linkspace/linkspace/index.html][Rust docs]]
 #+END_VERSE
 
 You can open/create a instance with [[lk_open]].
@@ -1108,7 +1108,7 @@ Update the transaction and process all the new packets ([[lk_process]],[[lk_proc
 This runs all functions registered as a watch.
 Only after that is the thread's view of the database updated to the latest state.
 
-The [[../cargo-doc/linkspace/linkspace/index.html][Rust docs]] are currently the most up to date, but the python package has most functions typed and commented as well.
+The [[../docs/rust/linkspace/linkspace/index.html][Rust docs]] are currently the most up to date, but the python package has most functions typed and commented as well.
 
 ** lk_open
 :PROPERTIES:
@@ -1167,7 +1167,7 @@ The [[../cargo-doc/linkspace/linkspace/index.html][Rust docs]] are currently the
 :CUSTOM_ID: Conventions
 :END:
 #+BEGIN_VERSE
-[[../cargo-doc/linkspace/conventions/index.html][Rust docs]]
+[[../docs/rust/linkspace/conventions/index.html][Rust docs]]
 #+END_VERSE
 
 Conventions are functions built on top of the other linkspace functions.
