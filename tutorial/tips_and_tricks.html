@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-09-22 Fri 10:14 -->
+<!-- 2023-10-02 Mon 16:44 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tips &amp; Tricks</title>
@@ -26,27 +26,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgcbc05c4">layout for the 'tree' btreemap</a></li>
-<li><a href="#org9a8c400">dot graph</a></li>
-<li><a href="#orgdb725e5">Reading/Writing large files</a></li>
-<li><a href="#orga3cc7cd">A poor man's REPL</a></li>
-<li><a href="#org001d90a">Single thread performance:</a></li>
+<li><a href="#org27a8c61">layout for the 'tree' btreemap</a></li>
+<li><a href="#org99dc503">dot graph</a></li>
+<li><a href="#org26e08a4">Reading/Writing large files</a></li>
+<li><a href="#org7c6ff07">A poor man's REPL</a></li>
+<li><a href="#orge5e6be8">Single thread performance:</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-orgcbc05c4" class="outline-2">
-<h2 id="orgcbc05c4">layout for the 'tree' btreemap</h2>
-<div class="outline-text-2" id="text-orgcbc05c4">
+<div id="outline-container-org27a8c61" class="outline-2">
+<h2 id="org27a8c61">layout for the 'tree' btreemap</h2>
+<div class="outline-text-2" id="text-org27a8c61">
 <pre class="example">
 lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [spacename:str] [pubkey:str] :: { [create:str] [hash:str] [recv:str] }"
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org9a8c400" class="outline-2">
-<h2 id="org9a8c400">dot graph</h2>
-<div class="outline-text-2" id="text-org9a8c400">
+<div id="outline-container-org99dc503" class="outline-2">
+<h2 id="org99dc503">dot graph</h2>
+<div class="outline-text-2" id="text-org99dc503">
 <pre class="example">
 lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [spacename:str] [pubkey:str] :: { [create:str] [hash:str] [recv:str] }"
 </pre>
@@ -54,9 +54,9 @@ lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[
 </div>
 
 
-<div id="outline-container-orgdb725e5" class="outline-2">
-<h2 id="orgdb725e5">Reading/Writing large files</h2>
-<div class="outline-text-2" id="text-orgdb725e5">
+<div id="outline-container-org26e08a4" class="outline-2">
+<h2 id="org26e08a4">Reading/Writing large files</h2>
+<div class="outline-text-2" id="text-org26e08a4">
 <pre class="example">
 export FILE=$2
 export CHAN=${3:-default}
@@ -78,9 +78,9 @@ lk --env watch "blobs:$LK_GROUP:/[env:CHAN]/[env:FILE]" --max 1 | \
 
 
 
-<div id="outline-container-orga3cc7cd" class="outline-2">
-<h2 id="orga3cc7cd">A poor man's REPL</h2>
-<div class="outline-text-2" id="text-orga3cc7cd">
+<div id="outline-container-org7c6ff07" class="outline-2">
+<h2 id="org7c6ff07">A poor man's REPL</h2>
+<div class="outline-text-2" id="text-org7c6ff07">
 <pre class="example">
 lk eval [argv:-1] argv -D'\n' --data-eval --data-stdin 
 </pre>
@@ -102,9 +102,9 @@ prints <code>The value of [1] = hello world</code>
 </div>
 </div>
 
-<div id="outline-container-org001d90a" class="outline-2">
-<h2 id="org001d90a">Single thread performance:</h2>
-<div class="outline-text-2" id="text-org001d90a">
+<div id="outline-container-orge5e6be8" class="outline-2">
+<h2 id="orge5e6be8">Single thread performance:</h2>
+<div class="outline-text-2" id="text-orge5e6be8">
 <p>
 FIXME: The debug build is significant slower - especially for keypoint:
 </p>
@@ -123,7 +123,7 @@ lk keypoint :: --password "my secret" --data-reads 1000 --create-int 0 --multi -
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-09-22 Fri 10:14</p>
+<p class="date">Created: 2023-10-02 Mon 16:44</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

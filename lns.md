@@ -24,7 +24,7 @@ Both publicly by registering, and privately for your own convenience.
 - @:me:local
 
 The top level names :local, :file , :env, and :pub are special.
-You can take a look on how it integrates with linkspace in the [guide](./docs/guide/index.html#ABELNS).
+You can take a look on how it integrates with linkspace in the [guide](./guide/index.html#ABELNS).
 
 ### What does a registration do?
 

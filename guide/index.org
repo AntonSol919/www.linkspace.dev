@@ -632,7 +632,7 @@ Having a linkspace runtime in the scope gives you access to functions like:
 - ~#~ and ~@~ ( see [[LNS]] ) for named groups, keys, and other data
 - ~readhash~
 
-When using [[lk_open]] , the instance is automatically setup as scope.
+The first instance of [[lk_open]] is used in the default (thread local).
 
 ~readhash~ is considered bad practice, fine to hack something together, but it doesn't give you much room to process errors or async.
 But you can do some wizardry combining it with ~[/links]~.

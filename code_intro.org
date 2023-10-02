@@ -197,7 +197,7 @@ The log-index is ordered by receive order, the hash-index by the point hash, and
 The database is always accessed through the runtime. 
 The runtime lets multiple processes/threads can read, write, and watch for new points.
 
-The library API uses callbacks and a user-driven eventloop ([[./docs/guide/index.html#runtime][guide]]).
+The library API uses callbacks and a user-driven eventloop ([[./guide/index.html#runtime][guide]]).
 `lk` is focused on piping packets.
 Commands are `watch-log`, `watch-tree`, `watch-hash`. These are shorthand for  `watch --mode ..`.
 
@@ -334,7 +334,7 @@ If no group is specified (like we've been doing) the public group is used.
 #+END_SRC
 
 #+BEGIN_VERSE
-See [[./docs/guide/index.html#ABE][ABE]] for more on the `[..]` syntax. 
+See [[./guide/index.html#ABE][ABE]] for more on the `[..]` syntax. 
 Its a small byte templating language included in the library for convenience with the syntax being the same for all programming language.
 ABE is also heavily used for CLI arguments, e.g. `lk linkpoint :: --stamp [now]` or `[now:+2h]`
 #+END_VERSE
@@ -366,7 +366,7 @@ Filters work on these mutable bytes as well.
 This let you quickly build specific network topologies.
 
 #+BEGIN_VERSE
-See [[./docs/guide/index.html#mutable][the guide]] for the mutable field names.
+See [[./guide/index.html#mutable][the guide]] for the mutable field names.
 #+END_VERSE
 
 #+name: exchange
@@ -389,8 +389,8 @@ One such convention is the `pull` convention. This writes a query as a specific 
   lk pull imageboard:: --write stdout | lk p "[spacename:str]\n\n[data]"
 #+END_SRC
 
-The goal of `pull` is to allow one process, e.g. an application like [[./docs/tutorial/imageboard.html][imageboard (bash)]] or [[./docs/tutorial/mineweeper-1.html][mineweeper (python)]]
-to signal another process, e.g. a group exchange process like  [[./docs/tutorial/bash.exchange.html][bash.exchange]],
+The goal of `pull` is to allow one process, e.g. an application like [[./tutorial/imageboard.html][imageboard (bash)]] or [[./tutorial/mineweeper-1.html][mineweeper (python)]]
+to signal another process, e.g. a group exchange process like  [[./tutorial/bash.exchange.html][bash.exchange]],
 that it wants packets matching a query from the group.
 
 Queries define a 'set of points' in linkspace.
@@ -409,5 +409,5 @@ Queries are designed such that joining two query strings the result is the commo
 #+END_SRC
 
 That's it for this quick introduction.
-Some notes on high level algorithm [[https://www.linkspace.dev/docs/tutorial/application-design.html][design]] are worth a read.  
-For a more in-depth technical guide or the library API see the [[./docs/guide/index.html][Guide]].
+Some notes on high level algorithm [[https://www.linkspace.dev/tutorial/application-design.html][design]] are worth a read.  
+For a more in-depth technical guide or the library API see the [[./guide/index.html][Guide]].

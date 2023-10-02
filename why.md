@@ -277,7 +277,7 @@ LNS solves a similar problem as DNS, i.e. instead of using a number like `192.16
 
 Finally, in our example so far I used a <span id="hh1">[HASH]</span> directly in the data field.
 This would not work well for most use-cases.
-Instead, a point in linkspace has a list of [links](./docs/guide/index.html#lk_linkpoint) adjacent to the data.
+Instead, a point in linkspace has a list of [links](./guide/index.html#lk_linkpoint) adjacent to the data.
 
 :::{.container}
 +---------------------+----------------------+-------------------------------+--------------------+
@@ -317,7 +317,7 @@ Each application defines its own data format and what tags mean.
 
 [^4]: Both TCP/IP packets and linkspace packets have control fields that are irrelevant to a vast majority of developers.
 
-For the full specification of creating and writing points see the [guide](./docs/guide/index.html#packet_layout)
+For the full specification of creating and writing points see the [guide](./guide/index.html#packet_layout)
 
 There are some nuances and various advanced topics.
 However, this should be enough to reason about the basics:
@@ -329,7 +329,7 @@ Users generate their identity and form groups to exchange points.
 The result is that _conceptually_ an application only needs to process its view of a shared space.
 
 To give linkspace a try [Download](https://github.com/AntonSol919/linkspace/releases) the latest release,
-and check out the examples or the (python) [tutorials](./docs/tutorial/index.html).
+and check out the examples or the (python) [tutorials](./tutorial/index.html).
 
 # Q&A
 
