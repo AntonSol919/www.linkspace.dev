@@ -4,8 +4,8 @@
 		<title>Linkspace</title>
 		 <link rel="icon" type="image/x-icon" href="./images/logo.png">
 		 <link rel="stylesheet" href="./style.css"/>
-     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source Code Pro">
-	<body>
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source%20Code%20Pro">
+	  <body>
 		 <a id="name" href="./index.html">
        <img id="logo" src="./images/logo.svg"/>Linkspace</a>
 		<div id="tagline"></div>

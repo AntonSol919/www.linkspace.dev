@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["lk_pull"],"mod":["status"]};
+window.SIDEBAR_ITEMS = {"mod":["pull","status"]};

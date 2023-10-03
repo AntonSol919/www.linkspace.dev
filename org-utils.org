@@ -3,7 +3,7 @@
 #+OPTIONS: H:4 num:nil \n:nil ::nil |:t ^:{}  *:t author:nil email:nil creator:nil 
 #+OPTIONS: html-style:nil
 
-#+HTML_HEAD: <link rel="icon" type="image/x-icon" href="../../images/logo.png">
+#+HTML_HEAD: <link rel="icon" type="image/x-icon" href="/images/logo.png">
 
 #+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="./style.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
@@ -16,7 +16,7 @@
 
 #+HTML_HEAD: <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
 #+HTML_HEAD: <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-#+HTML_HEAD: <script type="text/javascript" src="./org-utils.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="../org-utils.js"></script>
 
 
 

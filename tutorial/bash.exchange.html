@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-10-02 Mon 16:44 -->
+<!-- 2023-10-03 Tue 11:22 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>A bash exchange example</title>
 <meta name="generator" content="Org Mode" />
-<link rel="icon" type="image/x-icon" href="../../images/logo.png">
+<link rel="icon" type="image/x-icon" href="/images/logo.png">
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -15,7 +15,7 @@
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-<script type="text/javascript" src="./org-utils.js"></script>
+<script type="text/javascript" src="../org-utils.js"></script>
 <link rel="stylesheet" type="text/css" href="./style.css"/>
 </head>
 <body>
@@ -27,8 +27,8 @@
 Available in the <a href="https://github.com/AntonSol919/linkspace/releases">pkg</a> or in repository/linkspace/examples/<br>
 </p>
 
-<div class="ctabs" id="orge3cd102">
-<div class="info" id="org663ec1e">
+<div class="ctabs" id="orgdb68450">
+<div class="info" id="org5edc51d">
 <p class="verse">
 Available in the repo/linkspace/examples/<br>
 See repo/dev/exchange.md for some open design issues/notes.<br>
@@ -41,7 +41,7 @@ It does no pruning before sending or receiving.
 </p>
 
 </div>
-<div class="sh" id="orgb253102">
+<div class="sh" id="org67859b4">
 <p>
 
 </p>
@@ -91,7 +91,7 @@ LAST_RX=$(lk --private watch --max 1 ":[#:0]:/rxlog/$THEIR_KEY" | lk pktf [creat
 LAST_TX=$(lk --private watch --max 1 ":[#:0]:/txlog/$THEIR_KEY" | lk pktf [create:str])
 lk eval "last rx [u64:$LAST_RX/us:str]\nlast tx [u64:$LAST_TX/us:str]\n"
 
-lk set-status exchange $LK_GROUP process anyhost-client --data-str "$(lk e "OK\nPID:$$\nSESSION:$SESSION")" --data-repeat &amp;
+lk status set exchange $LK_GROUP process anyhost-client --data-str "$(lk e "OK\nPID:$$\nSESSION:$SESSION")" --data-repeat &amp;
 
 export LK_SKIP_HASH=true
 
@@ -174,7 +174,7 @@ function fin (){
 }
 trap "fin" EXIT
 
-lk set-status exchange $LK_GROUP process anyhost-client --data-str "$(lk e "OK\nPID:$$\nwe're hosting")" --data-repeat &amp;
+lk status set exchange $LK_GROUP process anyhost-client --data-str "$(lk e "OK\nPID:$$\nwe're hosting")" --data-repeat &amp;
 
 socat tcp-listen:$PORT,fork exec:"anyhost.handshake.sh serve anyhost.serve-io.sh",fdout=4 &amp;
 
@@ -242,7 +242,7 @@ wait -n
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-10-02 Mon 16:44</p>
+<p class="date">Created: 2023-10-03 Tue 11:22</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-10-02 Mon 16:44 -->
+<!-- 2023-10-03 Tue 11:22 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tips &amp; Tricks</title>
 <meta name="generator" content="Org Mode" />
-<link rel="icon" type="image/x-icon" href="../../images/logo.png">
+<link rel="icon" type="image/x-icon" href="/images/logo.png">
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -15,7 +15,7 @@
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-<script type="text/javascript" src="./org-utils.js"></script>
+<script type="text/javascript" src="../org-utils.js"></script>
 <link rel="stylesheet" type="text/css" href="./style.css"/>
 </head>
 <body>
@@ -26,27 +26,27 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org27a8c61">layout for the 'tree' btreemap</a></li>
-<li><a href="#org99dc503">dot graph</a></li>
-<li><a href="#org26e08a4">Reading/Writing large files</a></li>
-<li><a href="#org7c6ff07">A poor man's REPL</a></li>
-<li><a href="#orge5e6be8">Single thread performance:</a></li>
+<li><a href="#orge8da080">layout for the 'tree' btreemap</a></li>
+<li><a href="#orgd94f224">dot graph</a></li>
+<li><a href="#org01f2b67">Reading/Writing large files</a></li>
+<li><a href="#orge8073e5">A poor man's REPL</a></li>
+<li><a href="#org85e848c">Single thread performance:</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org27a8c61" class="outline-2">
-<h2 id="org27a8c61">layout for the 'tree' btreemap</h2>
-<div class="outline-text-2" id="text-org27a8c61">
+<div id="outline-container-orge8da080" class="outline-2">
+<h2 id="orge8da080">layout for the 'tree' btreemap</h2>
+<div class="outline-text-2" id="text-orge8da080">
 <pre class="example">
 lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [spacename:str] [pubkey:str] :: { [create:str] [hash:str] [recv:str] }"
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org99dc503" class="outline-2">
-<h2 id="org99dc503">dot graph</h2>
-<div class="outline-text-2" id="text-org99dc503">
+<div id="outline-container-orgd94f224" class="outline-2">
+<h2 id="orgd94f224">dot graph</h2>
+<div class="outline-text-2" id="text-orgd94f224">
 <pre class="example">
 lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [spacename:str] [pubkey:str] :: { [create:str] [hash:str] [recv:str] }"
 </pre>
@@ -54,9 +54,9 @@ lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[
 </div>
 
 
-<div id="outline-container-org26e08a4" class="outline-2">
-<h2 id="org26e08a4">Reading/Writing large files</h2>
-<div class="outline-text-2" id="text-org26e08a4">
+<div id="outline-container-org01f2b67" class="outline-2">
+<h2 id="org01f2b67">Reading/Writing large files</h2>
+<div class="outline-text-2" id="text-org01f2b67">
 <pre class="example">
 export FILE=$2
 export CHAN=${3:-default}
@@ -78,9 +78,9 @@ lk --env watch "blobs:$LK_GROUP:/[env:CHAN]/[env:FILE]" --max 1 | \
 
 
 
-<div id="outline-container-org7c6ff07" class="outline-2">
-<h2 id="org7c6ff07">A poor man's REPL</h2>
-<div class="outline-text-2" id="text-org7c6ff07">
+<div id="outline-container-orge8073e5" class="outline-2">
+<h2 id="orge8073e5">A poor man's REPL</h2>
+<div class="outline-text-2" id="text-orge8073e5">
 <pre class="example">
 lk eval [argv:-1] argv -D'\n' --data-eval --data-stdin 
 </pre>
@@ -102,9 +102,9 @@ prints <code>The value of [1] = hello world</code>
 </div>
 </div>
 
-<div id="outline-container-orge5e6be8" class="outline-2">
-<h2 id="orge5e6be8">Single thread performance:</h2>
-<div class="outline-text-2" id="text-orge5e6be8">
+<div id="outline-container-org85e848c" class="outline-2">
+<h2 id="org85e848c">Single thread performance:</h2>
+<div class="outline-text-2" id="text-org85e848c">
 <p>
 FIXME: The debug build is significant slower - especially for keypoint:
 </p>
@@ -123,7 +123,7 @@ lk keypoint :: --password "my secret" --data-reads 1000 --create-int 0 --multi -
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-10-02 Mon 16:44</p>
+<p class="date">Created: 2023-10-03 Tue 11:22</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

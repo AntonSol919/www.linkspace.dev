@@ -4,8 +4,8 @@
 		<title>Linkspace</title>
 		 <link rel="icon" type="image/x-icon" href="./images/logo.png">
 		 <link rel="stylesheet" href="./style.css"/>
-     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source Code Pro">
-	<body>
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source%20Code%20Pro">
+	  <body>
 		 <a id="name" href="./index.html">
        <img id="logo" src="./images/logo.svg"/>Linkspace</a>
 		<div id="tagline"></div>
@@ -49,7 +49,7 @@
       a more detailed explanation check out the guide.</p>
       <div class="sourceCode" id="version"><pre
       class="sourceCode bash"><code class="sourceCode bash"><span id="version-1"><a href="#version-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> <span class="at">--version</span></span></code></pre></div>
-      <pre class="example"><code>linkspace-cli linkspace-cli - 0.4.0 - main - a5d257c - 1.74.0-nightly
+      <pre class="example"><code>linkspace-cli linkspace-cli - 0.4.0 - deny_missing_docs - 0cce343 - 1.74.0-nightly
 </code></pre>
       <h1 id="point">Point</h1>
       <p>A single unit|event|message in linkspace is called a `point`. A
@@ -80,9 +80,9 @@
       class="sourceCode bash"><code class="sourceCode bash"><span id="pktf-1"><a href="#pktf-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;Hash: [hash:str] is a point at &#39;[spacename:str]&#39; with data &#39;[data]&#39;&quot;</span></span></code></pre></div>
       <pre class="example"><code>Hash: Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk is a point at &#39;&#39; with data &#39;Hello, Sol!
 &#39;
-Hash: LKel7c_Df4CmxUSjrMXVBoF_iob2qSrZsrUgjCQd1IQ is a point at &#39;/my/example/spacename&#39; with data &#39;some data&#39;
-Hash: v-_GMW835ojvcBarqFfDD4YEdWxdmvWB4x1mAslrees is a point at &#39;/my/example/other_space&#39; with data &#39;&#39;
-Hash: zxHjSFhHYH_HsxDVQR9L8swqErDOnxlDdYRHoT6MY3Q is a point at &#39;/my/example/spacename/subspace&#39; with data &#39;&#39;
+Hash: 9TYkQm06BnL3h24QOAM8mJ1OMbP8Bh5G7cBC_As4HC8 is a point at &#39;/my/example/spacename&#39; with data &#39;some data&#39;
+Hash: T87F_cDWdCu-LeYFuc7ao8oiApou2SemzScUn-dl-xI is a point at &#39;/my/example/other_space&#39; with data &#39;&#39;
+Hash: IUU1hD6QIV1UoQDhPYWHZ58DTJ9H_pDHXpmc1wvaQfQ is a point at &#39;/my/example/spacename/subspace&#39; with data &#39;&#39;
 </code></pre>
       <p>Because these properties are adjacent to 'data', they can be
       used for indexing and processing by general purpose tools like `lk
@@ -91,8 +91,8 @@ Hash: zxHjSFhHYH_HsxDVQR9L8swqErDOnxlDdYRHoT6MY3Q is a point at &#39;/my/example
       `/my/example` and 1 additional component</p>
       <div class="sourceCode" id="filter"><pre
       class="sourceCode bash"><code class="sourceCode bash"><span id="filter-1"><a href="#filter-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> filter ::/my/example:<span class="pp">*</span> <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[hash:str] [spacename:str]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>LKel7c_Df4CmxUSjrMXVBoF_iob2qSrZsrUgjCQd1IQ /my/example/spacename
-v-_GMW835ojvcBarqFfDD4YEdWxdmvWB4x1mAslrees /my/example/other_space
+      <pre class="example"><code>9TYkQm06BnL3h24QOAM8mJ1OMbP8Bh5G7cBC_As4HC8 /my/example/spacename
+T87F_cDWdCu-LeYFuc7ao8oiApou2SemzScUn-dl-xI /my/example/other_space
 </code></pre>
       <p>Points are addressable by their hash. To reference one point
       from another you add a link. Each link is a 16 byte tag and 32
@@ -124,7 +124,7 @@ v-_GMW835ojvcBarqFfDD4YEdWxdmvWB4x1mAslrees /my/example/other_space
       default.</p>
       <div class="sourceCode" id="point-stdin"><pre
       class="sourceCode bash"><code class="sourceCode bash"><span id="point-stdin-1"><a href="#point-stdin-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> somedata <span class="kw">|</span> <span class="ex">lk</span> linkpoint ::/my/other_spacename <span class="at">--data-stdin</span> <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[hash:str] = [data]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>XziQ1_IiwFhPAZOEzp4uhuFnTV4KQwnb0nRNzLaFm-U = somedata
+      <pre class="example"><code>UnoeIZCT2DMlGWKwmrnRB2ipC4bZTYCbowSkIB0Qyyw = somedata
 </code></pre>
       <h1 id="database">Database</h1>
       <p>Linkspace is primarily its packet format. Using the database is
@@ -135,7 +135,7 @@ v-_GMW835ojvcBarqFfDD4YEdWxdmvWB4x1mAslrees /my/example/other_space
       class="sourceCode bash"><code class="sourceCode bash"><span id="db-init-1"><a href="#db-init-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LK_DIR</span><span class="op">=</span>/tmp/linkspace <span class="kw">;</span> </span>
 <span id="db-init-2"><a href="#db-init-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> init <span class="kw">;</span> </span>
 <span id="db-init-3"><a href="#db-init-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> save <span class="op">&gt;</span> /dev/null <span class="kw">;</span> </span></code></pre></div>
-      <pre class="example"><code>LkInfo { dir: &quot;/tmp/linkspace&quot; }
+      <pre class="example"><code>LkInfo { kind: &quot;lmdb&quot;, dir: &quot;/tmp/linkspace&quot; }
 </code></pre>
       <p>Instead of using `save` you can set a write destinations
       directly.</p>
@@ -156,7 +156,7 @@ v-_GMW835ojvcBarqFfDD4YEdWxdmvWB4x1mAslrees /my/example/other_space
       `watch-hash`. These are shorthand for `watch –mode ..`.</p>
       <div class="sourceCode" id="watchtree"><pre
       class="sourceCode bash"><code class="sourceCode bash"><span id="watchtree-1"><a href="#watchtree-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> watch-tree ::/my:<span class="pp">**</span> <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[spacename:str]&quot;</span> <span class="op">&gt;</span> ./watching <span class="kw">&amp;</span></span></code></pre></div>
-      <pre class="example"><code>[1] 12369
+      <pre class="example"><code>[1] 7310
 </code></pre>
       <div class="sourceCode" id="react"><pre
       class="sourceCode bash"><code class="sourceCode bash"><span id="react-1"><a href="#react-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ./watching</span></code></pre></div>
@@ -217,7 +217,7 @@ v-_GMW835ojvcBarqFfDD4YEdWxdmvWB4x1mAslrees /my/example/other_space
       <div class="sourceCode" id="watch-tree"><pre
       class="sourceCode bash"><code class="sourceCode bash"><span id="watch-tree-1"><a href="#watch-tree-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> watch-tree <span class="st">&quot;imageboard::&quot;</span> <span class="at">--max</span> 1 <span class="dt">\</span></span>
 <span id="watch-tree-2"><a href="#watch-tree-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[hash:str] has the links:\n [links]&quot;</span> </span></code></pre></div>
-      <pre class="example"><code>t9b9NVMEsPMaYH4TTUJuLrRcsUTXdc_5u81FAkdkFGI has the links:
+      <pre class="example"><code>s4C_5CSYqs2nTAR8Y7ozON8F9hGPndU2HfOebVcVmj8 has the links:
  0000003000000200:Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4
 </code></pre>
       <div class="line-block">You should always quote your
@@ -243,7 +243,7 @@ v-_GMW835ojvcBarqFfDD4YEdWxdmvWB4x1mAslrees /my/example/other_space
 <span id="get-links-2"><a href="#get-links-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">lk</span> get-links pause <span class="dt">\</span></span>
 <span id="get-links-3"><a href="#get-links-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[hash:str]&quot;</span></span></code></pre></div>
       <pre class="example"><code>Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4
-t9b9NVMEsPMaYH4TTUJuLrRcsUTXdc_5u81FAkdkFGI
+s4C_5CSYqs2nTAR8Y7ozON8F9hGPndU2HfOebVcVmj8
 </code></pre>
       <p>To complete the imageboard application we'll have to add a few
       more steps to merge the data into a single picture. See the

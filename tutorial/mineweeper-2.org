@@ -6,7 +6,6 @@
 
 #+HTML_HEAD: <link rel="icon" type="image/x-icon" href="../../../images/logo.png">
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./style.css"/>
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="./mineweeper.css"/>
 
 
 #+begin_py

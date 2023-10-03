@@ -1,6 +1,8 @@
 .PHONY: all homepage rust-docs tutorials guide 
 
 all: homepage rust-docs tutorials guide 
+	echo "Use 'python -m http.server' before deadseeker"
+	./build-scripts/deadseeker.py
 
 rust-docs: 
 	cargo doc --manifest-path ../linkspace/Cargo.toml -p linkspace --target-dir ./build --no-deps

@@ -1,0 +1,496 @@
+# Created 2023-10-03 Tue 11:08
+#+options: toc:nil
+#+title: Quick start
+#+author: R.A. Sol
+#+pandoc_options: template:./template.pml
+This introduction uses the `lk` cli with bash.
+You can follow along by [[https://github.com/AntonSol919/linkspace/releases][downloading]] the latest release. 
+If you're more comfortable with Python or want a more detailed explanation check out the guide.  
+
+#+name: version
+#+begin_src bash
+  lk --version
+#+end_src
+
+#+results: version
+#+begin_example
+  linkspace-cli linkspace-cli - 0.4.0 - deny_missing_docs - 0cce343 - 1.74.0-nightly
+#+end_example
+
+* Point
+
+A single unit|event|message in linkspace is called a `point`.
+A point can hold just shy of 64kb.
+
+#+name: point-hello
+#+begin_src bash
+  echo "Hello, Sol!" | lk point > mylog
+#+end_src
+
+#+results: point-hello
+
+Points have a few of optional properties besides the data field.
+
+a spacename:
+#+name: point-spacename
+#+begin_src bash
+  echo -n some data | lk point ::/my/example/spacename --data-stdin >> mylog
+#+end_src
+
+#+results: point-spacename
+
+a timestamp in microseconds since epoch using `now` by default:
+
+#+name: point-create
+#+begin_src bash
+  STAMP=$(($(date +%s%N)/1000000)) # There's an easier syntax we'll get back to.
+  lk point ::/my/example/other_space --create-int $STAMP >> mylog
+#+end_src
+
+#+results: point-create
+
+and a signature:
+
+#+name: point-signed
+#+begin_src bash
+  # We don't have a linkspace instance yet - we can still sign packets by creating/providing an Argon2 encrypted key
+  KEY=$(lk key --no-pubkey --no-lk --password 'my secret') 
+  lk point ::/my/example/spacename/subspace --sign --enckey "$KEY" --password 'my secret' >> mylog
+#+end_src
+All points are hashed using Blake3. 
+
+*Point's refer to the hashed fields/data. The point, hash, and a header are packed into the packet format. Functions/APIs deal exclusively in the packet format.*
+
+`pktf` formats a stream of packets.
+
+#+name: pktf
+#+begin_src bash
+  cat mylog | lk pktf "Hash: [hash:str] is a point at '[spacename:str]' with data '[data]'"
+#+end_src
+
+#+results: pktf
+#+begin_example
+  Hash: Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk is a point at '' with data 'Hello, Sol!
+  '
+  Hash: cv3h4z-ZTMdOIMmztHkhgKgKGKawwTRBbydolJ1Mr8Y is a point at '/my/example/spacename' with data 'some data'
+  Hash: i8VCnLq_h6DunJW5jpJ6vBc21wJ5ihjVBkvInxIwIjM is a point at '/my/example/other_space' with data ''
+  Hash: Xsk5vZ6Komf3Mk11h5PA7n2nr8j-IAHNBSY6NZCXl-4 is a point at '/my/example/spacename/subspace' with data ''
+#+end_example
+
+Because these properties are adjacent to 'data', they can be used for indexing and processing by
+general purpose tools like `lk filter`. 
+
+Here we take only the points with a spacename starting with `/my/example` and 1 additional component
+
+#+name: filter
+#+begin_src bash
+  cat mylog | lk filter ::/my/example:* | lk pktf "[hash:str] [spacename:str]"
+#+end_src
+
+#+results: filter
+#+begin_example
+  cv3h4z-ZTMdOIMmztHkhgKgKGKawwTRBbydolJ1Mr8Y /my/example/spacename
+  i8VCnLq_h6DunJW5jpJ6vBc21wJ5ihjVBkvInxIwIjM /my/example/other_space
+#+end_example
+
+Points are addressable by their hash.
+To reference one point from another you add a link. 
+Each link is a 16 byte tag and 32 byte hash value.
+Tags can be anything. If less than 16 bytes are supplied it is left-padded with 0's.
+
+#+name: links
+#+begin_src bash
+  HASH=($(cat mylog | lk pktf [hash:str]))
+  lk point "::/my/example/link" -- "my first link:${HASH[0]}" "other link:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk" >> mylog
+#+end_src
+
+#+results: links
+
+You can get fancy with `pktf` and `xargs`.
+
+#+name: links-xargs
+#+begin_src bash
+  cat mylog | lk pktf "mytag:[hash:str]" | xargs lk point ::/my/example/link -- >> mylog
+#+end_src
+
+#+results: links-xargs
+
+A tool like `lk collect` has a few additional options for building points linking to other points.
+However, the `lk` binary is meant to do simple things.
+Use the library and a better programming language when doing non-trivial stuff.
+
+#+begin_HTML
+<details>
+<summary>
+Click here to see a graphical representation of mylog
+</summary>
+#+end_HTML
+
+#+results[90f12bcc59ff34a48f195bd9828668f6c5653d6d]: graph-mylog
+[[file:images/mylog-dot.svg]]
+
+
+#+begin_HTML
+</details>
+#+end_HTML
+
+Creating packets with `lk point` detects what kind you're trying to build.
+But it is better to be explicit. The 3 types of points are:
+`datapoint`, `linkpoint`, or `keypoint` (a signed linkpoint).
+
+NOTE: linkpoint and keypoint do not read data from stdin by default.
+
+#+name: point-stdin
+#+begin_src bash
+  echo somedata | lk linkpoint ::/my/other_spacename --data-stdin | lk pktf "[hash:str] = [data]"
+#+end_src
+
+#+results: point-stdin
+#+begin_example
+  R5o7B815so3Uow7K9p7U-IciKzKoVCGblCdelU7hDF0 = somedata
+#+end_example
+
+
+* Database
+
+Linkspace is primarily its packet format.
+Using the database is optional.
+
+The database and other tools exists to make it easier to build complex systems and packet flows.
+
+#+name: db-init
+#+begin_src bash
+  export LK_DIR=/tmp/linkspace ; 
+  lk init ; 
+  cat mylog | lk save > /dev/null ; 
+#+end_src
+
+#+results: db-init
+#+begin_example
+  LkInfo { kind: "lmdb", dir: "/tmp/linkspace" }
+#+end_example
+
+Instead of using `save` you can set a write destinations directly.
+
+#+name: write
+#+begin_src bash
+  echo hello world | lk point --write db --write file:mylog --write stdout | lk pktf [data]
+#+end_src
+
+#+results: write
+#+begin_example
+  hello world
+#+end_example
+
+The database has three indices. 
+A 'log', 'hash', and the 'tree' index. 
+The log-index is ordered by receive order, the hash-index by the point hash, and the tree-index primarily by a point's [spacename, create stamp] (see the guide for full details).
+
+The database is always accessed through the runtime. 
+The runtime lets multiple processes/threads can read, write, and watch for new points.
+
+The library API uses callbacks and a user-driven eventloop ([[file:./guide/index.html#runtime][guide]]).
+`lk` is focused on piping packets.
+Commands are `watch-log`, `watch-tree`, `watch-hash`. These are shorthand for  `watch --mode ..`.
+
+#+name: watchtree
+#+begin_src bash
+  lk watch-tree ::/my:** | lk pktf "[spacename:str]" > ./watching &
+#+end_src
+
+#+results: watchtree
+#+begin_example
+  [1] 24152
+#+end_example
+
+#+name: react
+#+begin_src bash
+  cat ./watching
+#+end_src
+
+#+results: react
+#+begin_example
+  /my/example/link
+  /my/example/link
+  /my/example/spacename
+  /my/example/other_space
+  /my/example/spacename/subspace
+#+end_example
+
+Adding a new point
+
+#+name: watch-write
+#+begin_src bash
+  lk linkpoint ::/my/my/my --write db
+#+end_src
+
+#+results: watch-write
+
+Wakes the watching threads to output the new point.
+
+#+name: react2
+#+begin_src bash
+  cat ./watching
+#+end_src
+
+#+results: react2
+#+begin_example
+  /my/example/link
+  /my/example/link
+  /my/example/spacename
+  /my/example/other_space
+  /my/example/spacename/subspace
+  /my/my/my
+#+end_example
+
+* Applications
+
+There are two optional fields included in the hash not yet shown. 
+The domain and group.
+
+The domain is analogous to a IP port. 
+An application pick a domain name (max 16 bytes).
+For example `imageboard`.
+
+#+begin_verse
+`pktf` is common enough to have the alias `lk p`.
+#+end_verse
+
+#+name: domain
+#+begin_src bash
+  lk linkpoint imageboard:: | lk p "[domain:str]"
+#+end_src
+
+#+results: domain
+#+begin_example
+  imageboard
+#+end_example
+
+Groups indicate the set of intended recipients.
+If a group exchange process is running, an application doesn't have to deal with sockets, (HTTP) endpoints, or other IO except for the user interface.
+The application can read, write, request from the group, and process packets using just the linkspace library. 
+
+Building an application is done by mapping an application state to and from linkspace packets (in the database).
+For example, a drawing application where multiple people can paint to a shared image board.
+A simple mapping could be: 
+
+- Images data are saved as data points
+- Every link in a linkpoint is: a hash to an image, and a tag holding (x,y) coordinates.
+
+Adding an image might look something like: 
+
+#+name: tuxpng
+#+begin_src bash
+  X=30 ; Y=200 ; IMG="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" ; 
+  curl -s $IMG | lk datapoint > tux.pkt
+  IMG_HASH=$(cat tux.pkt | lk p "[hash:str]")
+  lk linkpoint imageboard:: -- $(printf "%08d%08d" "$X" "$Y"):$IMG_HASH >> tux.pkt
+  lk save --pkts ./tux.pkt # Instead of `cat` we can provide a file
+#+end_src
+
+#+results: tuxpng
+
+Building an image requires the program to watch for new packets in `imageboard::`, and on every (new) point draw over the image.
+
+#+name: watch-tree
+#+begin_src bash
+  lk watch-tree "imageboard::" --max 1 \
+     | lk p "[hash:str] has the links:\n [links]" 
+#+end_src
+
+#+results: watch-tree
+#+begin_example
+  7wxKY_bcTNTbfMntyBX2k_ykREbvv1rfpIs1BsuAIIM has the links:
+   0000003000000200:Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4
+#+end_example
+
+#+begin_verse
+You should always quote your arguments.
+Otherwise, the previous example would not have worked.
+Without the quotes the characters `[lin` in "[links]" would be interpreted by the default bash shell.
+#+end_verse
+
+A link might reference a point that is not (yet) available on the device.
+An application has to decide how to handle the situation.
+In this example we'll just wait. 
+Waiting can be done manually. e.g.
+
+#+name: watch-tree-links
+#+begin_src bash
+  lk watch-tree "imageboard::" --max 1 \
+     | lk p "[links]" \
+     | cut -d':' -f2 \
+     | xargs -i lk watch-hash "{}" \
+     | lk pktf "got point [hash:str] which has [data_size:str] bytes"
+#+end_src
+
+#+results: watch-tree-links
+#+begin_example
+  got point Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4 which has 49983 bytes
+#+end_example
+
+Or use `lk get-links`. It has a few common strategies.
+
+#+name: get-links
+#+begin_src bash
+  lk watch-tree "imageboard::" --max 1 \
+      | lk get-links pause \
+      | lk pktf "[hash:str]"
+#+end_src
+
+#+results: get-links
+#+begin_example
+  Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4
+  7wxKY_bcTNTbfMntyBX2k_ykREbvv1rfpIs1BsuAIIM
+#+end_example
+
+To complete the imageboard application we'll have to add a few more steps to merge the data into a single picture.
+See the tutorial for an example on doing this and more. 
+
+The final piece of the puzzle is the group field. 
+A group is 32 bytes to signal the intended set of recipients. 
+It is orthogonal to the domain field, as the application should not care which group its running in.
+
+#+name: group
+#+begin_src bash
+  PUB=$(echo "Hello, Sol!" | lk data | lk pktf "[hash:str]")
+  lk linkpoint :$PUB:/example | lk p "[group:str]"
+#+end_src
+
+#+results: group
+#+begin_example
+  Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk
+#+end_example
+
+If no group is specified (like we've been doing) the public group is used.
+
+#+name: group-str
+#+begin_src bash
+  lk linkpoint :[#:pub]:/example  | lk p "[group:str]" 
+#+end_src
+
+#+results: group-str
+#+begin_example
+  Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk
+#+end_example
+
+#+begin_verse
+See [[file:./guide/index.html#ABE][ABE]] for more on the `[..]` syntax. 
+Its a small byte templating language included in the library for convenience with the syntax being the same for all programming language.
+ABE is also heavily used for CLI arguments, e.g. `lk linkpoint :: --stamp [now]` or `[now:+2h]`
+#+end_verse
+
+The other special group is `[0;32]`, also called the private group.
+You can refer to it with the expression `[#:0]`.
+Functions/subcommands that read/write existing points skip and/or warn whenever a point from the private group is seen unless enabled with `--private`.
+
+#+name: private
+#+begin_src bash
+  lk linkpoint domain:[#:0] | lk save 2>&1 # creating a packet is ok - but receving is not accepted by `lk save` without --private
+#+end_src
+
+#+results: private
+#+begin_example
+  error: Args { inner: ["/home/rs/Projects/linkspace/target/debug/lk", "save"] }
+  Pkt(
+      PrivateGroup,
+  )
+#+end_example
+
+A system to exchange points in a group can be made from scratch.
+Linkspace does not prescribe a way to do so.
+Each group / network is different, and no single solution can cover every situation.
+
+For example, use `lk watch imageboard:$MYGROUP | ...` and forward the entire stream to another device using netcat/socat, ssh, email, http, a USB stick,
+or other way to exchange bytes. 
+
+Linkspace is designed to only ever be a streams of packets,
+without additional overhead of a (custom) serialization formats. 
+As evident by the 'mylog' file we have used thus far.
+This keeps streams compatible with all tools that process streams.
+
+To that end, each packet has a mutable header excluded from the hash. 
+
+Filters work on these mutable bytes as well.
+This let you quickly build specific network topologies.
+
+#+begin_verse
+See [[file:./guide/index.html#mutable][the guide]] for the mutable field names.
+#+end_verse
+
+#+name: exchange
+#+begin_src
+  netcat 10.0.0.1 -p 6000 | lk route ubits0:=:0000 | lk save & # get packets from a host and set their ubits0 to 0000
+  netcat 10.0.2.0 -p 6000 | lk route ubits0:=:0001 | lk save & # get packets from another host and set their ubits0 to 0001
+  lk linkpoint example::/hello | lk route ubits0:=:0002 | lk save # save my packets with ubits 0002
+  lk watch-log --asc example::/hello -- "ubits0:>:0000" | nc 10.0.0.1 -p 6000  & # forward all packets with ubits0 higher than 0000 back to host. 
+#+end_src
+
+A single linkspace instance can be used by multiple applications on device, and connect to others.
+To that end there are some conventions.
+These are functions that create/watch for point with some predefined spacename, links, and data format.
+Conventions enable interoperability between multiple applications and background processes.
+
+One such convention is the `pull` convention. This writes a query as a specific point.
+
+#+name: pull
+#+begin_src bash
+  lk pull imageboard:: --write stdout | lk p "[spacename:str]\n\n[data]"
+#+end_src
+
+#+results: pull
+#+begin_example
+  /pull/[b:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk]/[a:imageboard]/default
+
+  :qid:default
+  type:1:[b2:00000010]
+  domain:=:[a:imageboard]
+  group:=:[b:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk]
+  depth:=:[u8:0]
+#+end_example
+
+The goal of `pull` is to allow one process, e.g. an application like [[file:./tutorial/imageboard.html][imageboard (bash)]] or [[file:./tutorial/mineweeper-1.html][mineweeper (python)]]
+to signal another process, e.g. a group exchange process like  [[file:./tutorial/bash.exchange.html][bash.exchange]],
+that it wants packets matching a query from the group.
+
+Queries define a 'set of points' in linkspace.
+The `filter` and `watch` commands are syntax sugar over queries.
+You can add `--print-query` to those commands to see the query used.
+
+Queries are designed such that joining two query strings the result is the common subset of both or an error if the union is empty.
+
+#+name: q1
+#+begin_src bash
+  lk print-query example::/ok 
+#+end_src
+
+#+results: q1
+#+begin_example
+  :mode:tree-desc
+  type:1:[b2:00000010]
+  domain:=:[a:example]
+  group:=:[b:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk]
+  prefix:=:/ok
+  depth:=:[u8:1]
+#+end_example
+
+#+name: q2
+#+begin_src bash
+  lk print-query example::/ok -- "spacename:=:/not_ok"
+#+end_src
+
+#+results: q2
+#+begin_example
+  error: Args { inner: ["/home/rs/Projects/linkspace/target/debug/lk", "print-query", "example::/ok", "--", "spacename:=:/not_ok"] }
+  Error {
+      context: "Error adding rule \'spacename\'",
+      source: Error {
+          context: "spacename:=:/not_ok",
+          source: "space prefix conflict",
+      },
+  }
+#+end_example
+
+That's it for this quick introduction.
+Some notes on high level algorithm [[https://www.linkspace.dev/tutorial/application-design.html][design]] are worth a read.  
+For a more in-depth technical guide or the library API see the [[file:./guide/index.html][Guide]].

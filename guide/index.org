@@ -672,6 +672,7 @@ One option is to use ~[/:..]~ to read ':' and '/' as is.
 :END:
 
 A full list of active scopes can be viewed with the ~help~ function.
+
 #+BEGIN_ctabs
 #+begin_misc
 #+BEGIN_VERSE
@@ -749,8 +750,6 @@ It allows you to register as ~@:Alice:nl~, ~#:sales:company:com~, etc.
 
 LNS is easy to use from an abe expression.
 Both to lookup and do a reverse lookup.
-
-See [[../../lns.html][lns]] for info.
 
 #+BEGIN_VERSE
 You can create local bindings, allowing you to reference ~[@:my_identity:local]~ or ~[#:friends:local]~
@@ -1082,7 +1081,7 @@ If you expect the value to be known locally [[lk_get_hash]] is faster.
 :CUSTOM_ID: runtime 
 :END:
 #+BEGIN_VERSE
-[[../docs/rust/linkspace/linkspace/index.html][Rust docs]]
+[[../docs/rust/linkspace/index.html][Rust docs]]
 #+END_VERSE
 
 You can open/create a instance with [[lk_open]].
@@ -1108,7 +1107,7 @@ Update the transaction and process all the new packets ([[lk_process]],[[lk_proc
 This runs all functions registered as a watch.
 Only after that is the thread's view of the database updated to the latest state.
 
-The [[../docs/rust/linkspace/linkspace/index.html][Rust docs]] are currently the most up to date, but the python package has most functions typed and commented as well.
+The [[../docs/rust/linkspace/index.html][Rust docs]] are currently the most up to date, but the python package has most functions typed and commented as well.
 
 ** lk_open
 :PROPERTIES:
@@ -1244,7 +1243,6 @@ Read ( or creates ) an encrypted private key using the local LNS. It can then be
 :CUSTOM_ID: lns
 :END:
 
-See [[../../lns.html][LNS]] for some general information.
 See [[#ABELNS][abe#lns]] for how to use LNS for lookup and reverse lookup.
 
 The LNS system works by making a claim in ~lns:[#:pub]:/claim/test/example/john~ which we'll call ~$Claim1~
@@ -1352,3 +1350,4 @@ All could be solved in a number of ways, but most solutions are quickly going to
 depending on the context.
 
 linkspace queries support arbitrary bytes, can be constraint/tested through concatenation, and have a consistent meaning w.r.t. predicates and can easily be expanded with options.
+
