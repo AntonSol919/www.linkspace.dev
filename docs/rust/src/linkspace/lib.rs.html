@@ -1162,13 +1162,52 @@
 <a href="#1162" id="1162">1162</a>
 <a href="#1163" id="1163">1163</a>
 <a href="#1164" id="1164">1164</a>
+<a href="#1165" id="1165">1165</a>
+<a href="#1166" id="1166">1166</a>
+<a href="#1167" id="1167">1167</a>
+<a href="#1168" id="1168">1168</a>
+<a href="#1169" id="1169">1169</a>
+<a href="#1170" id="1170">1170</a>
+<a href="#1171" id="1171">1171</a>
+<a href="#1172" id="1172">1172</a>
+<a href="#1173" id="1173">1173</a>
+<a href="#1174" id="1174">1174</a>
+<a href="#1175" id="1175">1175</a>
+<a href="#1176" id="1176">1176</a>
+<a href="#1177" id="1177">1177</a>
+<a href="#1178" id="1178">1178</a>
+<a href="#1179" id="1179">1179</a>
+<a href="#1180" id="1180">1180</a>
+<a href="#1181" id="1181">1181</a>
+<a href="#1182" id="1182">1182</a>
+<a href="#1183" id="1183">1183</a>
+<a href="#1184" id="1184">1184</a>
+<a href="#1185" id="1185">1185</a>
+<a href="#1186" id="1186">1186</a>
+<a href="#1187" id="1187">1187</a>
+<a href="#1188" id="1188">1188</a>
+<a href="#1189" id="1189">1189</a>
+<a href="#1190" id="1190">1190</a>
+<a href="#1191" id="1191">1191</a>
+<a href="#1192" id="1192">1192</a>
+<a href="#1193" id="1193">1193</a>
+<a href="#1194" id="1194">1194</a>
+<a href="#1195" id="1195">1195</a>
+<a href="#1196" id="1196">1196</a>
+<a href="#1197" id="1197">1197</a>
+<a href="#1198" id="1198">1198</a>
+<a href="#1199" id="1199">1199</a>
+<a href="#1200" id="1200">1200</a>
+<a href="#1201" id="1201">1201</a>
+<a href="#1202" id="1202">1202</a>
+<a href="#1203" id="1203">1203</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright Anton Sol
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
-// #![deny(missing_docs, missing_debug_implementations)]
-</span><span class="attr">#![feature(
+</span><span class="attr">#![deny(missing_docs, missing_debug_implementations)]
+#![feature(
     thread_local,
     write_all_vectored,
     control_flow_enum,
@@ -1199,17 +1238,17 @@ Some internals structs defs are currently leaking and will be removed.
         byte_fmt::{endian_types, AB, B64},
         core::env::RecvPktPtr,
         pkt::{
-            ab, as_abtxt_c, rspace1, rspace_buf, now, repr::PktFmt, space_buf, try_ab, Domain,
-            Error <span class="kw">as </span>PktError, GroupID, RootedSpace, RootedSpaceBuf, RootedStaticSpace, Link, LkHash, NetFlags, NetPkt,
-            NetPktArc, NetPktBox, NetPktExt, NetPktHeader, NetPktParts, NetPktPtr, SpaceError,
-            Point, PointExt, PointTypeFlags, PubKey, Space, SpaceBuf, SigningExt, SigningKey,
-            Stamp, Tag,
+            ab, as_abtxt_c, now, repr::PktFmt, rspace1, rspace_buf, space_buf, try_ab, Domain,
+            Error <span class="kw">as </span>PktError, GroupID, Link, LkHash, NetFlags, NetPkt, NetPktArc, NetPktBox,
+            NetPktExt, NetPktHeader, NetPktParts, NetPktPtr, Point, PointExt, PointTypeFlags,
+            PubKey, RootedSpace, RootedSpaceBuf, RootedStaticSpace, SigningExt, SigningKey, Space,
+            SpaceBuf, SpaceError, Stamp, Tag,
         },
         thread_local::{domain, group, set_domain, set_group},
     };
 }
-<span class="kw">use </span>prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>linkspace_common::pkt;
+<span class="kw">use </span>prelude::<span class="kw-2">*</span>;
 
 <span class="kw">pub use </span>prelude::SigningKey;
 
@@ -1227,7 +1266,7 @@ Some internals structs defs are currently leaking and will be removed.
     # use linkspace::{*,prelude::*,abe::*};
     # fn main() -&gt; LkResult{
     let datap = lk_datapoint(b&quot;Some data&quot;)?;
-    assert_eq!(datap.hash().to_string(), &quot;ay01_aEzVcp0scyCgKqfugoQSXGW4iefLgAZRxRp9sY&quot;);
+    assert_eq!(datap.hash().to_string(), &quot;ATE6XG70_mx-kV2GCZUIkNijcPa8gd1-C3OYu1pXqcU&quot;);
     assert_eq!(datap.data() , b&quot;Some data&quot;);
     # Ok(())}
     ```
@@ -1255,9 +1294,9 @@ Some internals structs defs are currently leaking and will be removed.
     ];
     let data = b&quot;extra data for the linkpoint&quot;;
     let create = Some(U64::new(0)); // None == Some(now()).
-    let linkpoint = lk_linkpoint(ab(b&quot;mydomain&quot;),PUBLIC,&amp;space,&amp;links,data,create)?;
+    let linkpoint = lk_linkpoint(data,ab(b&quot;mydomain&quot;),PUBLIC,&amp;space,&amp;links,create)?;
 
-    assert_eq!(linkpoint.hash().to_string(), &quot;zvyWklJrmEHBQfYBLxYh7Gh-3YOTCFRgyuXaGl6-xt8&quot;);
+    assert_eq!(linkpoint.hash().to_string(),&quot;IdnnQjgxJLGxLZGKdaXWVxc82-U8KyJoyKK3sKlD8Lc&quot;);
     assert_eq!(linkpoint.data(), data);
     assert_eq!(*linkpoint.get_group(), PUBLIC);
 
@@ -1373,7 +1412,7 @@ ABE is a byte templating language.
 See guide#ABE to understand its use and indepth explanation.
  **/
 </span><span class="kw">pub mod </span>abe {
-    <span class="kw">use </span><span class="self">self</span>::ctx::UserData;
+    <span class="kw">use </span><span class="self">self</span>::scope::UserData;
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="kw">pub use </span>linkspace_common::pkt::repr::DEFAULT_PKT;
@@ -1385,10 +1424,11 @@ See guide#ABE to understand its use and indepth explanation.
     <span class="doccomment">/**
     Evaluate an expression and return the bytes
 
-    Optionally add a `pkt` as a context.
-    &#39;:&#39; and &#39;/&#39; outside of &#39;[&#39; and &#39;]&#39; read as plain bytes.
-    Set parse_unencoded to true to read bytes outside the range 0x20..0xfe as-is. i.e. useful for contemplating with newlines and utf8.
+    Print a list of active scopes with help by using `lk_eval(&quot;[help]&quot;)`
+
+    Optionally add a `pkt` in the scope.
     See [lk_tokenize_abe] for different delimiter behavior
+    See [lk_eval_loose] that is less strict on its input
 
     ```
     # use linkspace::{*,prelude::*,abe::*};
@@ -1419,7 +1459,7 @@ See guide#ABE to understand its use and indepth explanation.
     let result = lk_eval( &quot;You can provide an argv [0] [1]&quot; , &amp;[b&quot;like&quot; as &amp;[u8], b&quot;this&quot;])?;
     assert_eq!(result,   b&quot;You can provide an argv like this&quot;);
 
-    let lp : NetPktBox = lk_linkpoint(ab(b&quot;mydomain&quot;),PUBLIC,RootedSpace::empty(),&amp;[],&amp;[],None)?;
+    let lp : NetPktBox = lk_linkpoint(&amp;[],ab(b&quot;mydomain&quot;),PUBLIC,RootedSpace::empty(),&amp;[],None)?;
     let pkt: &amp;dyn NetPkt = &amp;lp;
 
     assert_eq!( lk_eval( &quot;[hash]&quot; , pkt)?,&amp;*pkt.hash());
@@ -1430,7 +1470,7 @@ See guide#ABE to understand its use and indepth explanation.
     assert_eq!( by_arg, as_field);
 
     // or provide both at once with (pkt,&amp;[b&quot;argv&quot;])
-    // More options are available in [varctx]
+    // More options are available in [varscope]
 
     // escaped characters
     assert_eq!( lk_eval( r#&quot;\n\t\:\/\\\[\]&quot;# ,())?,  &amp;[b&#39;\n&#39;,b&#39;\t&#39;,b&#39;:&#39;,b&#39;/&#39;,b&#39;\\&#39;,b&#39;[&#39;,b&#39;]&#39;] );
@@ -1439,14 +1479,26 @@ See guide#ABE to understand its use and indepth explanation.
     # }
     ```
 
-    A list of functions can be found with ```lk_eval(&quot;[help]&quot;)```
     **/
-    </span><span class="kw">pub fn </span>lk_eval&lt;<span class="lifetime">&#39;o</span>&gt;(
-        expr: <span class="kw-2">&amp;</span>str,
-        udata: <span class="kw">impl </span>Into&lt;UserData&lt;<span class="lifetime">&#39;o</span>&gt;&gt;,
-        parse_unencoded: bool,
-    ) -&gt; LkResult&lt;Vec&lt;u8&gt;&gt; {
-        varctx::lk_eval(ctx::ctx(udata.into())<span class="question-mark">?</span>, expr, parse_unencoded)
+    </span><span class="kw">pub fn </span>lk_eval&lt;<span class="lifetime">&#39;o</span>&gt;(expr: <span class="kw-2">&amp;</span>str, udata: <span class="kw">impl </span>Into&lt;UserData&lt;<span class="lifetime">&#39;o</span>&gt;&gt;) -&gt; LkResult&lt;Vec&lt;u8&gt;&gt; {
+        varscope::lk_eval(scope::scope(udata.into())<span class="question-mark">?</span>, expr, <span class="bool-val">false</span>)
+    }
+
+    <span class="doccomment">/**
+    Same as lk_eval but accepts bytes outside the range 0x20..0xfe as-is.
+    useful for templating with newlines and utf bytes.
+
+    This distinction exists because UTF has a bunch of characters that can hide a surprise - lk_eval input and lk_encode output is only ever ascii.
+    ```
+    # use linkspace::{*,prelude::*,abe::*};
+    # fn main() -&gt; LkResult{
+    assert_eq!( &quot;abc 🔗🔗&quot;.as_bytes() as &amp;[u8], &amp;lk_eval_loose( &quot;abc 🔗🔗&quot; ,())?, );
+    assert_eq!( &quot;\0\0\0\0\0\0\0\0\0\0\0\0🔗 4036990103&quot;.as_bytes() as &amp;[u8], &amp;lk_eval_loose( &quot;[a:🔗] [:🔗/?u]&quot;,())?, );
+    # Ok(())}
+    ```
+    **/
+    </span><span class="kw">pub fn </span>lk_eval_loose&lt;<span class="lifetime">&#39;o</span>&gt;(expr: <span class="kw-2">&amp;</span>str, udata: <span class="kw">impl </span>Into&lt;UserData&lt;<span class="lifetime">&#39;o</span>&gt;&gt;) -&gt; LkResult&lt;Vec&lt;u8&gt;&gt; {
+        varscope::lk_eval(scope::scope(udata.into())<span class="question-mark">?</span>, expr, <span class="bool-val">true</span>)
     }
     <span class="doccomment">/**
     An abe parser. Useful to split a cli argument like &#39;domain:[#:test]:/thing/[12/u32] correctly.
@@ -1485,17 +1537,24 @@ See guide#ABE to understand its use and indepth explanation.
     # fn main() -&gt; LkResult{
     let bytes= lk_eval(&quot;[u32:8]&quot;,())?;
     assert_eq!(bytes,&amp;[0,0,0,8]);
-    assert_eq!(lk_encode(&amp;bytes,&quot;&quot;), r#&quot;\0\0\0\x08&quot;#);
+    assert_eq!(lk_encode(&amp;bytes,&quot;/:&quot;), r#&quot;\0\0\0\x08&quot;#);
     assert_eq!(lk_encode(&amp;bytes,&quot;u32&quot;), &quot;[u32:8]&quot;);
 
-    // This function can also be called with the encode &#39;/?&#39; evaluator
-    assert_eq!(lk_eval(r#&quot;[/?:\0\0\0[u8:8]:u32]&quot;#,())?,b&quot;[u32:8]&quot;);
 
     // the options are a list of &#39;/&#39; separated functions
     // In this example &#39;u32&#39; wont fit, LNS &#39;#&#39; lookup will succeed, if not the encoding would be base64
 
     let public_grp = PUBLIC;
     assert_eq!(lk_encode(&amp;*public_grp,&quot;u32/#/b&quot;), &quot;[#:pub]&quot;);
+
+    // We can get meta - encode is also available as a scope during lk_eval
+
+    // As the &#39;?&#39; function - with the tail argument being a single reverse option
+    assert_eq!(lk_eval(r#&quot;[?:\0\0\0[u8:8]:u32]&quot;#,())?,b&quot;[u32:8]&quot;);
+    assert_eq!(lk_eval(r#&quot;[:\0\0\0[u8:8]/?:u32]&quot;#,())?,b&quot;[u32:8]&quot;);
+
+    // Or as the &#39;?&#39; macro
+    assert_eq!(lk_eval(r#&quot;[/?:\0\0\0[u8:8]/u32/#/b]&quot;#,())?,b&quot;[u32:8]&quot;);
 
     # Ok(())
     # }
@@ -1505,7 +1564,7 @@ See guide#ABE to understand its use and indepth explanation.
     **/
     </span><span class="kw">pub fn </span>lk_encode(bytes: <span class="kw">impl </span>AsRef&lt;[u8]&gt;, options: <span class="kw-2">&amp;</span>str) -&gt; String {
         <span class="kw">let </span>bytes = bytes.as_ref();
-        varctx::lk_try_encode(ctx::ctx(().into()).unwrap(), bytes, options, <span class="bool-val">true</span>)
+        varscope::lk_try_encode(scope::scope(().into()).unwrap(), bytes, options, <span class="bool-val">true</span>)
             .unwrap_or_else(|_v| as_abtxt(bytes).to_string())
     }
     <span class="doccomment">/** [lk_encode] with Err on:
@@ -1519,52 +1578,54 @@ See guide#ABE to understand its use and indepth explanation.
         ignore_encoder_err: bool,
     ) -&gt; LkResult&lt;String&gt; {
         <span class="kw">let </span>bytes = bytes.as_ref();
-        varctx::lk_try_encode(
-            ctx::ctx(().into()).unwrap(),
+        varscope::lk_try_encode(
+            scope::scope(().into()).unwrap(),
             bytes,
             options,
             ignore_encoder_err,
         )
     }
-    <span class="doccomment">/// Custom context for use in [varctx]
-    </span><span class="kw">pub mod </span>ctx {
+    <span class="doccomment">/// build a custom scope for ABE for use in [varscope]
+    </span><span class="kw">pub mod </span>scope {
 
         <span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
         #[thread_local]
-        </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">static </span>LK_EVAL_CTX_RT: std::cell::RefCell&lt;<span class="prelude-ty">Option</span>&lt;linkspace_common::runtime::Linkspace&gt;&gt; = std::cell::RefCell::new(<span class="prelude-val">None</span>);
+        </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">static </span>LK_EVAL_SCOPE_RT: std::cell::RefCell&lt;
+            <span class="prelude-ty">Option</span>&lt;linkspace_common::runtime::Linkspace&gt;,
+        &gt; = std::cell::RefCell::new(<span class="prelude-val">None</span>);
 
         <span class="kw">use </span>core::fmt;
 
         <span class="kw">use </span>anyhow::Context;
-        <span class="kw">use </span>linkspace_common::abe::eval::{ Scope};
+        <span class="kw">use </span>linkspace_common::abe::eval::Scope;
         <span class="kw">use </span>linkspace_common::prelude::scope::ArgV;
-        <span class="kw">use </span>linkspace_common::prelude::{ NetPkt};
+        <span class="kw">use </span>linkspace_common::prelude::NetPkt;
 
         <span class="kw">use </span><span class="kw">crate</span>::LkResult;
-        <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>StdCtx&lt;<span class="lifetime">&#39;o</span>&gt; = <span class="kw">impl </span>Scope + <span class="lifetime">&#39;o</span>;
-        <span class="doccomment">/// Create a new context for use in [crate::varctx] with [empty_ctx], [core_ctx], [ctx], or [lk_ctx] (default)
-        </span><span class="kw">pub struct </span>LkCtx&lt;<span class="lifetime">&#39;o</span>&gt;(<span class="kw">pub</span>(<span class="kw">crate</span>) InlineCtx&lt;<span class="lifetime">&#39;o</span>&gt;);
-        <span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>&gt; fmt::Debug <span class="kw">for </span>LkCtx&lt;<span class="lifetime">&#39;o</span>&gt; {
+        <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>StdScope&lt;<span class="lifetime">&#39;o</span>&gt; = <span class="kw">impl </span>Scope + <span class="lifetime">&#39;o</span>;
+        <span class="doccomment">/// Custom scope used in [crate::varscope] build with [core_scope], [scope], or [lk_scope] (default)
+        </span><span class="kw">pub struct </span>LkScope&lt;<span class="lifetime">&#39;o</span>&gt;(<span class="kw">pub</span>(<span class="kw">crate</span>) InlineScope&lt;<span class="lifetime">&#39;o</span>&gt;);
+        <span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>&gt; fmt::Debug <span class="kw">for </span>LkScope&lt;<span class="lifetime">&#39;o</span>&gt; {
             <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; fmt::Result {
-                f.debug_tuple(<span class="string">&quot;LkCtx&quot;</span>).field(<span class="kw-2">&amp;</span><span class="string">&quot;_&quot;</span>).finish()
+                f.debug_tuple(<span class="string">&quot;LkScope&quot;</span>).field(<span class="kw-2">&amp;</span><span class="string">&quot;_&quot;</span>).finish()
             }
         }
-        
+
         <span class="attr">#[allow(clippy::large_enum_variant)]
-        </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>InlineCtx&lt;<span class="lifetime">&#39;o</span>&gt; {
-            Std(StdCtx&lt;<span class="lifetime">&#39;o</span>&gt;),
+        </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>InlineScope&lt;<span class="lifetime">&#39;o</span>&gt; {
+            Std(StdScope&lt;<span class="lifetime">&#39;o</span>&gt;),
             Dyn(<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span><span class="kw">dyn </span>Scope),
             Core,
             <span class="comment">// TODO UserCb
         </span>}
 
-        <span class="attr">#[derive(Copy, Clone, Default,Debug)]
+        <span class="attr">#[derive(Copy, Clone, Default, Debug)]
         #[repr(C)]
-        </span><span class="doccomment">/// User config for setting additional context to evaluation.
+        </span><span class="doccomment">/// User config for adding common scopes
         </span><span class="kw">pub struct </span>UserData&lt;<span class="lifetime">&#39;o</span>&gt; {
-            <span class="doccomment">/// Enable the packet context for [abe] e.g. &quot;\[hash:str\]&quot;
+            <span class="doccomment">/// Set a packet in scope e.g. &quot;\[hash:str\] in group \[group:str\]&quot;
             </span><span class="kw">pub </span>pkt: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span><span class="kw">dyn </span>NetPkt&gt;,
-            <span class="doccomment">/// Enable the argv context for [abe] e.g. &quot;\[0\]&quot;
+            <span class="doccomment">/// Add the argv scope e.g. &quot;\[0\] and \[1\]&quot;
             </span><span class="kw">pub </span>argv: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8]]&gt;,
         }
         <span class="kw">impl </span>From&lt;()&gt; <span class="kw">for </span>UserData&lt;<span class="lifetime">&#39;static</span>&gt; {
@@ -1592,7 +1653,6 @@ See guide#ABE to understand its use and indepth explanation.
             }
         }
 
-
         <span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>, <span class="kw">const </span>N: usize&gt; From&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8]; N]&gt; <span class="kw">for </span>UserData&lt;<span class="lifetime">&#39;o</span>&gt; {
             <span class="kw">fn </span>from(inp: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8]; N]) -&gt; <span class="self">Self </span>{
                 UserData {
@@ -1610,19 +1670,19 @@ See guide#ABE to understand its use and indepth explanation.
             }
         }
 
-        <span class="doccomment">/// create the a core_context - includes basic byte functions (eval &quot;[help]&quot;&quot; to see the full scope)
-        </span><span class="kw">pub const fn </span>core_ctx() -&gt; LkCtx&lt;<span class="lifetime">&#39;static</span>&gt; {
-            LkCtx(InlineCtx::Core)
+        <span class="doccomment">/// create the a core_scope - includes basic byte functions (eval &quot;\[help\]&quot; to see the full scope)
+        </span><span class="kw">pub const fn </span>core_scope() -&gt; LkScope&lt;<span class="lifetime">&#39;static</span>&gt; {
+            LkScope(InlineScope::Core)
         }
 
-        <span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
-        </span><span class="doccomment">/// the default context used with lk_eval - includes runtime dependent scopes
-        </span><span class="kw">pub fn </span>ctx(udata: UserData&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; LkResult&lt;LkCtx&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
-            _ctx(<span class="prelude-val">None</span>, udata, <span class="bool-val">false</span>)
+        <span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+        </span><span class="doccomment">/// the default scope used with lk_eval - includes runtime dependent scopes
+        </span><span class="kw">pub fn </span>scope(udata: UserData&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; LkResult&lt;LkScope&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
+            _scope(<span class="prelude-val">None</span>, udata, <span class="bool-val">false</span>)
         }
-        <span class="attr">#[cfg(not(feature=<span class="string">&quot;runtime&quot;</span>))]
-        </span><span class="doccomment">/// the default context used with lk_eval - includes runtime dependent scopes
-        </span><span class="kw">pub fn </span>ctx(udata: UserData&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; LkResult&lt;LkCtx&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
+        <span class="attr">#[cfg(not(feature = <span class="string">&quot;runtime&quot;</span>))]
+        </span><span class="doccomment">/// the default scope used with lk_eval - includes runtime dependent scopes
+        </span><span class="kw">pub fn </span>scope(udata: UserData&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; LkResult&lt;LkScope&lt;<span class="lifetime">&#39;_</span>&gt;&gt; {
             <span class="kw">use </span>linkspace_common::prelude::<span class="kw-2">*</span>;
 
             <span class="kw">let </span>argv = udata
@@ -1630,30 +1690,28 @@ See guide#ABE to understand its use and indepth explanation.
                 .map(|v| ArgV::try_fit(v).context(<span class="string">&quot;Too many inp values&quot;</span>))
                 .transpose()<span class="question-mark">?
                 </span>.map(EScope);
-            <span class="prelude-val">Ok</span>(LkCtx(InlineCtx::Std((
+            <span class="prelude-val">Ok</span>(LkScope(InlineScope::Std((
                 udata.pkt.map(|v| pkt_scope(v)),
                 core_scope(),
-                argv
+                argv,
             ))))
         }
 
-        <span class="comment">/*
-        #[cfg(feature=&quot;runtime&quot;)]
-
-        fn lk_ctx&lt;&#39;o&gt;(
-            lk: Option&lt;&amp;&#39;o crate::Linkspace&gt;,
-            udata: UserData&lt;&#39;o&gt;,
+        <span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+        </span><span class="doccomment">/// [scope] with a explicit Linkspace and optionally add the os environment scope (used with `[env:ENV_VAR]`)
+        </span><span class="kw">pub fn </span>lk_scope&lt;<span class="lifetime">&#39;o</span>&gt;(
+            lk: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span><span class="kw">crate</span>::Linkspace&gt;,
+            udata: UserData&lt;<span class="lifetime">&#39;o</span>&gt;,
             enable_env: bool,
-        ) -&gt; LkResult&lt;LkCtx&lt;&#39;o&gt;&gt; {
-            _ctx(Some(lk.map(|o| &amp;o.0)), udata, enable_env)
+        ) -&gt; LkResult&lt;LkScope&lt;<span class="lifetime">&#39;o</span>&gt;&gt; {
+            _scope(<span class="prelude-val">Some</span>(lk.map(|o| <span class="kw-2">&amp;</span>o.<span class="number">0</span>)), udata, enable_env)
         }
-        */
-        </span><span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
-        </span><span class="kw">fn </span>_ctx&lt;<span class="lifetime">&#39;o</span>&gt;(
+        <span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+        </span><span class="kw">fn </span>_scope&lt;<span class="lifetime">&#39;o</span>&gt;(
             lk: <span class="prelude-ty">Option</span>&lt;<span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>linkspace_common::runtime::Linkspace&gt;&gt;,
             udata: UserData&lt;<span class="lifetime">&#39;o</span>&gt;,
             enable_env: bool,
-        ) -&gt; LkResult&lt;LkCtx&lt;<span class="lifetime">&#39;o</span>&gt;&gt; {
+        ) -&gt; LkResult&lt;LkScope&lt;<span class="lifetime">&#39;o</span>&gt;&gt; {
             <span class="kw">use </span>linkspace_common::prelude::<span class="kw-2">*</span>;
             <span class="kw">let </span>argv = udata
                 .argv
@@ -1662,28 +1720,28 @@ See guide#ABE to understand its use and indepth explanation.
                 </span>.map(EScope);
             <span class="kw">let </span>get = <span class="kw">move </span>|| {
                 <span class="kw">match </span>lk {
-                    <span class="prelude-val">None </span>=&gt; LK_EVAL_CTX_RT.borrow().as_ref().cloned(),
+                    <span class="prelude-val">None </span>=&gt; LK_EVAL_SCOPE_RT.borrow().as_ref().cloned(),
                     <span class="prelude-val">Some</span>(v) =&gt; v.cloned(),
                 }
                 .ok_or_else(|| <span class="macro">anyhow::anyhow!</span>(<span class="string">&quot;no linkspace instance was set&quot;</span>))
             };
-            <span class="prelude-val">Ok</span>(LkCtx(InlineCtx::Std((
-                udata.pkt.map(|v| pkt_scope(v)),
-                lk_scope(get,enable_env),
-                argv
+            <span class="prelude-val">Ok</span>(LkScope(InlineScope::Std((
+                udata.pkt.map(pkt_scope),
+                lk_scope(get, enable_env),
+                argv,
             ))))
         }
-        <span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>&gt; LkCtx&lt;<span class="lifetime">&#39;o</span>&gt; {
+        <span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>&gt; LkScope&lt;<span class="lifetime">&#39;o</span>&gt; {
             <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>as_dyn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Scope + <span class="lifetime">&#39;o</span>) {
                 <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0 </span>{
-                    InlineCtx::Std(scope) =&gt; scope,
-                    InlineCtx::Core =&gt; <span class="kw-2">&amp;</span>linkspace_common::prelude::CORE_SCOPE,
-                    InlineCtx::Dyn(scope) =&gt; scope,
+                    InlineScope::Std(scope) =&gt; scope,
+                    InlineScope::Core =&gt; <span class="kw-2">&amp;</span>linkspace_common::prelude::CORE_SCOPE,
+                    InlineScope::Dyn(scope) =&gt; scope,
                 }
             }
             <span class="attr">#[doc(hidden)]
-            </span><span class="kw">pub fn </span>from_dyn(sdyn: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span><span class="kw">dyn </span>Scope) -&gt; <span class="self">Self</span>{
-                LkCtx(InlineCtx::Dyn(sdyn))
+            </span><span class="kw">pub fn </span>from_dyn(sdyn: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span><span class="kw">dyn </span>Scope) -&gt; <span class="self">Self </span>{
+                LkScope(InlineScope::Dyn(sdyn))
             }
         }
     }
@@ -1754,7 +1812,7 @@ See guide#ABE to understand its use and indepth explanation.
     <span class="kw">pub use </span>linkspace_common::core::query::KnownOptions;
     <span class="kw">use </span>linkspace_common::prelude::{ExtPredicate, PktPredicates};
 
-    <span class="kw">use </span><span class="kw">crate</span>::abe::ctx::UserData;
+    <span class="kw">use </span><span class="kw">crate</span>::abe::scope::UserData;
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
     <span class="doccomment">/// Create a new [Query]. Copy from a template. [Q] is the empty query.
@@ -1789,7 +1847,7 @@ See guide#ABE to understand its use and indepth explanation.
         expr: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str],
         udata: <span class="kw">impl </span>Into&lt;UserData&lt;<span class="lifetime">&#39;o</span>&gt;&gt;,
     ) -&gt; LkResult&lt;Query&gt; {
-        varctx::lk_query_parse(<span class="kw">crate</span>::abe::ctx::ctx(udata.into())<span class="question-mark">?</span>, query, expr)
+        varscope::lk_query_parse(<span class="kw">crate</span>::abe::scope::scope(udata.into())<span class="question-mark">?</span>, query, expr)
     }
     <span class="doccomment">/// Clear a [Query] for reuse
     </span><span class="kw">pub fn </span>lk_query_clear(query: <span class="kw-2">&amp;mut </span>Query) {
@@ -1811,7 +1869,7 @@ See guide#ABE to understand its use and indepth explanation.
     }
 }
 
-<span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
 </span><span class="kw">pub use </span>key::lk_key;
 <span class="doccomment">/// cryptographic key functions for use in [lk_keypoint]
 </span><span class="kw">pub mod </span>key {
@@ -1846,21 +1904,20 @@ See guide#ABE to understand its use and indepth explanation.
     </span><span class="kw">pub fn </span>lk_key_pubkey(key: <span class="kw-2">&amp;</span>str) -&gt; LkResult&lt;PubKey&gt; {
         <span class="prelude-val">Ok</span>(linkspace_common::identity::pubkey(key)<span class="question-mark">?</span>.into())
     }
-    
 
     <span class="doccomment">/** linkspace stored identity
     open (or generate) the key `name` which is also accessible as \[@:name:local\].
     empty name defaults to ( i.e. \[@:me:local\] )
     **/
-    </span><span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
+    </span><span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
     </span><span class="kw">pub fn </span>lk_key(
         linkspace: <span class="kw-2">&amp;</span>Linkspace,
         password: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>[u8]&gt;,
         name: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
         create: bool,
     ) -&gt; LkResult&lt;SigningKey&gt; {
-        <span class="kw">super</span>::varctx::lk_key(
-            <span class="kw">super</span>::abe::ctx::ctx(().into())<span class="question-mark">?</span>,
+        <span class="kw">super</span>::varscope::lk_key(
+            <span class="kw">super</span>::abe::scope::scope(().into())<span class="question-mark">?</span>,
             linkspace,
             password,
             name,
@@ -1869,12 +1926,12 @@ See guide#ABE to understand its use and indepth explanation.
     }
 }
 
-<span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
 </span><span class="kw">pub use </span>runtime::{
-    lk_get, lk_open, lk_process, lk_process_while, lk_save, lk_stop, lk_watch, Linkspace,
-    cb::{try_cb}
+    cb::try_cb, lk_get, lk_open, lk_process, lk_process_while, lk_save, lk_stop, lk_watch,
+    Linkspace,
 };
-<span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
 </span><span class="doccomment">/// a runtime to watch for new points from other processes or threads
 </span><span class="kw">pub mod </span>runtime {
     <span class="doccomment">/**
@@ -1892,7 +1949,7 @@ See guide#ABE to understand its use and indepth explanation.
     </span><span class="kw">pub struct </span>Linkspace(<span class="kw">pub</span>(<span class="kw">crate</span>) LinkspaceImpl);
     <span class="kw">use </span><span class="kw">crate</span>::interop::rt_interop::LinkspaceImpl;
 
-    <span class="kw">impl </span>std::fmt::Debug <span class="kw">for </span>Linkspace{
+    <span class="kw">impl </span>std::fmt::Debug <span class="kw">for </span>Linkspace {
         <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
             f.debug_tuple(<span class="string">&quot;Linkspace&quot;</span>).field(<span class="kw-2">&amp;</span><span class="string">&quot;_&quot;</span>).finish()
         }
@@ -1900,8 +1957,8 @@ See guide#ABE to understand its use and indepth explanation.
 
     <span class="kw">use </span>std::time::Instant;
 
-    <span class="kw">use </span>linkspace_common::{prelude::{QueryIDRef }, saturating_cast, saturating_neg_cast};
     <span class="kw">use </span>cb::PktHandler;
+    <span class="kw">use </span>linkspace_common::{prelude::QueryIDRef, saturating_cast, saturating_neg_cast};
     <span class="kw">use </span>tracing::debug_span;
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -1912,15 +1969,15 @@ See guide#ABE to understand its use and indepth explanation.
     /// A runtime is used in many arguments.
     /// Most notable to [lk_save], [lk_get], and [lk_watch] packets.
     /// The database is shared across threads and processes.
-    /// The runtime (i.e. lk_watch) is not. 
-    /// The first call (per thread) sets the default instance for functions like [lk_eval] (see [varctx] for more options).
+    /// The runtime (i.e. lk_watch) is not.
+    /// The first call (per thread) sets the default instance for functions like [lk_eval] (see [varscope] for more options).
     /// Moving an open runtime across threads is not supported.
 
     </span><span class="kw">pub fn </span>lk_open(dir: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>std::path::Path&gt;, create: bool) -&gt; std::io::Result&lt;Linkspace&gt; {
         <span class="kw">let </span>rt = linkspace_common::static_env::open_linkspace_dir(dir, create)<span class="question-mark">?</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>eval_ctx = <span class="kw">crate</span>::abe::ctx::LK_EVAL_CTX_RT.borrow_mut();
-        <span class="kw">if </span>eval_ctx.is_none() {
-            <span class="kw-2">*</span>eval_ctx = <span class="prelude-val">Some</span>(rt.clone())
+        <span class="kw">let </span><span class="kw-2">mut </span>eval_scope = <span class="kw">crate</span>::abe::scope::LK_EVAL_SCOPE_RT.borrow_mut();
+        <span class="kw">if </span>eval_scope.is_none() {
+            <span class="kw-2">*</span>eval_scope = <span class="prelude-val">Some</span>(rt.clone())
         }
         <span class="prelude-val">Ok</span>(Linkspace(rt))
     }
@@ -1933,17 +1990,20 @@ See guide#ABE to understand its use and indepth explanation.
 
     </span><span class="doccomment">/// save a packet. Returns true if new and false if its old.
     </span><span class="kw">pub fn </span>lk_save(lk: <span class="kw-2">&amp;</span>Linkspace, pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt) -&gt; std::io::Result&lt;bool&gt; {
-         lk.<span class="number">0</span>.env().save_dyn_one(pkt).map(|o| o.is_new())
+        lk.<span class="number">0</span>.env().save_dyn_one(pkt).map(|o| o.is_new())
     }
     <span class="doccomment">/// save multiple packets at once - returns the number of new packets written
     </span><span class="kw">pub fn </span>lk_save_all(lk: <span class="kw-2">&amp;</span>Linkspace, pkts: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt]) -&gt; std::io::Result&lt;usize&gt; {
-        <span class="kw">let </span>(start,excl) = lk_save_all_ext(lk, pkts)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>((excl.get()-start.get()) <span class="kw">as </span>usize)
+        <span class="kw">let </span>(start, excl) = lk_save_all_ext(lk, pkts)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>((excl.get() - start.get()) <span class="kw">as </span>usize)
     }
     <span class="doccomment">/// returns the range of recv stampes used to save new packets. total_new = r.1-r.0
-    </span><span class="kw">pub fn </span>lk_save_all_ext(lk: <span class="kw-2">&amp;</span>Linkspace, pkts: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt]) -&gt; std::io::Result&lt;(Stamp,Stamp)&gt; {
-        <span class="kw">let </span>(s,e) = lk.<span class="number">0</span>.env().save_dyn_iter(pkts.iter().copied())<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>((s.into(),e.into()))
+    </span><span class="kw">pub fn </span>lk_save_all_ext(
+        lk: <span class="kw-2">&amp;</span>Linkspace,
+        pkts: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt],
+    ) -&gt; std::io::Result&lt;(Stamp, Stamp)&gt; {
+        <span class="kw">let </span>(s, e) = lk.<span class="number">0</span>.env().save_dyn_iter(pkts.iter().copied())<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>((s.into(), e.into()))
     }
 
     <span class="doccomment">/// Run callback for every match for the query in the database.
@@ -1989,7 +2049,7 @@ See guide#ABE to understand its use and indepth explanation.
         <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">0</span>;
         <span class="kw">let </span>reader = lk.<span class="number">0</span>.get_reader();
         <span class="kw">let </span>opt_pkt = reader.query(mode, <span class="kw-2">&amp;</span>query.<span class="number">0</span>.predicates, <span class="kw-2">&amp;mut </span>i)<span class="question-mark">?</span>.next();
-        <span class="prelude-val">Ok</span>(opt_pkt.map(|v| (cb)(v)))
+        <span class="prelude-val">Ok</span>(opt_pkt.map(cb))
     }
     <span class="doccomment">/** read a single packet from the database by its hash without copying.
     This means that [NetPkt::net_header_mut] is unavailable.
@@ -2002,7 +2062,7 @@ See guide#ABE to understand its use and indepth explanation.
     ) -&gt; anyhow::Result&lt;<span class="prelude-ty">Option</span>&lt;A&gt;&gt; {
         <span class="kw">let </span>reader = lk.<span class="number">0</span>.get_reader();
         <span class="kw">let </span>opt = reader.read(<span class="kw-2">&amp;</span>hash)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(opt.map(|v| (cb)(v)))
+        <span class="prelude-val">Ok</span>(opt.map(cb))
     }
 
     <span class="doccomment">/**
@@ -2093,7 +2153,7 @@ See guide#ABE to understand its use and indepth explanation.
         <span class="doccomment">/// the path under which it is saved
         </span><span class="kw">pub </span>dir: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>std::path::Path,
     }
-    <span class="doccomment">/// get [LkInfo] of a linkspace runtime 
+    <span class="doccomment">/// get [LkInfo] of a linkspace runtime
     </span><span class="kw">pub fn </span>lk_info(lk: <span class="kw-2">&amp;</span>Linkspace) -&gt; LkInfo {
         LkInfo {
             kind: <span class="string">&quot;lmdb&quot;</span>,
@@ -2109,21 +2169,36 @@ See guide#ABE to understand its use and indepth explanation.
 
         <span class="kw">use </span>std::ops::{ControlFlow, Try};
 
-        <span class="kw">use </span>linkspace_common::prelude::{NetPkt };
+        <span class="kw">use </span>linkspace_common::prelude::NetPkt;
 
-        <span class="doccomment">/// Callbacks stored in a [Linkspace] instance. use [runtime::cb] to impl from function
+        <span class="doccomment">/// Callbacks stored in a [Linkspace] instance. use [cb] and [try_cb] to impl from a single function.
         </span><span class="kw">pub trait </span>PktHandler {
             <span class="doccomment">/// Handles an event.
             </span><span class="kw">fn </span>handle_pkt(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, lk: <span class="kw-2">&amp;</span>Linkspace) -&gt; ControlFlow&lt;()&gt;;
             <span class="doccomment">/// Called when break, finished, or replaced
-            </span><span class="kw">fn </span>stopped(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: Query, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Linkspace, <span class="kw">_</span>: StopReason, _total_calls: u32, _watch_calls: u32){}
+            </span><span class="kw">fn </span>stopped(
+                <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+                <span class="kw">_</span>: Query,
+                <span class="kw">_</span>: <span class="kw-2">&amp;</span>Linkspace,
+                <span class="kw">_</span>: StopReason,
+                _total_calls: u32,
+                _watch_calls: u32,
+            ) {
+            }
         }
         <span class="kw">impl </span>PktHandler <span class="kw">for </span>Box&lt;<span class="kw">dyn </span>PktHandler&gt; {
             <span class="kw">fn </span>handle_pkt(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, lk: <span class="kw-2">&amp;</span>Linkspace) -&gt; ControlFlow&lt;()&gt; {
                 (<span class="kw-2">**</span><span class="self">self</span>).handle_pkt(pkt, lk)
             }
 
-            <span class="kw">fn </span>stopped(<span class="kw-2">&amp;mut </span><span class="self">self</span>, query: Query, lk: <span class="kw-2">&amp;</span>Linkspace, reason: StopReason, total: u32, new: u32) <span class="kw">where</span>{
+            <span class="kw">fn </span>stopped(
+                <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+                query: Query,
+                lk: <span class="kw-2">&amp;</span>Linkspace,
+                reason: StopReason,
+                total: u32,
+                new: u32,
+            ) {
                 (<span class="kw-2">**</span><span class="self">self</span>).stopped(query, lk, reason, total, new)
             }
         }
@@ -2134,10 +2209,10 @@ See guide#ABE to understand its use and indepth explanation.
         <span class="attr">#[derive(Copy, Clone)]
         </span><span class="kw">struct </span>Cb&lt;A&gt; {
             handle_pkt: A,
-        <span class="comment">//  stopped: B,// unused but might enable later
+            <span class="comment">//  stopped: B,// unused but might enable later
         </span>}
-        <span class="doccomment">/// takes a fn(&amp;dyn NetPkt,&amp;Linkspace) -&gt; bool[should_continue] and returns impl [PktHandler]
-        </span><span class="kw">pub fn </span>cb(<span class="kw-2">mut </span>handle_pkt: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, <span class="kw-2">&amp;</span>Linkspace) -&gt; bool) -&gt; <span class="kw">impl </span>PktHandler{
+        <span class="doccomment">/// takes a `fn(&amp;dyn NetPkt,&amp;Linkspace) -&gt; bool[should_continue]` and returns impl [PktHandler]
+        </span><span class="kw">pub fn </span>cb(<span class="kw-2">mut </span>handle_pkt: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, <span class="kw-2">&amp;</span>Linkspace) -&gt; bool) -&gt; <span class="kw">impl </span>PktHandler {
             Cb {
                 handle_pkt: <span class="kw">move </span>|pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, lk: <span class="kw-2">&amp;</span>Linkspace| {
                     <span class="kw">if </span>(handle_pkt)(pkt, lk) {
@@ -2150,7 +2225,7 @@ See guide#ABE to understand its use and indepth explanation.
         }
 
         <span class="doccomment">/// takes any fn(&amp;dyn NetPkt,&amp;Linkspace) -&gt; Try (e.g. Result or Option) and returns impl [PktHandler] that logs on break
-        </span><span class="kw">pub fn </span>try_cb&lt;A, R, E&gt;(<span class="kw-2">mut </span>handle_pkt: A) -&gt; <span class="kw">impl </span>PktHandler 
+        </span><span class="kw">pub fn </span>try_cb&lt;A, R, E&gt;(<span class="kw-2">mut </span>handle_pkt: A) -&gt; <span class="kw">impl </span>PktHandler
         <span class="kw">where
             </span>R: Try&lt;Output = (), Residual = E&gt;,
             E: std::fmt::Debug,
@@ -2165,20 +2240,20 @@ See guide#ABE to understand its use and indepth explanation.
             }
         }
 
-        <span class="kw">impl</span>&lt;A&gt; PktHandler <span class="kw">for </span>Cb&lt;A&gt; <span class="kw">where  </span>A: FnMut(<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, <span class="kw-2">&amp;</span>Linkspace) -&gt; ControlFlow&lt;()&gt;
+        <span class="kw">impl</span>&lt;A&gt; PktHandler <span class="kw">for </span>Cb&lt;A&gt;
+        <span class="kw">where
+            </span>A: FnMut(<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, <span class="kw-2">&amp;</span>Linkspace) -&gt; ControlFlow&lt;()&gt;,
         {
             <span class="kw">fn </span>handle_pkt(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, lk: <span class="kw-2">&amp;</span>Linkspace) -&gt; ControlFlow&lt;()&gt; {
                 (<span class="self">self</span>.handle_pkt)(pkt, lk)
             }
         }
-
     }
 }
 
-
 <span class="doccomment">/// A set of functions that adhere to conventions
 </span><span class="kw">pub mod </span>conventions;
-<span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
 </span><span class="kw">pub use </span><span class="kw">crate</span>::conventions::pull::lk_pull;
 
 <span class="kw">pub use </span>consts::{PRIVATE, PUBLIC};
@@ -2190,13 +2265,13 @@ See guide#ABE to understand its use and indepth explanation.
 
 <span class="doccomment">/// misc functions &amp; tools - less stable
 </span><span class="kw">pub mod </span>misc {
-    <span class="kw">pub use </span>linkspace_common::pkt_stream_utils::QuickDedup;
-    <span class="kw">pub use </span>linkspace_common::pkt::tree_order::TreeEntry;
-    <span class="kw">pub use </span>linkspace_common::pkt::netpkt::DEFAULT_ROUTING_BITS;
     <span class="kw">pub use </span>linkspace_common::pkt::netpkt::cmp::PktCmp;
+    <span class="kw">pub use </span>linkspace_common::pkt::netpkt::DEFAULT_ROUTING_BITS;
     <span class="kw">pub use </span>linkspace_common::pkt::read;
     <span class="kw">pub use </span>linkspace_common::pkt::reroute::{RecvPkt, ReroutePkt, ShareArcPkt};
+    <span class="kw">pub use </span>linkspace_common::pkt::tree_order::TreeEntry;
     <span class="kw">pub use </span>linkspace_common::pkt::FieldEnum;
+    <span class="kw">pub use </span>linkspace_common::pkt_stream_utils::QuickDedup;
 
     <span class="kw">use </span>linkspace_common::prelude::B64;
 
@@ -2241,45 +2316,48 @@ See guide#ABE to understand its use and indepth explanation.
     */
 </span>}
 
-<span class="doccomment">/// Functions with a custom eval context
-</span><span class="kw">pub mod </span>varctx {
-
+<span class="doccomment">/// Functions with a custom eval scope - useful for security or when [lk_open]&#39;ing multiple different runtimes (only partially supported atm)
+</span><span class="kw">pub mod </span>varscope {
 
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use </span><span class="kw">crate</span>::abe::ctx::LkCtx;
-    <span class="kw">use </span>linkspace_common::{
-        abe::{eval::eval, parse_abe},
-    };
+    <span class="kw">use </span><span class="kw">crate</span>::abe::scope::LkScope;
+    <span class="kw">use </span>linkspace_common::abe::{eval::eval, parse_abe};
 
-    <span class="doccomment">/// [[crate::lk_eval]] with a custom context.
-    </span><span class="kw">pub fn </span>lk_eval(ctx: LkCtx, expr: <span class="kw-2">&amp;</span>str, parse_unencoded: bool) -&gt; LkResult&lt;Vec&lt;u8&gt;&gt; {
-        <span class="kw">let </span>expr = parse_abe(expr, parse_unencoded)<span class="question-mark">?</span>;
-        <span class="kw">let </span>val = eval(<span class="kw-2">&amp;</span>ctx.as_dyn(), <span class="kw-2">&amp;</span>expr)<span class="question-mark">?</span>;
+    <span class="doccomment">/// [crate::lk_eval]/[crate::abe::lk_eval_loose] with a custom scope
+    </span><span class="kw">pub fn </span>lk_eval(scope: LkScope, expr: <span class="kw-2">&amp;</span>str, loose: bool) -&gt; LkResult&lt;Vec&lt;u8&gt;&gt; {
+        <span class="kw">let </span>expr = parse_abe(expr, loose)<span class="question-mark">?</span>;
+        <span class="kw">let </span>val = eval(<span class="kw-2">&amp;</span>scope.as_dyn(), <span class="kw-2">&amp;</span>expr)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(val.concat())
     }
-    <span class="kw">pub fn </span>lk_try_encode(
-        ctx: LkCtx,
+    <span class="doccomment">/// [lk_eval] with a custom scope that errors on bad option &amp; can explicit trigger error on no encoding found.
+    </span><span class="kw">pub fn </span>lk_try_encode(
+        scope: LkScope,
         bytes: <span class="kw-2">&amp;</span>[u8],
         options: <span class="kw-2">&amp;</span>str,
         ignore_encoder_err: bool,
     ) -&gt; LkResult&lt;String&gt; {
         <span class="prelude-val">Ok</span>(linkspace_common::abe::eval::encode(
-            <span class="kw-2">&amp;</span>ctx.as_dyn(),
+            <span class="kw-2">&amp;</span>scope.as_dyn(),
             bytes,
             options,
             ignore_encoder_err,
         )<span class="question-mark">?</span>)
     }
-    <span class="doccomment">/// custom ctx version of [super::lk_query_parse]
-    </span><span class="kw">pub fn </span>lk_query_parse(ctx: LkCtx, <span class="kw-2">mut </span>query: Query, statements: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; LkResult&lt;Query&gt; {
+    <span class="doccomment">/// custom scope version of [super::lk_query_parse]
+    </span><span class="kw">pub fn </span>lk_query_parse(
+        scope: LkScope,
+        <span class="kw-2">mut </span>query: Query,
+        statements: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str],
+    ) -&gt; LkResult&lt;Query&gt; {
         <span class="kw">for </span>stmnt <span class="kw">in </span>statements {
-            query.<span class="number">0</span>.parse(stmnt.as_bytes(), <span class="kw-2">&amp;</span>ctx.as_dyn())<span class="question-mark">?</span>;
+            query.<span class="number">0</span>.parse(stmnt.as_bytes(), <span class="kw-2">&amp;</span>scope.as_dyn())<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(query)
     }
-    <span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
+    <span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+    </span><span class="doccomment">/// [lk_key] with a custom context
     </span><span class="kw">pub fn </span>lk_key(
-        ctx: LkCtx,
+        scope: LkScope,
         linkspace: <span class="kw-2">&amp;</span>Linkspace,
         password: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>[u8]&gt;,
         name: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
@@ -2287,7 +2365,7 @@ See guide#ABE to understand its use and indepth explanation.
     ) -&gt; LkResult&lt;SigningKey&gt; {
         <span class="kw">use </span>std::borrow::Cow;
 
-        <span class="kw">use </span>linkspace_common::{protocols::lns, prelude::parse_abe_strict_b};
+        <span class="kw">use </span>linkspace_common::{prelude::parse_abe_strict_b, protocols::lns};
 
         <span class="kw">let </span>name = <span class="kw">match </span>name {
             <span class="prelude-val">Some</span>(v) =&gt; Cow::Borrowed(v),
@@ -2298,14 +2376,14 @@ See guide#ABE to understand its use and indepth explanation.
         <span class="kw">let </span>password = <span class="kw">match </span>password {
             <span class="prelude-val">Some</span>(v) =&gt; Cow::Borrowed(v),
             <span class="prelude-val">None </span>=&gt; <span class="kw">match </span>std::env::var(<span class="string">&quot;LK_PASS&quot;</span>) {
-                <span class="prelude-val">Ok</span>(abe) =&gt; {
-                    Cow::Owned(eval(<span class="kw-2">&amp;</span>ctx.as_dyn(), <span class="kw-2">&amp;</span>parse_abe_strict_b(abe.as_bytes())<span class="question-mark">?</span>)<span class="question-mark">?</span>.concat())
-                }
+                <span class="prelude-val">Ok</span>(abe) =&gt; Cow::Owned(
+                    eval(<span class="kw-2">&amp;</span>scope.as_dyn(), <span class="kw-2">&amp;</span>parse_abe_strict_b(abe.as_bytes())<span class="question-mark">?</span>)<span class="question-mark">?</span>.concat(),
+                ),
                 <span class="prelude-val">Err</span>(_e) =&gt; Cow::Borrowed(<span class="kw-2">&amp;</span>[] <span class="kw">as </span><span class="kw-2">&amp;</span>[u8]),
             },
         };
         <span class="kw">let </span>expr = parse_abe_strict_b(name.as_bytes())<span class="question-mark">?</span>;
-        <span class="kw">let </span>name: lns::name::Name = eval(<span class="kw-2">&amp;</span>ctx.as_dyn(), <span class="kw-2">&amp;</span>expr)<span class="question-mark">?</span>.try_into()<span class="question-mark">?</span>;
+        <span class="kw">let </span>name: lns::name::Name = eval(<span class="kw-2">&amp;</span>scope.as_dyn(), <span class="kw-2">&amp;</span>expr)<span class="question-mark">?</span>.try_into()<span class="question-mark">?</span>;
         <span class="kw">match </span>lns::lookup_enckey(<span class="kw-2">&amp;</span>linkspace.<span class="number">0</span>, <span class="kw-2">&amp;</span>name)<span class="question-mark">? </span>{
             <span class="prelude-val">Some</span>((<span class="kw">_</span>, enckey)) =&gt; <span class="prelude-val">Ok</span>(linkspace_common::identity::decrypt(<span class="kw-2">&amp;</span>enckey, <span class="kw-2">&amp;</span>password)<span class="question-mark">?</span>),
             <span class="prelude-val">None </span>=&gt; {

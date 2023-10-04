@@ -193,6 +193,65 @@
 <a href="#193" id="193">193</a>
 <a href="#194" id="194">194</a>
 <a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright Anton Sol
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
@@ -228,7 +287,7 @@ A reply is accepted if it was made now-timeout.
 
 This might change
 **/
-</span><span class="kw">use crate</span>::{<span class="kw-2">*</span>};
+</span><span class="kw">use crate</span>::<span class="kw-2">*</span>;
 <span class="doccomment">/// const &#39;/status&#39; spacename
 </span><span class="kw">pub static </span>STATUS_SPACE: RootedStaticSpace&lt;<span class="number">16</span>&gt; = rspace1::&lt;<span class="number">7</span>&gt;(<span class="macro">concat_bytes!</span>([<span class="number">255</span>], <span class="string">b&quot;status&quot;</span>));
 
@@ -245,20 +304,27 @@ This might change
     <span class="doccomment">/// the instance
     </span><span class="kw">pub </span>instance: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8]&gt;,
     <span class="doccomment">/// qid to use for query - reuse of qid will remove the listening query
-    </span><span class="kw">pub </span>qid: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8]
+    </span><span class="kw">pub </span>qid: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8],
 }
 <span class="kw">impl </span>Default <span class="kw">for </span>LkStatus&lt;<span class="lifetime">&#39;static</span>&gt; {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        <span class="self">Self </span>{ domain: domain(), group: group(), objtype: <span class="kw-2">&amp;</span>[], instance: <span class="prelude-val">None</span>, qid: <span class="string">b&quot;status&quot; </span>}
+        <span class="self">Self </span>{
+            domain: domain(),
+            group: group(),
+            objtype: <span class="kw-2">&amp;</span>[],
+            instance: <span class="prelude-val">None</span>,
+            qid: <span class="string">b&quot;status&quot;</span>,
+        }
     }
 }
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>&gt; std::fmt::Debug <span class="kw">for </span>LkStatus&lt;<span class="lifetime">&#39;o</span>&gt;{
+<span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>&gt; std::fmt::Debug <span class="kw">for </span>LkStatus&lt;<span class="lifetime">&#39;o</span>&gt; {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
         f.debug_struct(<span class="string">&quot;LkStatus&quot;</span>)
             .field(<span class="string">&quot;domain&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.domain)
             .field(<span class="string">&quot;group&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.group)
             .field(<span class="string">&quot;objtype&quot;</span>, <span class="kw-2">&amp;</span>AB(<span class="kw-2">&amp;</span><span class="self">self</span>.objtype))
-            .field(<span class="string">&quot;instance&quot;</span>,<span class="kw-2">&amp;</span><span class="self">self</span>.instance.map(AB)).finish()
+            .field(<span class="string">&quot;instance&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.instance.map(AB))
+            .finish()
     }
 }
 <span class="attr">#[doc(hidden)]
@@ -273,13 +339,20 @@ This might change
 }
 
 <span class="doccomment">/// A query that returns both requests and updates
-</span><span class="kw">pub fn </span>lk_status_request(status:LkStatus) -&gt; LkResult&lt;NetPktBox&gt;{
-    lk_linkpoint(<span class="kw-2">&amp;</span>[],status.domain, PRIVATE, <span class="kw-2">&amp;</span>lk_status_space(status)<span class="question-mark">?</span>,<span class="kw-2">&amp;</span>[], <span class="prelude-val">None</span>)
+</span><span class="kw">pub fn </span>lk_status_request(status: LkStatus) -&gt; LkResult&lt;NetPktBox&gt; {
+    lk_linkpoint(
+        <span class="kw-2">&amp;</span>[],
+        status.domain,
+        PRIVATE,
+        <span class="kw-2">&amp;</span>lk_status_space(status)<span class="question-mark">?</span>,
+        <span class="kw-2">&amp;</span>[],
+        <span class="prelude-val">None</span>,
+    )
 }
 
 <span class="doccomment">/// A query that returns both requests and updates
-</span><span class="kw">pub fn </span>lk_status_overwatch(status:LkStatus,max_age:Stamp) -&gt; LkResult&lt;Query&gt; {
-    <span class="kw">let </span>LkStatus { domain,  ..} = status;
+</span><span class="kw">pub fn </span>lk_status_overwatch(status: LkStatus, max_age: Stamp) -&gt; LkResult&lt;Query&gt; {
+    <span class="kw">let </span>LkStatus { domain, .. } = status;
     <span class="kw">let </span>space = lk_status_space(status)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>q = lk_query(<span class="kw-2">&amp;</span>Q);
     <span class="kw">let </span>create_after = now().saturating_sub(max_age);
@@ -290,102 +363,147 @@ This might change
     <span class="prelude-val">Ok</span>(q)
 }
 
-<span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
-</span><span class="doccomment">/// watch for any points matching 
-</span><span class="kw">pub fn </span>lk_status_watch(lk:<span class="kw-2">&amp;</span>Linkspace,status:LkStatus, d_timeout:Stamp,
-                      <span class="kw-2">mut </span>cb: <span class="kw">impl </span><span class="kw">crate</span>::runtime::cb::PktHandler + <span class="lifetime">&#39;static</span>) -&gt; LkResult&lt;bool&gt;{
-    <span class="kw">use </span><span class="kw">crate</span>::runtime::{lk_watch2,lk_get_all};
+<span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+</span><span class="doccomment">/// watch for any points matching
+</span><span class="kw">pub fn </span>lk_status_watch(
+    lk: <span class="kw-2">&amp;</span>Linkspace,
+    status: LkStatus,
+    d_timeout: Stamp,
+    <span class="kw-2">mut </span>cb: <span class="kw">impl </span><span class="kw">crate</span>::runtime::cb::PktHandler + <span class="lifetime">&#39;static</span>,
+) -&gt; LkResult&lt;bool&gt; {
+    <span class="kw">use </span><span class="kw">crate</span>::runtime::{lk_get_all, lk_watch2};
     <span class="kw">use </span>linkspace_common::prelude::{U16, U32};
     <span class="kw">use </span>tracing::debug_span;
 
-    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">&quot;status_poll&quot;</span>,<span class="question-mark">?</span>status,<span class="question-mark">?</span>d_timeout);
+    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">&quot;status_poll&quot;</span>, <span class="question-mark">?</span>status, <span class="question-mark">?</span>d_timeout);
     <span class="kw">let _ </span>= span.enter();
     <span class="kw">let </span><span class="kw-2">mut </span>ok = <span class="bool-val">false</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>last_request = Stamp::ZERO;
-    <span class="kw">let </span><span class="kw-2">mut </span>query : Query= lk_status_overwatch(status, d_timeout)<span class="question-mark">?</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>query: Query = lk_status_overwatch(status, d_timeout)<span class="question-mark">?</span>;
     <span class="comment">// We want to capture any old request, so we first lk_get_all both requests and replies.
     </span>lk_get_all(lk, <span class="kw-2">&amp;</span>query, <span class="kw-2">&amp;mut </span>|pkt| {
         <span class="kw">if </span>pkt.get_links().is_empty() &amp;&amp; pkt.data().is_empty() {
             last_request = <span class="kw-2">*</span>pkt.get_create_stamp();
             <span class="macro">tracing::debug!</span>(pkt=%PktFmt(<span class="kw-2">&amp;</span>pkt),<span class="string">&quot;recently requested&quot;</span>);
             <span class="bool-val">false
-        </span>}<span class="kw">else </span>{
-            ok =<span class="bool-val">true</span>;
-            <span class="kw">let </span>cnt = (cb).handle_pkt(pkt,lk);
+        </span>} <span class="kw">else </span>{
+            ok = <span class="bool-val">true</span>;
+            <span class="kw">let </span>cnt = (cb).handle_pkt(pkt, lk);
             <span class="macro">tracing::debug!</span>(<span class="string">&quot;recently replied&quot;</span>);
             cnt.is_break()
         }
     })<span class="question-mark">?</span>;
-    <span class="kw">if </span>last_request == Stamp::ZERO{
+    <span class="kw">if </span>last_request == Stamp::ZERO {
         <span class="macro">tracing::debug!</span>(<span class="string">&quot;creating new req&quot;</span>);
         <span class="kw">let </span>req = lk_status_request(status).unwrap();
         last_request = <span class="kw-2">*</span>req.get_create_stamp();
-        lk_save(lk,<span class="kw-2">&amp;</span>req)<span class="question-mark">?</span>;
+        lk_save(lk, <span class="kw-2">&amp;</span>req)<span class="question-mark">?</span>;
     }
     <span class="kw">let </span>wait_until = last_request.saturating_add(d_timeout);
-    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>wait_until,<span class="string">&quot;Waiting until&quot;</span>);
+    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>wait_until, <span class="string">&quot;Waiting until&quot;</span>);
     query = lk_query_push(query, <span class="string">&quot;data_size&quot;</span>, <span class="string">&quot;&gt;&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
     query = lk_query_push(query, <span class="string">&quot;links_len&quot;</span>, <span class="string">&quot;&gt;&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
     query = lk_query_push(query, <span class="string">&quot;recv&quot;</span>, <span class="string">&quot;&lt;&quot;</span>, <span class="kw-2">&amp;*</span>wait_until)<span class="question-mark">?</span>;
     query = lk_query_push(query, <span class="string">&quot;i_db&quot;</span>, <span class="string">&quot;&lt;&quot;</span>, <span class="kw-2">&amp;*</span>U32::ZERO)<span class="question-mark">?</span>;
     query = lk_query_push(query, <span class="string">&quot;&quot;</span>, <span class="string">&quot;qid&quot;</span>, status.qid)<span class="question-mark">?</span>;
-    lk_watch2(lk, <span class="kw-2">&amp;</span>query, cb,span)<span class="question-mark">?</span>;
+    lk_watch2(lk, <span class="kw-2">&amp;</span>query, cb, span)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(ok)
 }
 
-<span class="kw">pub fn </span>is_status_reply(status:LkStatus,rspace:<span class="kw-2">&amp;</span>RootedSpace,pkt:<span class="kw-2">&amp;</span>NetPktPtr) -&gt; LkResult&lt;()&gt;{
-    <span class="macro">anyhow::ensure!</span>(<span class="kw-2">*</span>pkt.get_domain() == status.domain
-                    &amp;&amp; <span class="kw-2">*</span>pkt.get_group() == PRIVATE
-                    &amp;&amp; pkt.get_rooted_spacename() == rspace
-                    &amp;&amp; !pkt.get_links().is_empty()
-                    &amp;&amp; !pkt.data().is_empty()
-                    ,<span class="string">&quot;invalid status update&quot;</span>);
+<span class="kw">fn </span>is_status_reply(status: LkStatus, rspace: <span class="kw-2">&amp;</span>RootedSpace, pkt: <span class="kw-2">&amp;</span>NetPktPtr) -&gt; LkResult&lt;()&gt; {
+    <span class="macro">anyhow::ensure!</span>(
+        <span class="kw-2">*</span>pkt.get_domain() == status.domain
+            &amp;&amp; <span class="kw-2">*</span>pkt.get_group() == PRIVATE
+            &amp;&amp; pkt.get_rooted_spacename() == rspace
+            &amp;&amp; !pkt.get_links().is_empty()
+            &amp;&amp; !pkt.data().is_empty(),
+        <span class="string">&quot;invalid status update&quot;
+    </span>);
     <span class="prelude-val">Ok</span>(())
 }
 
 <span class="doccomment">/// Insert a callback that is triggered on a request. Must yield a valid response. Don&#39;t forget to process
-</span><span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
-</span><span class="kw">pub fn </span>lk_status_set(lk:<span class="kw-2">&amp;</span>Linkspace,status:LkStatus,<span class="kw-2">mut </span>update:<span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>Linkspace,Domain,GroupID,<span class="kw-2">&amp;</span>RootedSpace,Link) -&gt; LkResult&lt;NetPktBox&gt; +<span class="lifetime">&#39;static</span>)-&gt; LkResult&lt;()&gt;{
-    <span class="kw">use </span>tracing::debug_span;
+</span><span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+</span><span class="kw">pub fn </span>lk_status_set(
+    lk: <span class="kw-2">&amp;</span>Linkspace,
+    status: LkStatus,
+    <span class="kw-2">mut </span>update: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>Linkspace, Domain, GroupID, <span class="kw-2">&amp;</span>RootedSpace, Link) -&gt; LkResult&lt;NetPktBox&gt;
+        + <span class="lifetime">&#39;static</span>,
+) -&gt; LkResult&lt;()&gt; {
+    <span class="kw">use </span><span class="kw">crate</span>::runtime::lk_watch2;
     <span class="kw">use </span>linkspace_common::prelude::{U16, U32};
-    <span class="kw">use </span><span class="kw">crate</span>::runtime::{lk_watch2};
+    <span class="kw">use </span>tracing::debug_span;
 
-    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">&quot;status_set&quot;</span>,<span class="question-mark">?</span>status);
+    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">&quot;status_set&quot;</span>, <span class="question-mark">?</span>status);
     <span class="kw">let _ </span>= span.enter();
-    <span class="kw">let </span>LkStatus { domain, group, objtype, instance,qid }= status;
+    <span class="kw">let </span>LkStatus {
+        domain,
+        group,
+        objtype,
+        instance,
+        qid,
+    } = status;
 
     <span class="kw">let </span>objtype = objtype.to_vec();
     <span class="kw">let </span>instance = instance.or(<span class="prelude-val">Some</span>(<span class="string">b&quot;default&quot;</span>)).map(Vec::from);
-    <span class="kw">let </span>status = LkStatus { instance: instance.as_deref(), domain , group, objtype:<span class="kw-2">&amp;</span>objtype, qid};
+    <span class="kw">let </span>status = LkStatus {
+        instance: instance.as_deref(),
+        domain,
+        group,
+        objtype: <span class="kw-2">&amp;</span>objtype,
+        qid,
+    };
     <span class="kw">let </span>space = lk_status_space(status)<span class="question-mark">?</span>;
-    <span class="kw">let </span>link = Link{tag:ab(<span class="string">b&quot;init&quot;</span>),ptr:PRIVATE};
-    <span class="kw">let </span>initpkt = update(lk,status.domain, PRIVATE, <span class="kw-2">&amp;</span>space,link)<span class="question-mark">?</span>;
+    <span class="kw">let </span>link = Link {
+        tag: ab(<span class="string">b&quot;init&quot;</span>),
+        ptr: PRIVATE,
+    };
+    <span class="kw">let </span>initpkt = update(lk, status.domain, PRIVATE, <span class="kw-2">&amp;</span>space, link)<span class="question-mark">?</span>;
     is_status_reply(status, <span class="kw-2">&amp;</span>space, <span class="kw-2">&amp;</span>initpkt)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>prev = initpkt.hash();
-    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>initpkt,<span class="string">&quot;init status&quot;</span>);
-    lk_save(lk,<span class="kw-2">&amp;</span>initpkt )<span class="question-mark">?</span>;
+    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>initpkt, <span class="string">&quot;init status&quot;</span>);
+    lk_save(lk, <span class="kw-2">&amp;</span>initpkt)<span class="question-mark">?</span>;
     std::mem::drop(initpkt);
 
     <span class="kw">let </span><span class="kw-2">mut </span>q = lk_query(<span class="kw-2">&amp;</span>Q);
-    <span class="kw">let </span>prefix = lk_status_space(LkStatus { instance:<span class="prelude-val">None</span>, ..status})<span class="question-mark">?</span>;
+    <span class="kw">let </span>prefix = lk_status_space(LkStatus {
+        instance: <span class="prelude-val">None</span>,
+        ..status
+    })<span class="question-mark">?</span>;
     q = lk_query_push(q, <span class="string">&quot;data_size&quot;</span>, <span class="string">&quot;=&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
     q = lk_query_push(q, <span class="string">&quot;links_len&quot;</span>, <span class="string">&quot;=&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
     q = lk_query_push(q, <span class="string">&quot;prefix&quot;</span>, <span class="string">&quot;=&quot;</span>, prefix.space_bytes())<span class="question-mark">?</span>;
     <span class="comment">// We only care about new packets. Worst case a request was received and timeout between our init and this cb.
     </span>q = lk_query_push(q, <span class="string">&quot;i_db&quot;</span>, <span class="string">&quot;&lt;&quot;</span>, <span class="kw-2">&amp;*</span>U32::ZERO)<span class="question-mark">?</span>;
     q = lk_query_push(q, <span class="string">&quot;&quot;</span>, <span class="string">&quot;qid&quot;</span>, qid)<span class="question-mark">?</span>;
-    lk_watch2(lk, <span class="kw-2">&amp;</span>q, try_cb(<span class="kw">move </span>|pkt:<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, lk:<span class="kw-2">&amp;</span>Linkspace| -&gt; LkResult&lt;()&gt;{
-        <span class="kw">let </span>status = LkStatus { instance: instance.as_deref(), domain , group, objtype:<span class="kw-2">&amp;</span>objtype,qid:<span class="kw-2">&amp;</span>[]};
-        <span class="kw">let </span>p = pkt.get_rooted_spacename();
-        <span class="kw">if </span>p.depth() == space.depth() &amp;&amp; p.space() != space.as_ref() { <span class="kw">return </span><span class="prelude-val">Ok</span>(())}
-        <span class="kw">let </span>link = Link{tag:ab(<span class="string">b&quot;prev&quot;</span>),ptr:prev};
-        <span class="kw">let </span>reply = update(lk,status.domain,PRIVATE,<span class="kw-2">&amp;</span>space,link)<span class="question-mark">?</span>;
-        is_status_reply(status, <span class="kw-2">&amp;</span>space, <span class="kw-2">&amp;</span>reply)<span class="question-mark">?</span>;
-        prev  = reply.hash();
-        <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>reply,<span class="string">&quot;Reply status&quot;</span>);
-        lk_save(lk,<span class="kw-2">&amp;</span>reply)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
-    }),span)<span class="question-mark">?</span>;
+    lk_watch2(
+        lk,
+        <span class="kw-2">&amp;</span>q,
+        try_cb(<span class="kw">move </span>|pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, lk: <span class="kw-2">&amp;</span>Linkspace| -&gt; LkResult&lt;()&gt; {
+            <span class="kw">let </span>status = LkStatus {
+                instance: instance.as_deref(),
+                domain,
+                group,
+                objtype: <span class="kw-2">&amp;</span>objtype,
+                qid: <span class="kw-2">&amp;</span>[],
+            };
+            <span class="kw">let </span>p = pkt.get_rooted_spacename();
+            <span class="kw">if </span>p.depth() == space.depth() &amp;&amp; p.space() != space.as_ref() {
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+            }
+            <span class="kw">let </span>link = Link {
+                tag: ab(<span class="string">b&quot;prev&quot;</span>),
+                ptr: prev,
+            };
+            <span class="kw">let </span>reply = update(lk, status.domain, PRIVATE, <span class="kw-2">&amp;</span>space, link)<span class="question-mark">?</span>;
+            is_status_reply(status, <span class="kw-2">&amp;</span>space, <span class="kw-2">&amp;</span>reply)<span class="question-mark">?</span>;
+            prev = reply.hash();
+            <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>reply, <span class="string">&quot;Reply status&quot;</span>);
+            lk_save(lk, <span class="kw-2">&amp;</span>reply)<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>(())
+        }),
+        span,
+    )<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(())
 }
 </code></pre></div></section></main></body></html>

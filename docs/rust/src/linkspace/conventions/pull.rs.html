@@ -50,8 +50,10 @@
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
-</pre></div><pre class="rust"><code>
-<span class="doccomment">/** pull requests create a linkpoint in \[f:exchange\]:\[#:0\]:/pull/\[query.group\]/\[query.domain\]/\[query.id\]
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+</pre></div><pre class="rust"><code><span class="doccomment">/** pull requests create a linkpoint in \[f:exchange\]:\[#:0\]:/pull/\[query.group\]/\[query.domain\]/\[query.id\]
 
 Pull queries must have the predicates &#39;domain:=:..&#39; and &#39;group:=:..&#39;.
 It is up to an exchange process to fulfill the query.
@@ -65,7 +67,7 @@ You can use [lk_status_watch] to determine if a exchange is active
 
 <span class="kw">use crate</span>::<span class="kw-2">*</span>;
 
-<span class="attr">#[cfg(feature=<span class="string">&quot;runtime&quot;</span>)]
+<span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
 </span><span class="doccomment">/// Save a query in linkspace using the point format compatible with the pull convention
 </span><span class="kw">pub fn </span>lk_pull(lk: <span class="kw-2">&amp;</span>Linkspace, query: <span class="kw-2">&amp;</span>Query) -&gt; LkResult&lt;LkHash&gt; {
     <span class="kw">let </span>req = lk_pull_point(query)<span class="question-mark">?</span>;
@@ -73,7 +75,7 @@ You can use [lk_status_watch] to determine if a exchange is active
     <span class="prelude-val">Ok</span>(req.hash())
 }
 <span class="doccomment">/// Prefer using [lk_pull] - creates a pullpoint from a query
-</span><span class="kw">pub fn </span>lk_pull_point(query: <span class="kw-2">&amp;</span>Query ) -&gt; LkResult&lt;NetPktBox&gt; {
+</span><span class="kw">pub fn </span>lk_pull_point(query: <span class="kw-2">&amp;</span>Query) -&gt; LkResult&lt;NetPktBox&gt; {
     <span class="kw">let </span>group: GroupID = query
         .<span class="number">0
         </span>.predicates
@@ -88,7 +90,11 @@ You can use [lk_status_watch] to determine if a exchange is active
         .as_eq()
         .context(<span class="string">&quot;requires exact domain predicate&quot;</span>)<span class="question-mark">?
         </span>.into();
-    <span class="kw">let </span>id = query.<span class="number">0</span>.qid()<span class="question-mark">?</span>.flatten().context(<span class="string">&quot;missing :qid:... option&quot;</span>)<span class="question-mark">?</span>;
+    <span class="kw">let </span>id = query
+        .<span class="number">0
+        </span>.qid()<span class="question-mark">?
+        </span>.flatten()
+        .context(<span class="string">&quot;missing :qid:... option&quot;</span>)<span class="question-mark">?</span>;
     <span class="kw">let </span>data = query.<span class="number">0</span>.to_string();
     <span class="macro">tracing::trace!</span>(data);
     <span class="kw">let </span>pull_space = rspace_buf(<span class="kw-2">&amp;</span>[<span class="string">b&quot;pull&quot;</span>, <span class="kw-2">&amp;*</span>group, <span class="kw-2">&amp;*</span>domain, id]);
