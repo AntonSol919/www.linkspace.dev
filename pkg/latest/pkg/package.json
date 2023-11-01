@@ -1,0 +1,23 @@
+{
+  "name": "linkspace-js",
+  "collaborators": [
+    "Anton Sol <AntonSol919@gmail.com>"
+  ],
+  "description": "js bindings for linkspace",
+  "version": "0.5.0",
+  "license": "MPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AntonSol919/linkspace"
+  },
+  "files": [
+    "*"
+  ],
+  "module": "linkspace.js",
+  "homepage": "https://www.linkspace.dev",
+  "types": "linkspace.d.ts",
+  "sideEffects": [
+    "./linkspace.js",
+    "./snippets/*"
+  ]
+}
