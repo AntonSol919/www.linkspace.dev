@@ -17,6 +17,7 @@ from collections import deque
 search_attrs = set(['href', 'src'])
 agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
 
+errors = []
 
 class LinkParser(HTMLParser):
     def __init__(self, home, verbose = False):
@@ -27,21 +28,27 @@ class LinkParser(HTMLParser):
         self.verbose = verbose
         self.checked_links = set()
         self.pages_to_check = deque()
-        self.pages_to_check.appendleft(home)
+        self.pages_to_check.appendleft([home,"root"])
         self.scanner()
         self.cwp =home
 
     def scanner(self):
         '''Loop through remaining pages, looking for HTML responses'''
         while self.pages_to_check:
-            self.cwp = self.pages_to_check.pop()
+            [cwp,origin] = self.pages_to_check.pop()
+            self.cwp = cwp
 
             req = Request(self.cwp, headers={'User-Agent': agent})
-            res = request.urlopen(req)
-            if 'html' in res.headers['content-type']:
-                with res as f:
-                    body = f.read().decode('utf-8', errors='ignore')
-                    self.feed(body)
+            if self.verbose:
+                print(f"\t\t{origin} -> {cwp}")
+            try:
+                res = request.urlopen(req)
+                if 'html' in res.headers['content-type']:
+                    with res as f:
+                        body = f.read().decode('utf-8', errors='ignore')
+                        self.feed(body)
+            except urllib.error.HTTPError as e: 
+                errors.append([cwp,origin])
 
     def handle_starttag(self, tag, attrs):
         '''Override parent method and check tag for our attributes'''
@@ -71,8 +78,11 @@ class LinkParser(HTMLParser):
             if self.verbose:
                 print(f'{status} - {link} ({self.cwp})')
         if self.home in link:
-            self.pages_to_check.appendleft(link)
+            self.pages_to_check.appendleft([link,self.cwp])
 
 
 
 t = LinkParser("http://localhost:8000")
+
+for [dest,source] in errors:
+    print(f"ERROR: {source} -> {dest}")

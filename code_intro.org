@@ -40,8 +40,8 @@ a timestamp in microseconds since epoch using `now` by default:
 
 #+NAME: point-create
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  STAMP=$(($(date +%s%N)/1000000)) # There's an easier syntax we'll get back to.
-  lk point ::/my/example/other_space --create-int $STAMP >> mylog
+  # 12 seconds in the past - we'll get back to the [..] syntax 
+  lk point ::/my/example/other_space --create [now:-12s] >> mylog 
 #+END_SRC
 
 and a signature:
@@ -69,10 +69,11 @@ All points are hashed using Blake3.
   cat mylog | lk pktf "Hash: [hash:str] is a point at '[spacename:str]' with data '[data]'"
 #+END_SRC
 
-Because these properties are adjacent to 'data', they can be used for indexing and processing by
-general purpose tools like `lk filter`. 
+Or output only data: `cat mylog | lk pktf "[data]"`.
 
-Here we take only the points with a spacename starting with `/my/example` and 1 additional component
+The other fields are readable by general purpose tools to index, address, and filter the packets. 
+For example, lk filter.
+Here we only take those with a spacename starting with `/my/example` and 1 additional component
 
 #+NAME: filter
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -96,6 +97,15 @@ You can get fancy with `pktf` and `xargs`.
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
   cat mylog | lk pktf "mytag:[hash:str]" | xargs lk point ::/my/example/link -- >> mylog
 #+END_SRC
+
+#+BEGIN_VERSE
+When building a log you should start with only using the data field, in a readable format like JSON.
+Only when required should you expand to use the more advanced features like spacenames, signatures, and links. 
+
+You can ask if cryptographic properties, like signatures or distributed event ordering by linking, are worth to add upfront if you want to focus on the data.
+The answer is yes.
+Cryptographic signatures and hash addresses are difficult to get right, and infeasible to add retroactively. 
+#+END_VERSE
 
 A tool like `lk collect` has a few additional options for building points linking to other points.
 However, the `lk` binary is meant to do simple things.

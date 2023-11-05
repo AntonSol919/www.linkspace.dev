@@ -1,4 +1,9 @@
-Some notes on application level algorithm design. i.e. how to build something with linkspace. 
+---
+title: Notes on designing applications
+header-includes: <script src="../log.js" type="module"></script>
+---
+
+Some notes on application level design. i.e. how to build something with linkspace.
 
 # Associative state transition functions
 

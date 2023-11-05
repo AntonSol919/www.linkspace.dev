@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/linkspace/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="linkspace" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.0-nightly (ca62d2c44 2023-09-30)" data-channel="nightly" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../linkspace/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/linkspace/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="linkspace" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (9d83ac217 2023-10-31)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1201,6 +1201,15 @@
 <a href="#1201" id="1201">1201</a>
 <a href="#1202" id="1202">1202</a>
 <a href="#1203" id="1203">1203</a>
+<a href="#1204" id="1204">1204</a>
+<a href="#1205" id="1205">1205</a>
+<a href="#1206" id="1206">1206</a>
+<a href="#1207" id="1207">1207</a>
+<a href="#1208" id="1208">1208</a>
+<a href="#1209" id="1209">1209</a>
+<a href="#1210" id="1210">1210</a>
+<a href="#1211" id="1211">1211</a>
+<a href="#1212" id="1212">1212</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright Anton Sol
 //
 // This Source Code Form is subject to the terms of the Mozilla Public
@@ -1222,8 +1231,12 @@
 The functions re-exported below is essentially the entire linkspace interface.
 Bindings in other languages follow the same pattern.
 
-[prelude] includes some additional utilities.
-Some internals structs defs are currently leaking and will be removed.
+It is designed to be small, low level, compatible across languages, and allow zero copy where possible.
+That makes some functions awkward.
+E.g. [runtime::lk_get_all] only accepts a callback instead of returning a list/vector.
+Creating a utility function in your programming language that copies the packets into a list is plenty fast for 99% of users.
+
+[prelude] imports common functions and types with a few utilities for creating them.
 &quot;#</span>]
 
 </span><span class="doccomment">/// The only error format linkspace supports - alias for anyhow::Error
@@ -1787,6 +1800,9 @@ See guide#ABE to understand its use and indepth explanation.
     # Ok(()) }
     ```
 
+    Unlike predicates, options are non-associative. i.e. the order in which they&#39;re added matters.
+    &#39;push&#39; and &#39;parse&#39; add them to the top of the query.
+    In string form you find the matching option by reading from top to bottom.
     */
     </span><span class="attr">#[derive(Clone)]
     </span><span class="doccomment">/// a set of predicates and options to select/filter packets
@@ -1810,7 +1826,7 @@ See guide#ABE to understand its use and indepth explanation.
     <span class="kw">use </span>anyhow::Context;
     <span class="kw">pub use </span>linkspace_common::core::predicate::predicate_type::PredicateType;
     <span class="kw">pub use </span>linkspace_common::core::query::KnownOptions;
-    <span class="kw">use </span>linkspace_common::prelude::{ExtPredicate, PktPredicates};
+    <span class="kw">use </span>linkspace_common::prelude::ExtPredicate;
 
     <span class="kw">use </span><span class="kw">crate</span>::abe::scope::UserData;
 
@@ -1819,7 +1835,7 @@ See guide#ABE to understand its use and indepth explanation.
     </span><span class="kw">pub fn </span>lk_query(copy_from: <span class="kw-2">&amp;</span>Query) -&gt; Query {
         Query(copy_from.<span class="number">0</span>.clone())
     }
-    <span class="doccomment">/// Create a new [Query] specifically for a hash. Sets the right mode and &#39;i&#39; count. See [runtime::lk_get_hash] if you don&#39;t care to watch the db.
+    <span class="doccomment">/// Create a new [Query] specifically for a hash. Sets the right mode and &#39;i&#39; count. See [runtime::lk_get_hashes] if you don&#39;t care to watch the db.
     </span><span class="kw">pub fn </span>lk_hash_query(hash: LkHash) -&gt; Query {
         Query(linkspace_common::core::query::Query::hash_eq(hash))
     }
@@ -1827,7 +1843,8 @@ See guide#ABE to understand its use and indepth explanation.
     <span class="doccomment">/// Add a single statement to a [Query], potentially skipping an encode step.
     /// i.e. fast path for adding a single statement - lk_query_parse(q,&quot;{field}:{op}:{lk_encode(bytes)}&quot;)
     ///
-    /// Also accepts options in the form ```lk_query_push(q,&quot;&quot;,&quot;mode&quot;,b&quot;tree-asc&quot;)```;
+    /// Also accepts options in the form ```lk_query_push(q,&quot;&quot;,&quot;mode&quot;,b&quot;tree-asc&quot;)```.
+    /// Unlike predicates, options don&#39;t join and instead are pushed to the front of the query;
     </span><span class="kw">pub fn </span>lk_query_push(<span class="kw-2">mut </span>query: Query, field: <span class="kw-2">&amp;</span>str, test: <span class="kw-2">&amp;</span>str, val: <span class="kw-2">&amp;</span>[u8]) -&gt; LkResult&lt;Query&gt; {
         <span class="kw">if </span>field.is_empty() {
             query.<span class="number">0</span>.add_option(test, <span class="kw-2">&amp;</span>[val]);
@@ -1852,8 +1869,7 @@ See guide#ABE to understand its use and indepth explanation.
     <span class="doccomment">/// Clear a [Query] for reuse
     </span><span class="kw">pub fn </span>lk_query_clear(query: <span class="kw-2">&amp;mut </span>Query) {
         <span class="comment">//if fields.is_some() || keep_options { todo!()}
-        </span>query.<span class="number">0</span>.predicates = PktPredicates::DEFAULT;
-        query.<span class="number">0</span>.conf.<span class="number">0</span>.clear();
+        </span><span class="kw-2">*</span>query = Q.clone();
     }
     <span class="doccomment">/// Get the string representation of a [Query]
     </span><span class="kw">pub fn </span>lk_query_print(query: <span class="kw-2">&amp;</span>Query, as_expr: bool) -&gt; String {
@@ -1990,24 +2006,26 @@ See guide#ABE to understand its use and indepth explanation.
 
     </span><span class="doccomment">/// save a packet. Returns true if new and false if its old.
     </span><span class="kw">pub fn </span>lk_save(lk: <span class="kw-2">&amp;</span>Linkspace, pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt) -&gt; std::io::Result&lt;bool&gt; {
-        lk.<span class="number">0</span>.env().save_dyn_one(pkt).map(|o| o.is_new())
+        lk.<span class="number">0</span>.env().save_dyn_one(pkt).map(|o| o.is_written())
     }
     <span class="doccomment">/// save multiple packets at once - returns the number of new packets written
     </span><span class="kw">pub fn </span>lk_save_all(lk: <span class="kw-2">&amp;</span>Linkspace, pkts: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt]) -&gt; std::io::Result&lt;usize&gt; {
         <span class="kw">let </span>(start, excl) = lk_save_all_ext(lk, pkts)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>((excl.get() - start.get()) <span class="kw">as </span>usize)
     }
-    <span class="doccomment">/// returns the range of recv stampes used to save new packets. total_new = r.1-r.0
+    <span class="doccomment">/// returns the range [incusive,exclusive) of recv stamps used to save new packets. total_new = r.1-r.0
     </span><span class="kw">pub fn </span>lk_save_all_ext(
         lk: <span class="kw-2">&amp;</span>Linkspace,
         pkts: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt],
     ) -&gt; std::io::Result&lt;(Stamp, Stamp)&gt; {
-        <span class="kw">let </span>(s, e) = lk.<span class="number">0</span>.env().save_dyn_iter(pkts.iter().copied())<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>((s.into(), e.into()))
+        <span class="kw">let </span>range = lk.<span class="number">0</span>.env().save_dyn_iter(pkts.iter().copied())<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>((range.start.into(), range.end.into()))
     }
 
     <span class="doccomment">/// Run callback for every match for the query in the database.
     /// Break early if the callback returns true.
+    /// returns number of matches
+    /// if return from break return is -1*Number of matches
     /// If break =&gt; number of matches
     /// If no break ( cb only returned false ) =&gt; -1 * Number of matches
     </span><span class="kw">pub fn </span>lk_get_all(
@@ -2025,48 +2043,48 @@ See guide#ABE to understand its use and indepth explanation.
                 <span class="kw">break</span>;
             }
         }
-        <span class="prelude-val">Ok</span>(<span class="kw">if </span>breaks {
-            saturating_cast(c)
-        } <span class="kw">else </span>{
-            saturating_neg_cast(c)
-        })
+        <span class="kw">if </span>breaks {
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(saturating_neg_cast(c));
+        }
+        <span class="prelude-val">Ok</span>(saturating_cast(c))
     }
 
     <span class="doccomment">/// get the first result from the database matching the query.
     </span><span class="kw">pub fn </span>lk_get(lk: <span class="kw-2">&amp;</span>Linkspace, query: <span class="kw-2">&amp;</span>Query) -&gt; LkResult&lt;<span class="prelude-ty">Option</span>&lt;NetPktBox&gt;&gt; {
         lk_get_ref(lk, query, <span class="kw-2">&amp;mut </span>|v| v.as_netbox())
     }
-    <span class="doccomment">/** read a single packet directly without copying.
-    This means that [NetPkt::net_header_mut] is unavailable.
-    To mutate the header, wrap the result in [crate::misc::ReroutePkt] or copy with [NetPkt::as_netbox]..
-    **/
+    <span class="doccomment">/** read a single packet directly without copying when possible. **/
     </span><span class="kw">pub fn </span>lk_get_ref&lt;A&gt;(
         lk: <span class="kw-2">&amp;</span>Linkspace,
         query: <span class="kw-2">&amp;</span>Query,
-        cb: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(RecvPktPtr) -&gt; A,
+        cb: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt) -&gt; A,
     ) -&gt; LkResult&lt;<span class="prelude-ty">Option</span>&lt;A&gt;&gt; {
         <span class="kw">let </span>mode = query.<span class="number">0</span>.get_mode()<span class="question-mark">?</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">0</span>;
         <span class="kw">let </span>reader = lk.<span class="number">0</span>.get_reader();
         <span class="kw">let </span>opt_pkt = reader.query(mode, <span class="kw-2">&amp;</span>query.<span class="number">0</span>.predicates, <span class="kw-2">&amp;mut </span>i)<span class="question-mark">?</span>.next();
-        <span class="prelude-val">Ok</span>(opt_pkt.map(cb))
+        <span class="prelude-val">Ok</span>(opt_pkt.map(|p| cb(<span class="kw-2">&amp;</span>p)))
     }
-    <span class="doccomment">/** read a single packet from the database by its hash without copying.
-    This means that [NetPkt::net_header_mut] is unavailable.
-    To mutate the header, wrap the result in [crate::misc::ReroutePkt] or copy with [NetPkt::as_netbox]..
-     **/
-    </span><span class="kw">pub fn </span>lk_get_hash&lt;A&gt;(
+
+    <span class="doccomment">/// todo
+    </span><span class="kw">pub fn </span>lk_get_hashes(
         lk: <span class="kw-2">&amp;</span>Linkspace,
-        hash: LkHash,
-        cb: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(RecvPktPtr) -&gt; A,
-    ) -&gt; anyhow::Result&lt;<span class="prelude-ty">Option</span>&lt;A&gt;&gt; {
-        <span class="kw">let </span>reader = lk.<span class="number">0</span>.get_reader();
-        <span class="kw">let </span>opt = reader.read(<span class="kw-2">&amp;</span>hash)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(opt.map(cb))
+        hashes: <span class="kw-2">&amp;</span>[LkHash],
+        cb: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt) -&gt; bool,
+    ) -&gt; LkResult&lt;i32&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>c = <span class="number">0</span>;
+        <span class="kw">let </span>r = lk.<span class="number">0</span>.get_reader();
+        <span class="kw">for </span>p <span class="kw">in </span>r.get_pkts_by_hash(hashes.iter().copied()) {
+            c += <span class="number">1</span>;
+            <span class="kw">if </span>(cb)(<span class="kw-2">&amp;</span>p) {
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(saturating_neg_cast(c));
+            }
+        }
+        <span class="prelude-val">Ok</span>(saturating_cast(c))
     }
 
     <span class="doccomment">/**
-    Registers the query under its &#39;qid&#39; ( .e.g. set by lk_query_parse(q,&quot;:qid:myqid) )
+    Registers the query under its &#39;qid&#39; ( .e.g. set by lk_query_parse(q,&quot;:qid:myqid&quot;) )
     Before returning, calls cb for every packet in the database.
     The absolute return value is the number of times the callback was called.
     A positive value means the callback finished already.
@@ -2102,17 +2120,17 @@ See guide#ABE to understand its use and indepth explanation.
     }
 
     <span class="doccomment">/// close lk_watch watches based on the query id &#39;:qid:example&#39; in the query.
-    </span><span class="kw">pub fn </span>lk_stop(rt: <span class="kw-2">&amp;</span>Linkspace, id: <span class="kw-2">&amp;</span>[u8], range: bool) {
+    </span><span class="kw">pub fn </span>lk_stop(lk: <span class="kw-2">&amp;</span>Linkspace, id: <span class="kw-2">&amp;</span>[u8], range: bool) {
         <span class="kw">if </span>range {
-            rt.<span class="number">0</span>.close_range(id)
+            lk.<span class="number">0</span>.close_range(id)
         } <span class="kw">else </span>{
-            rt.<span class="number">0</span>.close(id)
+            lk.<span class="number">0</span>.close(id)
         }
     }
 
     <span class="doccomment">/// process the log of new packets and trigger callbacks. Updates the reader to the latest state.
-    </span><span class="kw">pub fn </span>lk_process(rt: <span class="kw-2">&amp;</span>Linkspace) -&gt; Stamp {
-        rt.<span class="number">0</span>.process()
+    </span><span class="kw">pub fn </span>lk_process(lk: <span class="kw-2">&amp;</span>Linkspace) -&gt; Stamp {
+        lk.<span class="number">0</span>.process()
     }
     <span class="doccomment">/**
     continuously process callbacks until:

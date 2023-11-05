@@ -1,5 +1,6 @@
 ---
 title:  Tutorials
+header-includes: <script src="../log.js" type="module"></script>
 ---
 
 These are some tutorials and code examples.

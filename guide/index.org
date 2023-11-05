@@ -137,15 +137,24 @@ echo "Hello, Sol!" | lk data | lk pktf "[hash:str]\n[data]"
 #+end_sh
 
 #+begin_py
-
 #+begin_src python :session lkpy :exports both :results output verbatim
   from linkspace import *
   datap = lk_datapoint(b"Hello, Sol!\n")
   print(f'Packed data {datap.data.decode()} into a packet with hash {b64(datap.hash)}')
-  print(lk_eval2str("Or use abe, a language agnostic template, like this: [hash:str] = [data]", datap))
+  print(lk_eval2str("Or use abe, a language agnostic template. Eg. [hash:str] = [data]", datap))
 #+END_SRC
-
 #+end_py
+
+#+begin_js
+#+begin_src js
+  // import init,* as linkspace from "/pkg/latest/linkspace.js"; -- already imported 
+  let datap = lk_datapoint("Hello, Sol!");
+  log( datap.data );
+  log(new TextDecoder().decode(datap.data))
+  log(lk_eval2str("Or use abe, a language agnostic template.\\n Eg. [hash:str] = [data]",datap));
+#+END_SRC
+#+end_js
+
 
 #+end_ctabs
 
@@ -1023,20 +1032,21 @@ They are of the form ~':' name ':' rest~.
 Depending on the context/function they are ignored.
 Developers are free to expand their meaning for their usecase like in a group exchange processes. 
 
-Unlike predicates, options have no standard meaning when two queries with the same option are concatenated.
-Predicates have a well defined meaning when queries are concatenated.
-Options should define their own logic when they appear multiple times.
-
-The following options are known to have a specific meaning:
+Unlike predicates, options are not associative. 
+The order they are joined matters.
+When using lk_query_push or lk_query_parse, the options are added *to the front* of the string.
+i.e. finding the first matching option is done by reading from top to bottom. 
+Extensions should clearly define the meaning when multiple appear.
 
 NOTE: These options will change somewhat in coming versions. 
 
-| name          | value                      | use                                            | multiple     |
-|---------------+----------------------------+------------------------------------------------+--------------|
-| :mode:        | (tree/hash/log)-(asc/desc) | set the table to read from                     | Last is used |
-| :follow       |                            | also output linked packets                     | N/A          |
-| :qid:         | <any>                      | identity/close an active query                 | Last is used |
-| :notify-close |                            | send a final dummy packet when closing a query | N/A          |
+| name          | value                      | use                                            | multiple         |
+|---------------+----------------------------+------------------------------------------------+------------------|
+| :mode:        | (tree/hash/log)-(asc/desc) | set the index to read from                     | Top most is used |
+| :follow       |                            | also output linked packets                     | N/A              |
+| :qid:         | <any>                      | identity/close an active query                 | Top most is used |
+| :notify-close |                            | send a final dummy packet when closing a query | N/A              |
+
 
 ** Known predicates & options
 :PROPERTIES:

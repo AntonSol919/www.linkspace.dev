@@ -19,10 +19,15 @@ guide: build-debug
 build-debug: 
 	make -C ../linkspace build-debug
 
+
+jspkg: 
+	rm -r ./pkg/latest || true
+	wasm-pack build ../linkspace/ffi/linkspace-js --target web -d $(CURDIR)/pkg/latest
+
 homepage: build-debug index.html about.html code_intro.html
 
 # ORG PANDOC EXPORT 
-%.html: %.org template.pml
+%.html: %.org template.pml org-utils.org
 	emacsclient --eval "(progn (switch-to-buffer (find-file-noselect \"./$<\")) (org-pandoc-export-to-html5))"
 
 %.html: %.md template.pml

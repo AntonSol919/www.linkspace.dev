@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>application-design</title>
+  <title>Notes on designing applications</title>
   <style>
 html {
 color: #1a1a1a;
@@ -162,13 +162,61 @@ vertical-align: middle;
 }
 .display.math{display: block; text-align: center; margin: 0.5rem auto;}
 </style>
+  <script type="module">import init, {
+    lk_keygen,
+    lk_key_encrypt,
+    lk_key_decrypt,
+    lk_key_pubkey,
+    now,
+    
+    lk_datapoint,
+    lk_linkpoint,
+    lk_keypoint,
+    
+    lk_read,
+    lk_write,
+    
+    lk_eval2str,
+    
+    b64,
+    Link,
+    get_consts,
+    build_info
+} from '/pkg/latest/linkspace.js';
+
+async function go(){
+    let wasm = await init();
+    let enckey = localStorage.getItem('lk_key');
+    let key = enckey ? lk_key_decrypt(enckey,localStorage.getItem('lk_password') || "") : lk_keygen();
+    if (enckey == null) { localStorage.setItem('lk_key', lk_key_encrypt(key,''));}
+
+    let session_id = sessionStorage.getItem("session_id") || lk_eval2str("[now/?u]");
+
+    sessionStorage.setItem("session_id",session_id);
+
+    let group = lk_datapoint(window.location.origin).hash;
+    let space = window.location.pathname.split("/").filter(e=>e);
+    let domain = "tracking";
+    function lkq(event){
+        let kp = lk_keypoint(key,JSON.stringify({session_id,"event":event}),{group, space,domain});
+        let body = lk_write(kp);
+        fetch("https://ws.alinkspace.org/log",{method:"POST",body});
+    }
+    lkq("open");
+}
+
+go();
+</script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
 </head>
 <body>
-<p>Some notes on application level algorithm design. i.e. how to build
-something with linkspace.</p>
+<header id="title-block-header">
+<h1 class="title">Notes on designing applications</h1>
+</header>
+<p>Some notes on application level design. i.e. how to build something
+with linkspace.</p>
 <h1 id="associative-state-transition-functions">Associative state
 transition functions</h1>
 <p>‘State’ in this context refers to any mutating variable.</p>

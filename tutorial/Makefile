@@ -7,9 +7,9 @@ PAGES := $(patsubst ./%.md,./%.html,$(MD_PAGES)) $(patsubst ./%.org,./%.html,$(O
 all : $(PAGES) 
 
 # ORG HTML EXPORT
-%.html: %.org 
+%.html: %.org ../org-utils.org
 	emacsclient --eval "(progn (switch-to-buffer (find-file-noselect \"./$<\")) (org-html-export-to-html))"
 
-%.html: %.md
+%.html: %.md ../log.j	s
 	pandoc --embed-resources --standalone $< > $@
 
