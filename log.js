@@ -4,20 +4,16 @@ import init, {
     lk_key_decrypt,
 
     lk_datapoint,
-    lk_linkpoint,
     lk_keypoint,
     
-    lk_write,
-    lk_read,
+    lk_serialize,
+    lk_deserialize,
     
-    lk_eval2str,
     build_info,
     b64,
     Link,
-    CONSTS
 }  from '/pkg/latest/linkspace.js';
 
-let binfo;
 function getBrowserInfo(){
     let timeInfo = Intl.DateTimeFormat().resolvedOptions();
     return {
@@ -30,7 +26,7 @@ function getBrowserInfo(){
 }
 
 async function go(){
-    let wasm = await init();
+    await init();
     let enckey = localStorage.getItem('lk_key');
     let key = enckey ? lk_key_decrypt(enckey,localStorage.getItem('lk_password') || "") : lk_keygen();
     if (enckey == null) { localStorage.setItem('lk_key', lk_key_encrypt(key,''));}
@@ -49,12 +45,12 @@ async function go(){
         );
     }
     function logPkt(pkt){
-        fetch("https://ws.alinkspace.org/log", { method: "POST", body: lk_write(pkt)}); 
+        fetch("https://ws.alinkspace.org/log", { method: "POST", body: lk_serialize(pkt)}); 
     }
 
     let sentinal = await fetch("https://ws.alinkspace.org/local-pkts/sentinal");
     let bytes = new Uint8Array(await sentinal.arrayBuffer());
-    let [sentinalPkt,_rest] = lk_read(bytes);
+    let [sentinalPkt,_rest] = lk_deserialize(bytes);
     console.log(sentinalPkt.toString());
     links.push(new Link("serverSentinal",sentinalPkt.hash));
 
@@ -103,7 +99,6 @@ async function go(){
     pageReadEvent(120);
     pageReadEvent(300);
     pageReadEvent(600);
-
 }
 
 go();

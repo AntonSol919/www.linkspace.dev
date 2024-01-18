@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-11-05 Sun 09:20 -->
+<!-- 2024-01-18 Thu 14:14 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>(WIP) MineWeeper Lobby</title>
@@ -26,7 +26,7 @@
 <header>
 <h1 class="title">(WIP) MineWeeper Lobby</h1>
 <p class="subtitle" role="doc-subtitle">A Linkspace Application Tutorial</p>
-</header><div class="py" id="orgd551b99">
+</header><div class="py" id="orge522801">
 <div class="org-src-container">
 <pre class="src src-python">#!/bin/env python3
 
@@ -44,7 +44,9 @@ group = lk_eval(group_name)
 lk = lk_open()
 key = lk_key(lk)
 
-common_q = lk_query_parse(lk_query(),"domain:=:mineweeper","group:=:"+group_name)
+common_q = lk_query()
+lk_query_parse(common_q,"domain:=:mineweeper\ngroup:=:"+group_name)
+
 keypoint = functools.partial(lk_keypoint,key=key,domain=b"mineweeper",group=group)
 
 recent_ok = lk_status_watch(
@@ -53,8 +55,11 @@ recent_ok = lk_status_watch(
     group=group,
     objtype=b"process")
 
-if not recent_ok and lk_process_while(lk,qid=b"status") == 0:
-    exit("No exchange process active. ")
+if not recent_ok:
+    pr = lk_process_while(lk,qid=b"status")
+    print(f"Process status to {pr}")
+    if pr == 0:
+        exit("No exchange process active. ")
 
 @dataclass
 class Lobby:
@@ -71,12 +76,6 @@ class Lobby:
 print("Welcome to the mineweeper lobby. Pick a game or setup a new one.")
 print("Press enter to refresh or enter 'w' to await for change")
 
-# Because we'll be using 'input()' we dont't have asynchronous feedback.
-# In a better program we would use a thread for the user interface.
-
-get_lobbies = lk_query_parse(common_q,"prefix:=:/host","depth:=:[u8:2]","create:&gt;:[now:-10m]",":qid:lobbies")
-lk_pull(lk,lk_query_parse(get_lobbies,":follow"))
-
 host_lobby = None
 lobbies:Dict[Tuple[bytes,bytes],Lobby] = dict()
 def insert(p:Pkt):
@@ -87,8 +86,20 @@ def insert(p:Pkt):
         lobby.start_pkt = p
     lobbies[(p.comp1,p.pubkey)] = lobby
 
-
+get_lobbies = lk_query(common_q)
+lk_query_parse(
+    get_lobbies,
+    """
+    prefix:=:/host
+    depth:=:[u8:2]
+    stamp:&gt;:[now:-10m]
+    :qid:lobbies
+    """
+)
 lk_watch(lk,get_lobbies,insert)
+
+lk_query_parse(get_lobbies,":follow")
+lk_pull(lk,lk_query(get_lobbies))
 lk_process(lk);
 
 while host_lobby is None or host_lobby.create_pkt is None:
@@ -111,7 +122,7 @@ while host_lobby is None or host_lobby.create_pkt is None:
                 game_name = input("Game name &gt; ")
             host_space = lk_eval("[//host/[0]]",argv=[game_name])
             create = keypoint(space=host_space)
-            lk_save(lk,create)
+            lk_write(lk,create)
             lk_process(lk)
             host_lobby = lobbies[(create.comp1,create.pubkey)]
         else:
@@ -127,9 +138,15 @@ player_name = ""
 while not player_name:
     player_name = input("Player name &gt; ")
 
-get_lobby = lk_query_parse(
-    common_q,"prefix:=:/lobby/[hash]",":qid:lobby[hash]",
-    pkt=host_lobby.create_pkt)
+get_lobby = lk_query(common_q)
+lk_query_parse(
+    get_lobby,
+    """
+    prefix:=:/lobby/[hash]
+    :qid:lobby[hash]
+    """,
+    pkt=host_lobby.create_pkt
+)
 # we could have used lk_query_push(common_q,"","qid",b"lobby" + host.create_pkt.hash)
 
 def lobby_pkt(p:Pkt):
@@ -137,9 +154,6 @@ def lobby_pkt(p:Pkt):
     if p.comp2 == b"chat":
         host_lobby.chat.append(p)
     elif p.comp2 == b"":
-        latest = host_lobby.players.get(p.pubkey)
-        if latest and latest.create &gt; p.create:
-            return
         host_lobby.players[p.pubkey] = p
     else:
         print("unknown msg",p)
@@ -151,7 +165,7 @@ join_pkt = keypoint(space=lobby_space,data=player_name)
 # host.create_pkt.hash == join_pkt.comp1 and b64(host.create_pkt.hash) == b64(join_pkt.comp1)
 
 
-lk_save(lk,join_pkt)
+lk_write(lk,join_pkt)
 lk_watch(lk,get_lobby, on_match=lobby_pkt)
 lk_process(lk) # Process ourselves
 
@@ -187,22 +201,22 @@ while not host_lobby.start_pkt:
             rows = int(input("rows (10) &gt; ") or "10")
             mine_rate = float(input("mine_rate (0.2) &gt; ")or "0.2")
             data = json.dumps({"columns":cols,"rows":rows,"mine_rate":mine_rate,"players":players})
-            start_pkt = keypoint(spacename=host_lobby.create_pkt.spacename,data=data,links=[Link("create",host_lobby.create_pkt.hash)])
-            lk_save(lk,start_pkt)
+            start_pkt = keypoint(space=host_lobby.create_pkt.space,data=data,links=[Link("create",host_lobby.create_pkt.hash)])
+            lk_write(lk,start_pkt)
             lk_process(lk)
         except Exception as e:
             print(e)
 
     elif cmd == "/leave":
-        lk_save(lk,keypoint(space=lobby_space))
+        lk_write(lk,keypoint(space=lobby_space))
         if me_host:
-            leave_pkt = keypoint(spacename=host_lobby.create_pkt.spacename,links=[Link("create",host_lobby.create_pkt.hash)]) # no data means we closed the lobby.
-            lk_save(lk,leave_pkt)
+            leave_pkt = keypoint(space=host_lobby.create_pkt.space,links=[Link("create",host_lobby.create_pkt.hash)]) # no data means we closed the lobby.
+            lk_write(lk,leave_pkt)
             print("host left ",leave_pkt)
         lk_process(lk)
         exit("We left.")
     else:
-        lk_save(lk,keypoint(space=lobby_space + lk_eval("[//chat]"),data=cmd))
+        lk_write(lk,keypoint(space=lobby_space + lk_eval("[//chat]"),data=cmd))
         lk_process(lk)
 
 if not len(host_lobby.start_pkt.data):
@@ -221,7 +235,7 @@ os.system(f"python \"{srcpath}/mineweeper-multiplayer.py\" {game_setup_hash}")
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-11-05 Sun 09:20</p>
+<p class="date">Created: 2024-01-18 Thu 14:14</p>
 </div>
 </body>
 </html>

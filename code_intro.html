@@ -1,379 +1,789 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Linkspace</title>
-		 <link rel="icon" type="image/x-icon" href="./images/logo.png">
-		 <link rel="stylesheet" href="./style.css"/>
-     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source%20Code%20Pro">
-     <script src="/log.js" type="module"></script>
-	  <body>
-		 <a id="name" href="./index.html">
-       <img id="logo" src="./images/logo.svg"/>Linkspace</a>
-		<div id="tagline"></div>
-    
+<html lang="en">
+<head>
+<!-- 2024-01-18 Thu 15:17 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Quick start</title>
+<meta name="author" content="R.A. Sol" />
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
 
-    <nav>
-      <li>
-        <a href="./index.html">Home</a>
-      </li>
-      <li>
-        <a href="./code_intro.html">Quick start</a>
-      </li>
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<header>
+<h1 class="title">Quick start</h1>
+</header><p>
+This introduction uses the `lk` cli with bash.
+You can follow along by <a href="https://github.com/AntonSol919/linkspace/releases">downloading</a> the latest release. 
+If you're more comfortable with Python or want a more detailed explanation check out the guide.  
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orgd153e58">lk --version
+</pre>
+</div>
+
+<pre class="example" id="org7248406">
+linkspace-cli linkspace-cli - 0.6.0 - main - cf010d4 - 1.77.0-nightly
+</pre>
+
+<div id="outline-container-org5e7aff0" class="outline-2">
+<h2 id="org5e7aff0"><span class="section-number-2">1.</span> Point</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+A single unit|event|message in linkspace is called a `point`.
+A point can hold just shy of 64kb.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orga73db08">echo "Hello, Sol!" | lk point &gt; mylog
+</pre>
+</div>
+
+<p>
+Points have a few of optional properties besides the data field.
+</p>
+
+<p>
+a spacename:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash" id="orgaeb9ee5">echo -n some data | lk point ::/my/example/spacename --data-stdin &gt;&gt; mylog
+</pre>
+</div>
+
+<p>
+a timestamp in microseconds since epoch using `now` by default:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org35f2cb0"># 12 seconds in the past - we'll get back to the [..] syntax 
+lk point ::/my/example/other_space --stamp [now:-12s] &gt;&gt; mylog 
+</pre>
+</div>
+
+<p>
+and a signature:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org08fdaeb">KEY=$(lk key --no-pubkey --no-lk --password 'my secret') 
+lk point ::/my/example/spacename/subspace --sign --enckey "$KEY" --password 'my secret' &gt;&gt; mylog
+</pre>
+</div>
+<p>
+All points are hashed using Blake3. 
+</p>
+
+<p>
+<b>Point's refer to the hashed fields/data. The point, hash, and a header are packed into the packet format. Functions/APIs deal exclusively in the packet format.</b>
+</p>
+
+<p>
+`pktf` formats a stream of packets.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orgad26da5">cat mylog | lk pktf "Hash: [hash:str] is a point at '[space:str]' with data '[data]'"
+</pre>
+</div>
+
+<pre class="example" id="org27d4d51">
+Hash: Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk is a point at '' with data 'Hello, Sol!
+'
+Hash: wnX2wponxVQ_u6fml6m9kebtVDIIKx0OgA28EG5o8GE is a point at '/my/example/spacename' with data 'some data'
+Hash: F1AdaT0fg-uQsgGJIQBJlO5SWhopCdKW8yy6qorP1uo is a point at '/my/example/other_space' with data ''
+Hash: iEsYVyzzqY544sJLUpwJq7-VeK2WJH1V8rjoWiT__zY is a point at '/my/example/spacename/subspace' with data ''
+</pre>
+
+<p>
+Or output only data: `cat mylog | lk pktf "[data]"`.
+</p>
+
+<p>
+The other fields are readable by general purpose tools to index, address, and filter the packets. 
+For example, lk filter.
+Here we only take those with a spacename starting with `/my/example` and 1 additional component
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orge02dc3e">cat mylog | lk filter ::/my/example:* | lk pktf "[hash:str] [space:str]"
+</pre>
+</div>
+
+<pre class="example" id="org72abb09">
+wnX2wponxVQ_u6fml6m9kebtVDIIKx0OgA28EG5o8GE /my/example/spacename
+F1AdaT0fg-uQsgGJIQBJlO5SWhopCdKW8yy6qorP1uo /my/example/other_space
+</pre>
+
+<p class="verse">
+You can go build even more complex filters with `lk do -s &#x2013;write stdout &#x2013; [..]`<br>
+</p>
+
+<p>
+Points are addressable by their hash.
+To reference one point from another you add a link. 
+Each link is a 16 byte tag and 32 byte hash value.
+If less than 16 bytes are supplied it is left-padded with 0's.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org327b1b0">HASH=($(cat mylog | lk pktf [hash:str]))
+lk point "::/my/example/link" -- "my first link:${HASH[0]}" "other link:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk" &gt;&gt; mylog
+</pre>
+</div>
+
+<p>
+You can get fancy with `pktf` and `xargs`.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org80808ee">cat mylog | lk pktf "mytag:[hash:str]" | xargs lk point ::/my/example/link -- &gt;&gt; mylog
+</pre>
+</div>
+
+<p class="verse">
+When building a log you should start with only using the data field, in a readable format like JSON.<br>
+Only when required should you expand to use the more advanced features like spacenames, signatures, and links.<br>
+<br>
+You can ask if cryptographic properties, like signatures or distributed event ordering by linking, are worth to add upfront if you want to focus on the data.<br>
+The answer is yes.<br>
+Cryptographic signatures and hash addresses are difficult to get right, and infeasible to add retroactively.<br>
+</p>
+
+<p>
+A tool like `lk collect` has a few additional options for building points linking to other points.
+However, the `lk` binary is meant to do simple things.
+Use the library and a better programming language when doing non-trivial stuff.
+</p>
+
+<div class="HTML" id="org44b8504">
+<p>
+&lt;details&gt;
+&lt;summary&gt;
+Click here to see a graphical representation of mylog
+&lt;/summary&gt;
+</p>
+
+</div>
 
 
-      <li >
-        <a href="./about.html">About</a>
-      </li>
+<figure id="org99dfd42">
+<img src="images/mylog-dot.svg" alt="mylog-dot.svg" class="org-svg">
 
-      <hr>
-      <li>
-        <a href="./tutorial/index.html" target="_blank">Tutorials</a>
-      </li>
-      <li>
-        <a href="./guide/index.html" target="_blank">Guide</a>
-      </li>
+</figure>
 
-      <li>
-        <a href="https://github.com/AntonSol919/linkspace/releases">Download</a>
-      </li>
-      <li>
-        <a href="https://github.com/AntonSol919/linkspace" target="_blank">Git</a>
-      </li>
 
-    </nav>
-    
-    <div id="main">
-      <p>This introduction uses the `lk` cli with bash. You can follow
-      along by <a
-      href="https://github.com/AntonSol919/linkspace/releases">downloading</a>
-      the latest release. If you're more comfortable with Python or want
-      a more detailed explanation check out the guide.</p>
-      <div class="sourceCode" id="version"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="version-1"><a href="#version-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> <span class="at">--version</span></span></code></pre></div>
-      <pre class="example"><code>linkspace-cli linkspace-cli - 0.5.1 - main - c770b73 - 1.75.0-nightly
-</code></pre>
-      <h1 id="point">Point</h1>
-      <p>A single unit|event|message in linkspace is called a `point`. A
-      point can hold just shy of 64kb.</p>
-      <div class="sourceCode" id="point-hello"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="point-hello-1"><a href="#point-hello-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Hello, Sol!&quot;</span> <span class="kw">|</span> <span class="ex">lk</span> point <span class="op">&gt;</span> mylog</span></code></pre></div>
-      <p>Points have a few of optional properties besides the data
-      field.</p>
-      <p>a spacename:</p>
-      <div class="sourceCode" id="point-spacename"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="point-spacename-1"><a href="#point-spacename-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-n</span> some data <span class="kw">|</span> <span class="ex">lk</span> point ::/my/example/spacename <span class="at">--data-stdin</span> <span class="op">&gt;&gt;</span> mylog</span></code></pre></div>
-      <p>a timestamp in microseconds since epoch using `now` by
-      default:</p>
-      <div class="sourceCode" id="point-create"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="point-create-1"><a href="#point-create-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 12 seconds in the past - we&#39;ll get back to the [..] syntax </span></span>
-<span id="point-create-2"><a href="#point-create-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> point ::/my/example/other_space <span class="at">--create</span> <span class="pp">[</span><span class="ss">now:</span><span class="pp">-</span><span class="ss">12s</span><span class="pp">]</span> <span class="op">&gt;&gt;</span> mylog </span></code></pre></div>
-      <p>and a signature:</p>
-      <div class="sourceCode" id="point-signed"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="point-signed-1"><a href="#point-signed-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We don&#39;t have a linkspace instance yet - we can still sign packets by creating/providing an Argon2 encrypted key</span></span>
-<span id="point-signed-2"><a href="#point-signed-2" aria-hidden="true" tabindex="-1"></a><span class="va">KEY</span><span class="op">=</span><span class="va">$(</span><span class="ex">lk</span> key <span class="at">--no-pubkey</span> <span class="at">--no-lk</span> <span class="at">--password</span> <span class="st">&#39;my secret&#39;</span><span class="va">)</span> </span>
-<span id="point-signed-3"><a href="#point-signed-3" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> point ::/my/example/spacename/subspace <span class="at">--sign</span> <span class="at">--enckey</span> <span class="st">&quot;</span><span class="va">$KEY</span><span class="st">&quot;</span> <span class="at">--password</span> <span class="st">&#39;my secret&#39;</span> <span class="op">&gt;&gt;</span> mylog</span></code></pre></div>
-      <p>All points are hashed using Blake3.</p>
-      <p><strong>Point's refer to the hashed fields/data. The point,
-      hash, and a header are packed into the packet format.
-      Functions/APIs deal exclusively in the packet format.</strong></p>
-      <p>`pktf` formats a stream of packets.</p>
-      <div class="sourceCode" id="pktf"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="pktf-1"><a href="#pktf-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;Hash: [hash:str] is a point at &#39;[spacename:str]&#39; with data &#39;[data]&#39;&quot;</span></span></code></pre></div>
-      <pre class="example"><code>Hash: Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk is a point at &#39;&#39; with data &#39;Hello, Sol!
-&#39;
-Hash: Rvv4O1jSAWlLr5GaDao-YaJvCC_jJdJ3WvFtmR-6lH8 is a point at &#39;/my/example/spacename&#39; with data &#39;some data&#39;
-Hash: MlCys7eu_ozmoZalfqOWDiCvIn8b8mG8qX_sXOhXvtI is a point at &#39;/my/example/other_space&#39; with data &#39;&#39;
-Hash: yHgbC6zQvVFp5w_buiwpTisbRnH1WMiPKwSNAM5SlQM is a point at &#39;/my/example/spacename/subspace&#39; with data &#39;&#39;
-</code></pre>
-      <p>Or output only data: `cat mylog | lk pktf "[data]"`.</p>
-      <p>The other fields are readable by general purpose tools to
-      index, address, and filter the packets. For example, lk filter.
-      Here we only take those with a spacename starting with
-      `/my/example` and 1 additional component</p>
-      <div class="sourceCode" id="filter"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="filter-1"><a href="#filter-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> filter ::/my/example:<span class="pp">*</span> <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[hash:str] [spacename:str]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>Rvv4O1jSAWlLr5GaDao-YaJvCC_jJdJ3WvFtmR-6lH8 /my/example/spacename
-MlCys7eu_ozmoZalfqOWDiCvIn8b8mG8qX_sXOhXvtI /my/example/other_space
-</code></pre>
-      <p>Points are addressable by their hash. To reference one point
-      from another you add a link. Each link is a 16 byte tag and 32
-      byte hash value. Tags can be anything. If less than 16 bytes are
-      supplied it is left-padded with 0's.</p>
-      <div class="sourceCode" id="links"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="links-1"><a href="#links-1" aria-hidden="true" tabindex="-1"></a><span class="va">HASH</span><span class="op">=</span><span class="va">($(</span><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="pp">[</span><span class="ss">hash:str</span><span class="pp">]</span><span class="va">))</span></span>
-<span id="links-2"><a href="#links-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> point <span class="st">&quot;::/my/example/link&quot;</span> <span class="at">--</span> <span class="st">&quot;my first link:</span><span class="va">${HASH</span><span class="op">[</span><span class="dv">0</span><span class="op">]</span><span class="va">}</span><span class="st">&quot;</span> <span class="st">&quot;other link:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk&quot;</span> <span class="op">&gt;&gt;</span> mylog</span></code></pre></div>
-      <p>You can get fancy with `pktf` and `xargs`.</p>
-      <div class="sourceCode" id="links-xargs"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="links-xargs-1"><a href="#links-xargs-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;mytag:[hash:str]&quot;</span> <span class="kw">|</span> <span class="fu">xargs</span> lk point ::/my/example/link <span class="at">--</span> <span class="op">&gt;&gt;</span> mylog</span></code></pre></div>
-      <div class="line-block">When building a log you should start with
-      only using the data field, in a readable format like JSON.<br />
-      Only when required should you expand to use the more advanced
-      features like spacenames, signatures, and links.<br />
-      <br />
-      You can ask if cryptographic properties, like signatures or
-      distributed event ordering by linking, are worth to add upfront if
-      you want to focus on the data.<br />
-      The answer is yes.<br />
-      Cryptographic signatures and hash addresses are difficult to get
-      right, and infeasible to add retroactively.</div>
-      <p>A tool like `lk collect` has a few additional options for
-      building points linking to other points. However, the `lk` binary
-      is meant to do simple things. Use the library and a better
-      programming language when doing non-trivial stuff.</p>
-      <details>
-      <summary>
-      Click here to see a graphical representation of mylog
-      </summary>
+<div class="HTML" id="org3401f9c">
+<p>
+&lt;/details&gt;
+</p>
 
-      <p><img src="images/mylog-dot.svg" /></p>
-      </details>
+</div>
 
-      <p>Creating packets with `lk point` detects what kind you're
-      trying to build. But it is better to be explicit. The 3 types of
-      points are: `datapoint`, `linkpoint`, or `keypoint` (a signed
-      linkpoint).</p>
-      <p>NOTE: linkpoint and keypoint do not read data from stdin by
-      default.</p>
-      <div class="sourceCode" id="point-stdin"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="point-stdin-1"><a href="#point-stdin-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> somedata <span class="kw">|</span> <span class="ex">lk</span> linkpoint ::/my/other_spacename <span class="at">--data-stdin</span> <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[hash:str] = [data]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>bg9ADn-zLYHCqYWKIKGN3ddbEoWdtNGgrKFTsO9L8Vk = somedata
-</code></pre>
-      <h1 id="database">Database</h1>
-      <p>Linkspace is primarily its packet format. Using the database is
-      optional.</p>
-      <p>The database and other tools exists to make it easier to build
-      complex systems and packet flows.</p>
-      <div class="sourceCode" id="db-init"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="db-init-1"><a href="#db-init-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LK_DIR</span><span class="op">=</span>/tmp/linkspace <span class="kw">;</span> </span>
-<span id="db-init-2"><a href="#db-init-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> init <span class="kw">;</span> </span>
-<span id="db-init-3"><a href="#db-init-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> mylog <span class="kw">|</span> <span class="ex">lk</span> save <span class="op">&gt;</span> /dev/null <span class="kw">;</span> </span></code></pre></div>
-      <pre class="example"><code>LkInfo { kind: &quot;lmdb&quot;, dir: &quot;/tmp/linkspace&quot; }
-</code></pre>
-      <p>Instead of using `save` you can set a write destinations
-      directly.</p>
-      <div class="sourceCode" id="write"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="write-1"><a href="#write-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> hello world <span class="kw">|</span> <span class="ex">lk</span> point <span class="at">--write</span> db <span class="at">--write</span> file:mylog <span class="at">--write</span> stdout <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="pp">[</span><span class="ss">data</span><span class="pp">]</span></span></code></pre></div>
-      <pre class="example"><code>hello world
-</code></pre>
-      <p>The database has three indices. A 'log', 'hash', and the 'tree'
-      index. The log-index is ordered by receive order, the hash-index
-      by the point hash, and the tree-index primarily by a point's
-      [spacename, create stamp] (see the guide for full details).</p>
-      <p>The database is always accessed through the runtime. The
-      runtime lets multiple processes/threads can read, write, and watch
-      for new points.</p>
-      <p>The library API uses callbacks and a user-driven eventloop (<a
-      href="./guide/index.html#runtime">guide</a>). `lk` is focused on
-      piping packets. Commands are `watch-log`, `watch-tree`,
-      `watch-hash`. These are shorthand for `watch –mode ..`.</p>
-      <div class="sourceCode" id="watchtree"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="watchtree-1"><a href="#watchtree-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> watch-tree ::/my:<span class="pp">**</span> <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[spacename:str]&quot;</span> <span class="op">&gt;</span> ./watching <span class="kw">&amp;</span></span></code></pre></div>
-      <pre class="example"><code>[1] 10412
-</code></pre>
-      <div class="sourceCode" id="react"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="react-1"><a href="#react-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ./watching</span></code></pre></div>
-      <pre class="example"><code>/my/example/link
+<p>
+Creating packets with `lk point` detects what kind you're trying to build.
+But it is better to be explicit. The 3 types of points are:
+`datapoint`, `linkpoint`, or `keypoint` (a signed linkpoint).
+</p>
+
+<p>
+NOTE: linkpoint and keypoint do not read data from stdin by default.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orgb304c44">echo somedata | lk linkpoint ::/my/other_spacename --data-stdin | lk pktf "[hash:str] = [data]"
+</pre>
+</div>
+
+<pre class="example" id="orgf12f39d">
+wps6Wsg6aToFSbMKmD3BfXjIefZag4fF8JWaXIXAjjs = somedata
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org8bd6d20" class="outline-2">
+<h2 id="org8bd6d20"><span class="section-number-2">2.</span> Database</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Linkspace is primarily its packet format.
+Using the database is optional.
+</p>
+
+<p>
+The database and other tools exists to make it easier to build complex systems and packet flows.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orgf75e8fa">export LK_DIR=/tmp/linkspace ; 
+lk init ; 
+cat mylog | lk write &gt; /dev/null ; 
+</pre>
+</div>
+
+<pre class="example" id="org1261f6f">
+LkInfo { kind: "lmdb", dir: None }
+</pre>
+
+<p>
+Instead of using `save` you can set a write destinations directly.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org9f03aa5">echo hello world | lk point --write db --write file:mylog --write stdout | lk pktf [data]
+</pre>
+</div>
+
+<pre class="example" id="org2a9c6ea">
+hello world
+</pre>
+
+<p>
+The database has three indices. 
+A 'log', 'hash', and the 'tree' index. 
+The log-index is ordered by receive order, the hash-index by the point hash, and the tree-index primarily by a point's [space, create stamp] (see the guide for full details).
+</p>
+
+<p>
+The database is always accessed through the runtime. 
+The runtime lets multiple processes/threads can read, write, and watch for new points.
+</p>
+
+<p>
+The library API uses callbacks and a user-driven eventloop (<a href="./guide/index.html#runtime">guide</a>).
+`lk` is focused on piping packets.
+Commands are `watch-log`, `watch-tree`, `watch-hash`. These are shorthand for  `watch &#x2013;mode ..`.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org75bfddc">lk watch-tree ::/my:** | lk pktf "[space:str]" &gt; ./watching &amp;
+</pre>
+</div>
+
+<pre class="example" id="org19c1737">
+[1] 868
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org665c798">cat ./watching
+</pre>
+</div>
+
+<pre class="example" id="org2a7130a">
+/my/example/link
 /my/example/link
 /my/example/spacename
 /my/example/other_space
 /my/example/spacename/subspace
-</code></pre>
-      <p>Adding a new point</p>
-      <div class="sourceCode" id="watch-write"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="watch-write-1"><a href="#watch-write-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> linkpoint ::/my/my/my <span class="at">--write</span> db</span></code></pre></div>
-      <p>Wakes the watching threads to output the new point.</p>
-      <div class="sourceCode" id="react2"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="react2-1"><a href="#react2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ./watching</span></code></pre></div>
-      <pre class="example"><code>/my/example/link
+</pre>
+
+<p>
+Adding a new point
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orgfc8731c">lk linkpoint ::/my/my/my --write db
+</pre>
+</div>
+
+<p>
+Wakes the watching threads to output the new point.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org32bdc84">cat ./watching
+</pre>
+</div>
+
+<pre class="example" id="org3f86552">
+/my/example/link
 /my/example/link
 /my/example/spacename
 /my/example/other_space
 /my/example/spacename/subspace
 /my/my/my
-</code></pre>
-      <h1 id="applications">Applications</h1>
-      <p>There are two optional fields included in the hash not yet
-      shown. The domain and group.</p>
-      <p>The domain is analogous to a IP port. An application pick a
-      domain name (max 16 bytes). For example `imageboard`.</p>
-      <div class="line-block">`pktf` is common enough to have the alias
-      `lk p`.</div>
-      <div class="sourceCode" id="domain"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="domain-1"><a href="#domain-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> linkpoint imageboard:: <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[domain:str]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>imageboard
-</code></pre>
-      <p>Groups indicate the set of intended recipients. If a group
-      exchange process is running, an application doesn't have to deal
-      with sockets, (HTTP) endpoints, or other IO except for the user
-      interface. The application can read, write, request from the
-      group, and process packets using just the linkspace library.</p>
-      <p>Building an application is done by mapping an application state
-      to and from linkspace packets (in the database). For example, a
-      drawing application where multiple people can paint to a shared
-      image board. A simple mapping could be:</p>
-      <ul>
-      <li>Images data are saved as data points</li>
-      <li>Every link in a linkpoint is: a hash to an image, and a tag
-      holding (x,y) coordinates.</li>
-      </ul>
-      <p>Adding an image might look something like:</p>
-      <div class="sourceCode" id="tuxpng"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="tuxpng-1"><a href="#tuxpng-1" aria-hidden="true" tabindex="-1"></a><span class="va">X</span><span class="op">=</span>30 <span class="kw">;</span> <span class="va">Y</span><span class="op">=</span>200 <span class="kw">;</span> <span class="va">IMG</span><span class="op">=</span><span class="st">&quot;https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg&quot;</span> <span class="kw">;</span> </span>
-<span id="tuxpng-2"><a href="#tuxpng-2" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> <span class="va">$IMG</span> <span class="kw">|</span> <span class="ex">lk</span> datapoint <span class="op">&gt;</span> tux.pkt</span>
-<span id="tuxpng-3"><a href="#tuxpng-3" aria-hidden="true" tabindex="-1"></a><span class="va">IMG_HASH</span><span class="op">=</span><span class="va">$(</span><span class="fu">cat</span> tux.pkt <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[hash:str]&quot;</span><span class="va">)</span></span>
-<span id="tuxpng-4"><a href="#tuxpng-4" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> linkpoint imageboard:: <span class="at">--</span> <span class="va">$(</span><span class="bu">printf</span> <span class="st">&quot;%08d%08d&quot;</span> <span class="st">&quot;</span><span class="va">$X</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$Y</span><span class="st">&quot;</span><span class="va">)</span>:<span class="va">$IMG_HASH</span> <span class="op">&gt;&gt;</span> tux.pkt</span>
-<span id="tuxpng-5"><a href="#tuxpng-5" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> save <span class="at">--pkts</span> ./tux.pkt <span class="co"># Instead of `cat` we can provide a file</span></span></code></pre></div>
-      <p>Building an image requires the program to watch for new packets
-      in `imageboard::`, and on every (new) point draw over the
-      image.</p>
-      <div class="sourceCode" id="watch-tree"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="watch-tree-1"><a href="#watch-tree-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> watch-tree <span class="st">&quot;imageboard::&quot;</span> <span class="at">--max</span> 1 <span class="dt">\</span></span>
-<span id="watch-tree-2"><a href="#watch-tree-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[hash:str] has the links:\n [links]&quot;</span> </span></code></pre></div>
-      <pre class="example"><code>b-tKZMVvXtyC24Y4TPlsgb7yizRyb25Kb4sNKpu_5zo has the links:
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgf6475ab" class="outline-2">
+<h2 id="orgf6475ab"><span class="section-number-2">3.</span> Applications</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+There are two optional fields included in the hash not yet shown. 
+The domain and group.
+</p>
+
+<p>
+The domain is analogous to a IP port. 
+An application pick a domain name (max 16 bytes).
+For example `imageboard`.
+</p>
+
+<p class="verse">
+`pktf` is common enough to have the alias `lk p`.<br>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org5c8b59b">lk linkpoint imageboard:: | lk p "[domain:str]"
+</pre>
+</div>
+
+<pre class="example" id="orgfcddaf3">
+imageboard
+</pre>
+
+<p>
+Groups indicate the set of intended recipients.
+If a group exchange process is running, an application doesn't have to deal with sockets, (HTTP) endpoints, or other IO except for the user interface.
+The application can read, write, request from the group, and process packets using just the linkspace library. 
+</p>
+
+<p>
+Building an application is done by mapping an application state to and from linkspace packets (in the database).
+For example, a drawing application where multiple people can paint to a shared image board.
+A simple mapping could be: 
+</p>
+
+<ul class="org-ul">
+<li>Images data are saved as data points</li>
+<li>Every link in a linkpoint is: a hash to an image, and a tag holding (x,y) coordinates.</li>
+</ul>
+
+<p>
+Adding an image might look something like: 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orgce2289f">X=30 ; Y=200 ; IMG="https://upload.wikimedia.org/wikipedia/commons/3/35/Tux.svg" ; 
+curl -s $IMG | lk datapoint &gt; tux.pkt
+IMG_HASH=$(cat tux.pkt | lk p "[hash:str]")
+lk linkpoint imageboard:: -- $(printf "%08d%08d" "$X" "$Y"):$IMG_HASH &gt;&gt; tux.pkt
+lk write --pkts ./tux.pkt # Instead of `cat` we can provide a file
+</pre>
+</div>
+
+<p>
+Building an image requires the program to watch for new packets in `imageboard::`, and on every (new) point draw over the image.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org93adbc9">lk watch-tree "imageboard::" --max 1 \
+   | lk p "[hash:str] has the links:\n [links]" 
+</pre>
+</div>
+
+<pre class="example" id="orgf2163f1">
+zDquQvNuDXOcIGLy3YND3sN0s8qZA5DH3uYOpJtl3AY has the links:
  0000003000000200:Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4
-</code></pre>
-      <div class="line-block">You should always quote your
-      arguments.<br />
-      Otherwise, the previous example would not have worked.<br />
-      Without the quotes the characters `[lin` in "[links]" would be
-      interpreted by the default bash shell.</div>
-      <p>A link might reference a point that is not (yet) available on
-      the device. An application has to decide how to handle the
-      situation. In this example we'll just wait. Waiting can be done
-      manually. e.g.</p>
-      <div class="sourceCode" id="watch-tree-links"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="watch-tree-links-1"><a href="#watch-tree-links-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> watch-tree <span class="st">&quot;imageboard::&quot;</span> <span class="at">--max</span> 1 <span class="dt">\</span></span>
-<span id="watch-tree-links-2"><a href="#watch-tree-links-2" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[links]&quot;</span> <span class="dt">\</span></span>
-<span id="watch-tree-links-3"><a href="#watch-tree-links-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">&#39;:&#39;</span> <span class="at">-f2</span> <span class="dt">\</span></span>
-<span id="watch-tree-links-4"><a href="#watch-tree-links-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span> <span class="fu">xargs</span> <span class="at">-i</span> lk watch-hash <span class="st">&quot;{}&quot;</span> <span class="dt">\</span></span>
-<span id="watch-tree-links-5"><a href="#watch-tree-links-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;got point [hash:str] which has [data_size:str] bytes&quot;</span></span></code></pre></div>
-      <pre class="example"><code>got point Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4 which has 49983 bytes
-</code></pre>
-      <p>Or use `lk get-links`. It has a few common strategies.</p>
-      <div class="sourceCode" id="get-links"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="get-links-1"><a href="#get-links-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> watch-tree <span class="st">&quot;imageboard::&quot;</span> <span class="at">--max</span> 1 <span class="dt">\</span></span>
-<span id="get-links-2"><a href="#get-links-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">lk</span> get-links pause <span class="dt">\</span></span>
-<span id="get-links-3"><a href="#get-links-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[hash:str]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4
-b-tKZMVvXtyC24Y4TPlsgb7yizRyb25Kb4sNKpu_5zo
-</code></pre>
-      <p>To complete the imageboard application we'll have to add a few
-      more steps to merge the data into a single picture. See the
-      tutorial for an example on doing this and more.</p>
-      <p>The final piece of the puzzle is the group field. A group is 32
-      bytes to signal the intended set of recipients. It is orthogonal
-      to the domain field, as the application should not care which
-      group its running in.</p>
-      <div class="sourceCode" id="group"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="group-1"><a href="#group-1" aria-hidden="true" tabindex="-1"></a><span class="va">PUB</span><span class="op">=</span><span class="va">$(</span><span class="bu">echo</span> <span class="st">&quot;Hello, Sol!&quot;</span> <span class="kw">|</span> <span class="ex">lk</span> data <span class="kw">|</span> <span class="ex">lk</span> pktf <span class="st">&quot;[hash:str]&quot;</span><span class="va">)</span></span>
-<span id="group-2"><a href="#group-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> linkpoint :<span class="va">$PUB</span>:/example <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[group:str]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk
-</code></pre>
-      <p>If no group is specified (like we've been doing) the public
-      group is used.</p>
-      <div class="sourceCode" id="group-str"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="group-str-1"><a href="#group-str-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> linkpoint :<span class="pp">[</span><span class="ss">#:pub</span><span class="pp">]</span>:/example  <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[group:str]&quot;</span> </span></code></pre></div>
-      <pre class="example"><code>Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk
-</code></pre>
-      <div class="line-block">See <a
-      href="./guide/index.html#ABE">ABE</a> for more on the `[..]`
-      syntax.<br />
-      Its a small byte templating language included in the library for
-      convenience with the syntax being the same for all programming
-      language.<br />
-      ABE is also heavily used for CLI arguments, e.g. `lk linkpoint ::
-      –stamp [now]` or `[now:+2h]`</div>
-      <p>The other special group is `[0;32]`, also called the private
-      group. You can refer to it with the expression `[#:0]`.
-      Functions/subcommands that read/write existing points skip and/or
-      warn whenever a point from the private group is seen unless
-      enabled with `–private`.</p>
-      <div class="sourceCode" id="private"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="private-1"><a href="#private-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> linkpoint domain:<span class="pp">[</span><span class="ss">#:0</span><span class="pp">]</span> <span class="kw">|</span> <span class="ex">lk</span> save <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span> <span class="co"># creating a packet is ok - but receving is not accepted by `lk save` without --private</span></span></code></pre></div>
-      <pre class="example"><code>error: Args { inner: [&quot;/home/rs/Projects/linkspace/target/debug/lk&quot;, &quot;save&quot;] }
+</pre>
+
+<p class="verse">
+You should always quote your arguments.<br>
+Otherwise, the previous example would not have worked.<br>
+Without the quotes the characters `[lin` in "[links]" would be interpreted by the default bash shell.<br>
+</p>
+
+<p>
+A link might reference a point that is not (yet) available on the device.
+An application has to decide how to handle the situation.
+In this example we'll just wait. 
+Waiting can be done manually. e.g.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org44f275a">lk watch-tree "imageboard::" --max 1 \
+   | lk p "[links]" \
+   | cut -d':' -f2 \
+   | xargs -i lk watch-hash "{}" \
+   | lk pktf "got point [hash:str] which has [data_size:str] bytes"
+</pre>
+</div>
+
+<pre class="example" id="org7c687f2">
+got point Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4 which has 49983 bytes
+</pre>
+
+<p>
+Or use `lk get-links`. It has a few common strategies.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orge311736">lk watch-tree "imageboard::" --max 1 \
+    | lk get-links pause \
+    | lk pktf "[hash:str]"
+</pre>
+</div>
+
+<pre class="example" id="org368ccdc">
+Sz0ZZDWxKht-jbM7Tfkn0nis4tNoKNPH_kfI7JYUnY4
+zDquQvNuDXOcIGLy3YND3sN0s8qZA5DH3uYOpJtl3AY
+</pre>
+
+<p>
+To complete the imageboard application we'll have to add a few more steps to merge the data into a single picture.
+See the tutorial for an example on doing this and more. 
+</p>
+
+<p>
+The final piece of the puzzle is the group field. 
+A group is 32 bytes to signal the intended set of recipients. 
+It is orthogonal to the domain field, as the application should not care which group its running in.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org1f9aa6c">PUB=$(echo "Hello, Sol!" | lk data | lk pktf "[hash:str]")
+lk linkpoint :$PUB:/example | lk p "[group:str]"
+</pre>
+</div>
+
+<pre class="example" id="org5d3d5cc">
+Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk
+</pre>
+
+<p>
+If no group is specified (like we've been doing) the public group is used.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org374915d">lk linkpoint :[#:pub]:/example  | lk p "[group:str]" 
+</pre>
+</div>
+
+<pre class="example" id="orgdf6dc66">
+Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk
+</pre>
+
+<p class="verse">
+See <a href="./guide/index.html#ABE">ABE</a> for more on the `[..]` syntax.<br>
+Its a small byte templating language included in the library for convenience with the syntax being the same for all programming language.<br>
+ABE is also heavily used for CLI arguments, e.g. `lk linkpoint :: &#x2013;stamp [now]` or `[now:+2h]`<br>
+</p>
+
+<p>
+The other special group is `[0;32]`, also called the private group.
+You can refer to it with the expression `[#:0]`.
+Functions/subcommands that read/write existing points skip and/or warn whenever a point from the private group is seen unless enabled with `&#x2013;private`.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org58d0dea">lk linkpoint domain:[#:0] | lk write 2&gt;&amp;1 # creating a packet is ok - but receving is not accepted by `lk write` without --private
+</pre>
+</div>
+
+<pre class="example" id="org9e54767">
+error: Args { inner: ["/home/rs/Projects/linkspace/target/debug/lk", "write"] }
 Pkt(
     PrivateGroup,
 )
-</code></pre>
-      <p>A system to exchange points in a group can be made from
-      scratch. Linkspace does not prescribe a way to do so. Each group /
-      network is different, and no single solution can cover every
-      situation.</p>
-      <p>For example, use `lk watch imageboard:$MYGROUP | …` and forward
-      the entire stream to another device using netcat/socat, ssh,
-      email, http, a USB stick, or other way to exchange bytes.</p>
-      <p>Linkspace is designed to only ever be a streams of packets,
-      without additional overhead of a (custom) serialization formats.
-      As evident by the 'mylog' file we have used thus far. This keeps
-      streams compatible with all tools that process streams.</p>
-      <p>To that end, each packet has a mutable header excluded from the
-      hash.</p>
-      <p>Filters work on these mutable bytes as well. This let you
-      quickly build specific network topologies.</p>
-      <div class="line-block">See <a
-      href="./guide/index.html#mutable">the guide</a> for the mutable
-      field names.</div>
-      <pre id="exchange"><code>netcat 10.0.0.1 -p 6000 | lk route ubits0:=:0000 | lk save &amp; # get packets from a host and set their ubits0 to 0000
-netcat 10.0.2.0 -p 6000 | lk route ubits0:=:0001 | lk save &amp; # get packets from another host and set their ubits0 to 0001
-lk linkpoint example::/hello | lk route ubits0:=:0002 | lk save # save my packets with ubits 0002
-lk watch-log --asc example::/hello -- &quot;ubits0:&gt;:0000&quot; | nc 10.0.0.1 -p 6000  &amp; # forward all packets with ubits0 higher than 0000 back to host. 
-</code></pre>
-      <p>A single linkspace instance can be used by multiple
-      applications on device, and connect to others. To that end there
-      are some conventions. These are functions that create/watch for
-      point with some predefined spacename, links, and data format.
-      Conventions enable interoperability between multiple applications
-      and background processes.</p>
-      <p>One such convention is the `pull` convention. This writes a
-      query as a specific point.</p>
-      <div class="sourceCode" id="pull"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="pull-1"><a href="#pull-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> pull imageboard:: <span class="at">--write</span> stdout <span class="kw">|</span> <span class="ex">lk</span> p <span class="st">&quot;[spacename:str]\n\n[data]&quot;</span></span></code></pre></div>
-      <pre class="example"><code>/pull/[b:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk]/[a:imageboard]/default
+</pre>
+
+<p>
+A system to exchange points in a group can be made from scratch.
+Linkspace does not prescribe a way to do so.
+Each group / network is different, and no single solution can cover every situation.
+</p>
+
+<p>
+For example, use `lk watch imageboard:$MYGROUP | &#x2026;` and forward the entire stream to another device using netcat/socat, ssh, email, http, a USB stick,
+or other way to exchange bytes. 
+</p>
+
+<p>
+Linkspace is designed to only ever be a streams of packets,
+without additional overhead of a (custom) serialization formats. 
+As evident by the 'mylog' file we have used thus far.
+This keeps streams compatible with all tools that process streams.
+</p>
+
+<p>
+To that end, each packet has a mutable header excluded from the hash. 
+</p>
+
+<p>
+Filters work on these mutable bytes as well.
+This let you quickly build specific network topologies.
+</p>
+
+<p class="verse">
+See <a href="./guide/index.html#mutable">the guide</a> for the mutable field names.<br>
+</p>
+
+<pre class="example" id="orgcc78b2e">
+netcat 10.0.0.1 -p 6000 | lk route ubits0:=:0000 | lk write &amp; # get packets from a host and set their ubits0 to 0000
+netcat 10.0.2.0 -p 6000 | lk route ubits0:=:0001 | lk write &amp; # get packets from another host and set their ubits0 to 0001
+lk linkpoint example::/hello | lk route ubits0:=:0002 | lk write # write my packets with ubits 0002
+lk watch-log --asc example::/hello -- "ubits0:&gt;:0000" | nc 10.0.0.1 -p 6000  &amp; # forward all packets with ubits0 higher than 0000 back to host. 
+</pre>
+
+<p>
+A single linkspace instance can be used by multiple applications on device, and connect to others.
+To that end there are some conventions.
+These are functions that create/watch for point with some predefined spacename, links, and data format.
+Conventions enable interoperability between multiple applications and background processes.
+</p>
+
+<p>
+One such convention is the `pull` convention. This writes a query as a specific point.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org3f71db6">lk pull imageboard:: --write stdout | lk p "[space:str]\n\n[data]"
+</pre>
+</div>
+
+<pre class="example" id="org65e2762">
+/pull/[b:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk]/[a:imageboard]/default
 
 :qid:default
 type:1:[b2:00000010]
 domain:=:[a:imageboard]
 group:=:[b:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk]
 depth:=:[u8:0]
-</code></pre>
-      <p>The goal of `pull` is to allow one process, e.g. an application
-      like <a href="./tutorial/imageboard.html">imageboard (bash)</a> or
-      <a href="./tutorial/mineweeper-1.html">mineweeper (python)</a> to
-      signal another process, e.g. a group exchange process like <a
-      href="./tutorial/bash.exchange.html">bash.exchange</a>, that it
-      wants packets matching a query from the group.</p>
-      <p>Queries define a 'set of points' in linkspace. The `filter` and
-      `watch` commands are syntax sugar over queries. You can add
-      `–print-query` to those commands to see the query used.</p>
-      <p>Queries are designed such that joining two query strings the
-      result is the common subset of both or an error if the union is
-      empty.</p>
-      <div class="sourceCode" id="q1"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="q1-1"><a href="#q1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> print-query example::/ok </span></code></pre></div>
-      <pre class="example"><code>:mode:tree-desc
+</pre>
+
+<p>
+The goal of `pull` is to allow one process, e.g. an application like <a href="./tutorial/imageboard.html">imageboard (bash)</a> or <a href="./tutorial/mineweeper-1.html">mineweeper (python)</a>
+to signal another process, e.g. a group exchange process like  <a href="./tutorial/bash.exchange.html">bash.exchange</a>,
+that it wants packets matching a query from the group.
+</p>
+
+<p>
+Queries define a 'set of points' in linkspace.
+The `filter` and `watch` commands are syntax sugar over queries.
+You can add `&#x2013;print-query` to those commands to see the query used.
+</p>
+
+<p>
+Queries are designed such that joining two query strings the result is the common subset of both or an error if the union is empty.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="org8bb99bb">lk print-query example::/ok 
+</pre>
+</div>
+
+<pre class="example" id="org58a044b">
+:mode:tree-desc
 
 type:1:[b2:00000010]
 domain:=:[a:example]
 group:=:[b:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk]
 prefix:=:/ok
 depth:=:[u8:1]
-</code></pre>
-      <div class="sourceCode" id="q2"><pre
-      class="sourceCode bash"><code class="sourceCode bash"><span id="q2-1"><a href="#q2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">lk</span> print-query example::/ok <span class="at">--</span> <span class="st">&quot;spacename:=:/not_ok&quot;</span></span></code></pre></div>
-      <pre class="example"><code>error: Args { inner: [&quot;/home/rs/Projects/linkspace/target/debug/lk&quot;, &quot;print-query&quot;, &quot;example::/ok&quot;, &quot;--&quot;, &quot;spacename:=:/not_ok&quot;] }
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-bash" id="orgbdbbece">lk print-query example::/ok -- "spacename:=:/not_ok"
+</pre>
+</div>
+
+<pre class="example" id="org52a275a">
+error: Args { inner: ["/home/rs/Projects/linkspace/target/debug/lk", "print-query", "example::/ok", "--", "spacename:=:/not_ok"] }
 Error {
-    context: &quot;Error adding rule \&#39;spacename\&#39;&quot;,
-    source: Error {
-        context: &quot;spacename:=:/not_ok&quot;,
-        source: &quot;space prefix conflict&quot;,
-    },
+    context: "could not turn stmt into valid extpred",
+    source: ParseKind(
+        spacename,
+    ),
 }
-</code></pre>
-      <p>That's it for this quick introduction. Some notes on high level
-      algorithm <a
-      href="https://www.linkspace.dev/tutorial/application-design.html">design</a>
-      are worth a read. For a more in-depth technical guide or the
-      library API see the <a href="./guide/index.html">Guide</a>.</p>
-    </div>
-    </body>
+</pre>
+
+<p>
+That's it for this quick introduction.
+Some notes on high level algorithm <a href="https://www.linkspace.dev/tutorial/application-design.html">design</a> are worth a read.  
+For a more in-depth technical guide or the library API see the <a href="./guide/index.html">Guide</a>.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: R.A. Sol</p>
+<p class="date">Created: 2024-01-18 Thu 15:17</p>
+</div>
+</body>
 </html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["pull","status"]};
+window.SIDEBAR_ITEMS = {"mod":["handshake","pull","status"]};

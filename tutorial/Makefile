@@ -10,6 +10,6 @@ all : $(PAGES)
 %.html: %.org ../org-utils.org
 	emacsclient --eval "(progn (switch-to-buffer (find-file-noselect \"./$<\")) (org-html-export-to-html))"
 
-%.html: %.md ../log.j	s
+%.html: %.md ../log.js
 	pandoc --embed-resources --standalone $< > $@
 

@@ -157,7 +157,7 @@ group	[#:test]
 domain	mineweeper
 spacename
 pubkey	[@:none]
-create	1682062494375521
+stamp	1682062494375521
 links	0
 
 data	278
@@ -214,7 +214,7 @@ One method to do so is as follows:
 
   lk link mineweeper:[#:test] --data ./setup.json | tee setup.pkt | lk pktf
   # Manually save this packet to each instance
-  find ./ -mindepth 1 -maxdepth 1 -type d -exec lk --dir "{}" save --pkts ./setup.pkt \;
+  find ./ -mindepth 1 -maxdepth 1 -type d -exec lk --dir "{}" write --pkts ./setup.pkt \;
 #+end_src
 
 If properly done the middle panel of each instance should show a new packet.
@@ -278,10 +278,8 @@ On the other hand, only the host can cheat and nobody would know about it.
 *** Who cares?
 The option you should take by default.
 Most games _can_ be cheated, so the upside of making it more difficult has its limits.
-
-Scrabble or Chess can use helper tools you can't detect.
+Scrabble or Chess players on the internet can use tools you can't detect.
 Shooter games have aimbots and 'see-through-walls' cheats.
-
 Most players are not cheaters, even if they could.
 Trusting your peers save a lot of hassle.
 For a game like MineWeeper that is usually enough.
@@ -308,10 +306,10 @@ Once you have every ack packet you can combine the ack.hash bytes to get a rando
 #+begin_src python
   ack_link = Link("ack",player_turn_pkt.hash)
   # Its best to enforce a value for the 'create' stamp so there is less ambigiouty on what the 'correct' packet must look like
-  ack_pkt = lk_keypoint( create=player_turn_pkt.create, link = [ack_link])~
+  ack_pkt = lk_keypoint( stamp=player_turn_pkt.stamp, link = [ack_link])~
   acked = dict()
   def collect_acks(ack_pkt):
-      if list(ack_pkt.link) == [ack_link] and ack_pkt.create == ack_pkt.create:
+      if list(ack_pkt.link) == [ack_link] and ack_pkt.stamp == ack_pkt.stamp:
           acked.insert(pkt.pubkey,pkt.hash)
           if len(acked) == players:
               return False

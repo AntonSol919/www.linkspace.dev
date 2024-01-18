@@ -212,7 +212,7 @@ or multiple entries through a spacename "/thread/Tabs or spaces/msg".
 This might seem more trouble than existing solutions like a filesystem or HTTP.
 In those, a request using a spacename gets you a single result. But this is not the case.
 
-In linkspace points have a 'create' timestamp and can be signed by a public key (which i'll refer to with [@:...keyname]).
+In linkspace points have a 'create' stamp, usually the local time in microseconds, and can be signed by a public key (which i'll refer to with [@:...keyname]).
 
 The single result HTTP or a filesystem provides is an incomplete abstraction.
 It is unable to capture events over time, scaling is impractical, and a valid & consistent results is an assumption - that can break to disastrous effects.

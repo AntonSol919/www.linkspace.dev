@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-11-05 Sun 09:20 -->
+<!-- 2024-01-18 Thu 14:14 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Imageboard</title>
@@ -28,8 +28,8 @@
 Available in the <a href="https://github.com/AntonSol919/linkspace/releases">pkg</a> or in repository/examples<br>
 </p>
 
-<div class="ctabs" id="org3925013">
-<div class="sh" id="orgc9cebc8">
+<div class="ctabs" id="org86e6d65">
+<div class="sh" id="org09c1ee8">
 <p>
 
 </p>
@@ -54,10 +54,7 @@ IMG_HASH=$(\
                | lk pktf "[hash:str]")
 TAG=$(printf "%08d%08d" "$X" "$Y")
 
-lk link "imageboard:$LK_GROUP:/$BOARD" \
-   -l "$TAG":"$IMG_HASH" "$@" \
-   --write db --write stdout \
-    | lk pktf
+lk link "imageboard:$LK_GROUP:/$BOARD" --write db --write stdout -- "$TAG":"$IMG_HASH" "$@" | lk pktf
 
 echo PIDS $(jobs -p)
 </pre>
@@ -76,14 +73,14 @@ fi
 START_STAMP=${2:-"0"} # If no stamp is given we begin at 0, i.e. unix epoch in microseconds
 
 # We select everything with a create field greater or equal to $START_STAMP
-lk watch --db-only "imageboard:$LK_GROUP:/$BOARD" -- "create:&gt;=:[u64:$START_STAMP]" \
+lk watch --db-only "imageboard:$LK_GROUP:/$BOARD" -- "stamp:&gt;=:[u64:$START_STAMP]" \
     | lk pktf "[/links:[tag:str] [ptr:str]]" \
     | while read REF; do
         X=${REF:0:8}
         Y=${REF:8:8}
         IMG_HASH=${REF: -43}
         echo "Placing $IMG_HASH at $X , $Y"
-        lk watch-hash $IMG_HASH --ttl 5s \
+        lk watch-hash $IMG_HASH --until 5s \
             | lk pktf "[data]" --delimiter "" \
             | magick composite -geometry +$X+$Y - PNG32:$BOARD.png PNG32:$BOARD.png
     done
@@ -107,13 +104,13 @@ magick convert -size 1000x1000 xc:transparent PNG32:$BOARD.png
 lk status watch exchange $LK_GROUP process --write "stdout-expr:exchange - [data]"  || echo "No exchange process active"
 
 echo Pulling $LK_GROUP $BOARD
-lk pull "imageboard:$LK_GROUP:/$BOARD" --follow -- "create:&gt;:[now:-1D]" 
+lk pull "imageboard:$LK_GROUP:/$BOARD" --follow -- "stamp:&gt;:[now:-1D]" 
 
 $BINS/imageboard.view.sh $BOARD 0 # run once
 
 #On receiving a new packet of interest we repaint the board from that stamp
 lk watch --new-only "imageboard:$LK_GROUP:/$BOARD" | \
-    lk pktf "[create:str]" | \
+    lk pktf "[stamp:str]" | \
     while read STAMP; do
         $BINS/imageboard.view.sh $BOARD $STAMP
     done
@@ -125,7 +122,7 @@ lk watch --new-only "imageboard:$LK_GROUP:/$BOARD" | \
 </div>
 
 
-<div class="py" id="orgc7270de">
+<div class="py" id="orge047eef">
 <p>
 This is a straight-up translation of the bash script.
 It works, but it could be done better by having only a single python instance running.
@@ -171,8 +168,8 @@ linkp = lk_linkpoint(domain=b"imageboard",
 lk = lk_open(create=True) 
 
 # write the point to the linkspace instance
-_isnew = lk_save(lk,datap)
-lk_save(lk,linkp)
+_isnew = lk_write(lk,datap)
+lk_write(lk,linkp)
 </pre>
 </div>
 
@@ -199,30 +196,33 @@ group_expr = os.environ.get("LK_GROUP","[#:pub]")
 group = lk_eval(group_expr)
 
 
+query = lk_query()
 # You can parse multiple statements as abe.
 # The usual ABE scope is available, and you can extend it with argv
-query_string = """
-domain:=:imageboard
-group:=:[0]
-spacename:=:/[1]
-create:&gt;=:[2/u64]
-"""
-query = lk_query_parse(lk_query(),query_string,argv=[group_expr,boardname,str(create_stamp)])
+lk_query_parse(
+    query,
+    """
+    domain:=:imageboard
+    group:=:[0]
+    space:=:/[1]
+    stamp:&gt;=:[2/u64]
+    """
+    argv=[group_expr,boardname,str(create_stamp)])
 
 # or use templates. if you're just interested in the string
-query = lk_query_parse(query,f"create:&gt;=:[:{str(create_stamp)}/u64]")
+lk_query_parse(query,f"stamp:&gt;=:[:{str(create_stamp)}/u64]")
 # Or if you have the exact bytes
 create_b = create_stamp.to_bytes(8,byteorder='big')
-query = lk_query_parse(query,f"create:&gt;=:[0]",argv=[create_b])
+lk_query_parse(query,f"stamp:&gt;=:[0]",argv=[create_b])
 # Or if you're only adding a single statement
-query = lk_query_push(query,"create","&gt;=",create_b)
+lk_query_push(query,"stamp","&gt;=",create_b)
 
 # The query merges overlapping predicates, and errors on conflicting predicates
 
 # Query parsing is somewhat forgiving in that it allows alternative encodings for Group, Domain, and Space. 
 # Group can take the b64 no-pad string
 # Domain is 16 bytes but does not have to prepend '\0'
-# Space takes either a '/' delimited expression, or the 'space' bytes ( as given by the spacename function or pkt.spacename value )
+# Space takes either a '/' delimited expression, or the 'space' bytes ( as given by the space function or pkt.space value )
 # The other values require the exact number of bytes, in big endian when a number.
 
 # Its worth understanding why these two work. Checkout the guide
@@ -233,24 +233,24 @@ assert lk_encode(create_b,"u64") == create_abe
 # we'll collect our entries in here 
 image_data = []
 def update_image(pkt):
-    create = pkt.create # all the links in the packet will have this as their z-index
+    create = pkt.stamp # all the links in the packet will have this as their z-index
     for link in pkt.links:
         x = int(str(link.tag[:8],'ascii'))
         y = int(str(link.tag[8:],'ascii'))
         q = lk_hash_query(link.ptr) # shorthand for :mode:hash-asc i:=:[u32:0] hash:=:HASH
-        q = lk_query_push(q,"recv","&lt;",lk_eval("[now:+3s]"))
+        lk_query_push(q,"recv","&lt;",lk_eval("[now:+3s]"))
 
         # we need a uniq id to register this query under.
         qid = bytearray(pkt.hash)
         qid.extend(link.ptr)
-        q = lk_query_push(q,"","qid",bytes(qid))
+        lk_query_push(q,"","qid",bytes(qid))
 
         # print("Looking for ",lk_query_print(q,True))
-        # we could get with 'lk_get(lk,q)' but to give new packets a chance to arrive we've set recv &lt; now+3s so we will watch them.
+        # we could get with 'lk_read(lk,q)' but to give new packets a chance to arrive we've set recv &lt; now+3s so we will watch them.
         lk_watch(lk,q,lambda data_pkt : image_data.append([create,x,y,data_pkt,pkt]))
 
 # we only care about the ones we know right now. 
-lk_get_all(lk,query, update_image)
+lk_read_all(lk,query, update_image)
 
 # Because we set a timeout ( recv&lt;now+5s ) for all data packets ( in case we're still receiving them )
 # we can simply wait until all callbacks are done or dropped.
@@ -305,8 +305,8 @@ else:
 query_string = """
 group:=:[#:pub]
 domain:=:imageboard
-spacename:=:/[0]
-create:&gt;=:[now:-1D]
+space:=:/[0]
+stamp:&gt;=:[now:-1D]
 :qid:[0]
 """
 query = lk_query_parse(lk_query(),query_string,argv=[boardname])
@@ -319,8 +319,8 @@ script_dir = os.path.dirname(os.path.realpath(__file__))
 os.system(f"{script_dir}/imageboard.view.py {boardname} 0")
 
 def update_img(pkt):
-    create = lk_eval2str("[create:str]",pkt)
-    os.system(f"{script_dir}/imageboard.view.py {boardname} {create}")
+    stamp = lk_eval2str("[stamp:str]",pkt)
+    os.system(f"{script_dir}/imageboard.view.py {boardname} {stamp}")
 
 query = lk_query_parse(query,"i_db:&lt;:[u32:0]") # we only care for packets not currently in the database. The new stuff
 lk_watch(lk,query, update_img)
@@ -333,7 +333,7 @@ lk_process_while(lk)
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-11-05 Sun 09:20</p>
+<p class="date">Created: 2024-01-18 Thu 14:14</p>
 </div>
 </body>
 </html>

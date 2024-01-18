@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-11-05 Sun 09:20 -->
+<!-- 2024-01-18 Thu 14:14 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>MineWeeper</title>
@@ -28,21 +28,21 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orga2d177a">Bob's Hotseat MineWeeper</a></li>
-<li><a href="#org1969601">Game on</a></li>
-<li><a href="#org27ef803">Multiplayer</a></li>
-<li><a href="#orgfa9bc60">Cheating</a>
+<li><a href="#org20034d1">Bob's Hotseat MineWeeper</a></li>
+<li><a href="#orga8c237f">Game on</a></li>
+<li><a href="#orgc3a2b92">Multiplayer</a></li>
+<li><a href="#org4774741">Cheating</a>
 <ul>
 <li>
 <ul>
-<li><a href="#org7c49000">Who cares?</a></li>
-<li><a href="#org55c632d">Emulate host/client</a></li>
-<li><a href="#org66511e0">Rng-esus died for your sins</a></li>
+<li><a href="#org11ef204">Who cares?</a></li>
+<li><a href="#org3f73664">Emulate host/client</a></li>
+<li><a href="#org79f9740">Rng-esus died for your sins</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org1098f0e">A reality check</a></li>
+<li><a href="#orgb01fdba">A reality check</a></li>
 </ul>
 </div>
 </nav>
@@ -55,7 +55,7 @@ We'll follow Bob in his journey.
 </p>
 
 
-<figure id="orgc63a61d">
+<figure id="orgadd0ca2">
 <img src="./images/bob-hi.png" alt="bob-hi.png">
 
 </figure>
@@ -114,9 +114,9 @@ Before you continue, please check this consent form to not hold Bob accountable 
 </div>
 
 
-<div id="outline-container-orga2d177a" class="outline-2">
-<h2 id="orga2d177a">Bob's Hotseat MineWeeper</h2>
-<div class="outline-text-2" id="text-orga2d177a">
+<div id="outline-container-org20034d1" class="outline-2">
+<h2 id="org20034d1">Bob's Hotseat MineWeeper</h2>
+<div class="outline-text-2" id="text-org20034d1">
 <p>
 Bob's game is perfect, but there is a teeny-tiny, little, detail missing.
 It only works in hotseat mode. Every player has to be at the same keyboard taking turns.
@@ -134,7 +134,7 @@ It asks the user for a list of player names.
 Players take turns entering which cell to reveal until someone reveals a mine or no more safe cells exist.
 </p>
 
-<div class="py" id="orge4d9631">
+<div class="py" id="orga604b2c">
 <div class="org-src-container">
 <pre class="src src-python">from mineweeper import MineWeeper, clear_screen, NoSuchCell,AlreadyRevealed
 import re,random
@@ -175,8 +175,8 @@ Maybe someday he'll make it a 3D VR experience.
 <img src="./images/bob-doubt.png" alt="bob-doubt.png">
 </p>
 
-<div class="ctabs" id="orgbbfc6c0">
-<div class="info" id="org3bc7d80">
+<div class="ctabs" id="org7b92a12">
+<div class="info" id="org26dba44">
 <p>
 Contrary to Bob, we don't care much for the details of MineWeeper.
 In case you're interested checkout the tab or open the code in ./app/mineweeper-py/mineweeper.py
@@ -184,7 +184,7 @@ In case you're interested checkout the tab or open the code in ./app/mineweeper-
 
 </div>
 
-<div class="py" id="org5bd63d6">
+<div class="py" id="orgf2d279f">
 <div class="org-src-container">
 <pre class="src src-python">import linkspace
 import itertools
@@ -304,15 +304,15 @@ class MineWeeper():
 </div>
 </div>
 
-<div id="outline-container-org1969601" class="outline-2">
-<h2 id="org1969601">Game on</h2>
-<div class="outline-text-2" id="text-org1969601">
+<div id="outline-container-orga8c237f" class="outline-2">
+<h2 id="orga8c237f">Game on</h2>
+<div class="outline-text-2" id="text-orga8c237f">
 <p>
 After searching high and low for a method to share it with the world, our friend Bob reaches for enlightenment.
 </p>
 
 
-<figure id="org53e4c32">
+<figure id="orga30d93d">
 <img src="./images/bob-enlightend.png" alt="bob-enlightend.png">
 
 </figure>
@@ -381,7 +381,7 @@ He's not set on the details, but every game starts with at least the players kno
 </ul>
 
 <p class="verse">
-In this setup everybody knows the board, but we'll touch on <a href="#orgfa9bc60">Cheating</a> later.<br>
+In this setup everybody knows the board, but we'll touch on <a href="#org4774741">Cheating</a> later.<br>
 </p>
 
 <p>
@@ -392,14 +392,14 @@ The hash of the packet can fill the role.
 The point that starts the game ends up looking as follows:
 </p>
 
-<pre class="example" id="orgf15966f">
+<pre class="example" id="org40575d3">
 type	LinkPoint
 hash	VJPxHigyCAmXvPojLxAQzHGYOiZDHP46ztaPZzMm6to
 group	[#:test]
 domain	mineweeper
 spacename
 pubkey	[@:none]
-create	1682062494375521
+stamp	1682062494375521
 links	0
 
 data	278
@@ -415,8 +415,8 @@ data	278
 }
 </pre>
 
-<div class="ctabs" id="orgb5f2fa9">
-<div class="info" id="orga246fe2">
+<div class="ctabs" id="org6641f60">
+<div class="info" id="org9e14cdf">
 <p>
 
 </p>
@@ -429,7 +429,7 @@ It requires tmux to be installed (available in most package managers)
 
 </div>
 
-<div class="setup" id="orgb1d7033">
+<div class="setup" id="orgf6a420c">
 <p>
 
 </p>
@@ -477,7 +477,7 @@ cat ./*/emulate_name_key &gt; setup.json
 
 lk link mineweeper:[#:test] --data ./setup.json | tee setup.pkt | lk pktf
 # Manually save this packet to each instance
-find ./ -mindepth 1 -maxdepth 1 -type d -exec lk --dir "{}" save --pkts ./setup.pkt \;
+find ./ -mindepth 1 -maxdepth 1 -type d -exec lk --dir "{}" write --pkts ./setup.pkt \;
 </pre>
 </div>
 
@@ -496,9 +496,9 @@ Finally, in each session we can use the upper panel to run:
 </div>
 
 
-<div id="outline-container-org27ef803" class="outline-2">
-<h2 id="org27ef803">Multiplayer</h2>
-<div class="outline-text-2" id="text-org27ef803">
+<div id="outline-container-orgc3a2b92" class="outline-2">
+<h2 id="orgc3a2b92">Multiplayer</h2>
+<div class="outline-text-2" id="text-orgc3a2b92">
 <p>
 The outline is as follows:
 </p>
@@ -525,7 +525,7 @@ There is no host to orchestrate, and packets can arrive for each players in a di
 The solution is rather mundane. Adding a link to another packet is proof that one was created before the other.
 </p>
 
-<div class="py" id="org97084b5">
+<div class="py" id="orgea54dd8">
 <div class="org-src-container">
 <pre class="src src-python">#!/bin/env python3
 
@@ -546,7 +546,7 @@ lk = lk_open()
 signing_key = lk_key(lk)
 
 # Get the game setup packet.
-game_pkt = lk_get(lk, lk_hash_query(game_hash)) or exit("No such game start")
+game_pkt = lk_read(lk, lk_hash_query(game_hash)) or exit("No such game start")
 
 """
 We have decided the data will be json encoded and look like:
@@ -572,30 +572,33 @@ print(game_conf)
 
 # The players are a subset of the members in a group.
 # They must signal what data they want from the group.
-# We make it unambiguous which packets are part of this game by reading/writing to a unique spacename.
-game_spacename = space([b"game", game_pkt.hash])
+# We make it unambiguous which packets are part of this game by reading/writing to a unique space.
+game_space = space([b"game", game_pkt.hash])
 # Internally, spacenames are length separated bytes. Most arguments accept a string like /game/[b:AAAAA....] .
 # In our case we can skip this b64 encoding step.
 
-# Every query has at least the following in common.
-common_q = lk_query_parse(
-    lk_query(),
-    "domain:=:mineweeper",
-    "group:=:[group]",
-    "spacename:=:[0]",
-    pkt=game_pkt, argv=[game_spacename]) #provides the [group] and [0] values
+# Every query we're going to use has the following in common.
+common_q = lk_query()
+lk_query_parse(common_q,
+    """
+    domain:=:mineweeper
+    group:=:[group]
+    space:=:[0]
+    """,
+    pkt=game_pkt, argv=[game_space]) #provides the [group] and [0] values
 
 # To inspect a query use print(lk_query_print(common_q, True))
 
 # We signal the group to send us packets by saving the query in a packet to a specific location.
 # Instead of doing so manually, we use lk_pull.
 # pulling requires the query to have a qid so we can remove it later.
-pull_q = lk_query_push(common_q,"","qid", b"game"+game_pkt.hash)
+pull_q = lk_query(common_q)
+lk_query_push(pull_q,"","qid", b"game"+game_pkt.hash)
 lk_pull(lk, pull_q)
 
 # If everything is going to plan:
 # An exchange process reads the request, and ensure all players eventually receive packets from others that matches the query.
-# i.e. whenever we save a point with the spacename 'game_spacename', the other players who ran lk_pull receive that packet.
+# i.e. whenever we write a point with the spacename 'game_space', the other players who ran lk_pull receive that packet.
 
 # A packet is one of three types. (Or to be exact, a packet is a [netheader,hash,point] and there are three types of points)
 # A datapoint, linkpoint, or keypoint.
@@ -605,7 +608,7 @@ lk_pull(lk, pull_q)
 # For our case we'll only use keypoints.
 
 # Its common to wrap the *point functions when arguments wont change.
-new_keypoint = functools.partial(lk_keypoint, key=signing_key, domain=b"mineweeper", group=game_pkt.group, spacename=game_spacename)
+new_keypoint = functools.partial(lk_keypoint, key=signing_key, domain=b"mineweeper", group=game_pkt.group, space=game_space)
 
 player_count = len(game_conf['players'])
 for i, e in enumerate(game_conf['players']):
@@ -654,11 +657,12 @@ while game.print_game_state():
     # We narrow our query to packets signed by the current player.
     # We have their pubkey in a base64 string.
     # lk_query_push and lk_query_parse can both update the query. The later handles strings formats instead of bytes.
-    q = lk_query_parse(common_q,"pubkey:=:"+player_b64_key)
+    q = lk_query(common_q)
+    lk_query_parse(q,"pubkey:=:"+player_b64_key)
 
     # (We don't have to lk_pull. This query is a subset of what we're already pulling).
 
-    q = lk_query_push(q,"","qid",b"move") # eqv: lk_query_parse(q,":qid:move").
+    lk_query_push(q,"","qid",b"move") # eqv: lk_query_parse(q,":qid:move").
 
     # To start check the database for a match.
     # lk_watch first checks the database. If the callback returned True it returns a positive number.
@@ -682,7 +686,7 @@ while game.print_game_state():
                 pkt = new_keypoint(data=data,links=[prev_turn])
                 # We save the packet. An exchange process will ensure the other players get it.
                 # (This does not update our view of the database until we call lk_process or lk_process_while)
-                lk_save(lk,pkt)
+                lk_write(lk,pkt)
                 break
             except Exception as e: 
                 print(e)
@@ -703,8 +707,8 @@ print("Fin")
 
 </div>
 
-<div class="ctabs" id="orgc664dce">
-<div class="info" id="org22ec04f">
+<div class="ctabs" id="org99164e8">
+<div class="info" id="org7392611">
 <p>
 
 </p>
@@ -712,7 +716,7 @@ print("Fin")
 <p>
 To start the mineweeper-multiplayer.py manually, we run the following in each session
 </p>
-<div class="bash" id="org8b78d29">
+<div class="bash" id="org8422638">
 <p>
 mineweeper-multiplayer.py $( cat ../setup.pkt | lk p [hash:str] )
 </p>
@@ -725,9 +729,9 @@ mineweeper-multiplayer.py $( cat ../setup.pkt | lk p [hash:str] )
 </div>
 </div>
 
-<div id="outline-container-orgfa9bc60" class="outline-2">
-<h2 id="orgfa9bc60">Cheating</h2>
-<div class="outline-text-2" id="text-orgfa9bc60">
+<div id="outline-container-org4774741" class="outline-2">
+<h2 id="org4774741">Cheating</h2>
+<div class="outline-text-2" id="text-org4774741">
 <p>
 There are three ways to deal with cheating.
 </p>
@@ -737,7 +741,7 @@ Four if you count Bobs disapproval as an option.
 </p>
 
 
-<figure id="orgd94ee60">
+<figure id="org9a89753">
 <img src="./images/bob-angry.png" alt="bob-angry.png">
 
 </figure>
@@ -754,9 +758,9 @@ On the other hand, only the host can cheat and nobody would know about it.
 </p>
 </div>
 
-<div id="outline-container-org7c49000" class="outline-4">
-<h4 id="org7c49000">Who cares?</h4>
-<div class="outline-text-4" id="text-org7c49000">
+<div id="outline-container-org11ef204" class="outline-4">
+<h4 id="org11ef204">Who cares?</h4>
+<div class="outline-text-4" id="text-org11ef204">
 <p>
 The option you should take by default.
 Most games <span class="underline">can</span> be cheated, so the upside of making it more difficult has its limits.
@@ -775,9 +779,9 @@ For a game like MineWeeper that is usually enough.
 </div>
 </div>
 
-<div id="outline-container-org55c632d" class="outline-4">
-<h4 id="org55c632d">Emulate host/client</h4>
-<div class="outline-text-4" id="text-org55c632d">
+<div id="outline-container-org3f73664" class="outline-4">
+<h4 id="org3f73664">Emulate host/client</h4>
+<div class="outline-text-4" id="text-org3f73664">
 <p>
 One option is to emulate a host/client setup.
 The first player could act as host and watch for turns and reply with the result.
@@ -791,9 +795,9 @@ Once the game is done, the host can release the packet and players could check i
 </div>
 </div>
 
-<div id="outline-container-org66511e0" class="outline-4">
-<h4 id="org66511e0">Rng-esus died for your sins</h4>
-<div class="outline-text-4" id="text-org66511e0">
+<div id="outline-container-org79f9740" class="outline-4">
+<h4 id="org79f9740">Rng-esus died for your sins</h4>
+<div class="outline-text-4" id="text-org79f9740">
 <p>
 There are a number of ways to define a set of rules that make MineWeeper random without anyone knowing the full mine map.
 </p>
@@ -814,10 +818,10 @@ Once you have every ack packet you can combine the ack.hash bytes to get a rando
 <div class="org-src-container">
 <pre class="src src-python">ack_link = Link("ack",player_turn_pkt.hash)
 # Its best to enforce a value for the 'create' stamp so there is less ambigiouty on what the 'correct' packet must look like
-ack_pkt = lk_keypoint( create=player_turn_pkt.create, link = [ack_link])~
+ack_pkt = lk_keypoint( stamp=player_turn_pkt.stamp, link = [ack_link])~
 acked = dict()
 def collect_acks(ack_pkt):
-    if list(ack_pkt.link) == [ack_link] and ack_pkt.create == ack_pkt.create:
+    if list(ack_pkt.link) == [ack_link] and ack_pkt.stamp == ack_pkt.stamp:
         acked.insert(pkt.pubkey,pkt.hash)
         if len(acked) == players:
             return False
@@ -851,9 +855,9 @@ Cheating is now impossible.
 </div>
 </div>
 
-<div id="outline-container-org1098f0e" class="outline-2">
-<h2 id="org1098f0e">A reality check</h2>
-<div class="outline-text-2" id="text-org1098f0e">
+<div id="outline-container-orgb01fdba" class="outline-2">
+<h2 id="orgb01fdba">A reality check</h2>
+<div class="outline-text-2" id="text-orgb01fdba">
 <p>
 In the <a href="./mineweeper-2.html">next</a> installment Bob will continue his journey to building the best game ever.
 This time by building a lobby system so it's actually playable.
@@ -883,7 +887,7 @@ That being said, there are currently no breaking changes to Bob's program planne
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-11-05 Sun 09:20</p>
+<p class="date">Created: 2024-01-18 Thu 14:14</p>
 </div>
 </body>
 </html>

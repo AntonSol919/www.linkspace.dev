@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-11-05 Sun 09:20 -->
+<!-- 2024-01-18 Thu 14:14 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Tips &amp; Tricks</title>
@@ -27,37 +27,37 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org86c0bb1">layout for the 'tree' btreemap</a></li>
-<li><a href="#orgf5c8d18">dot graph</a></li>
-<li><a href="#orga55bddc">Reading/Writing large files</a></li>
-<li><a href="#org13a5a18">A poor man's REPL</a></li>
-<li><a href="#org98dbb88">Single thread performance:</a></li>
+<li><a href="#org7154c83">layout for the 'tree' btreemap</a></li>
+<li><a href="#org43cde03">dot graph</a></li>
+<li><a href="#org9366610">Reading/Writing large files</a></li>
+<li><a href="#org67707b5">A poor man's REPL</a></li>
+<li><a href="#org63e9e04">Single thread performance:</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-org86c0bb1" class="outline-2">
-<h2 id="org86c0bb1">layout for the 'tree' btreemap</h2>
-<div class="outline-text-2" id="text-org86c0bb1">
+<div id="outline-container-org7154c83" class="outline-2">
+<h2 id="org7154c83">layout for the 'tree' btreemap</h2>
+<div class="outline-text-2" id="text-org7154c83">
 <pre class="example">
-lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [spacename:str] [pubkey:str] :: { [create:str] [hash:str] [recv:str] }"
+lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [space:str] [pubkey:str] :: { [stamp:str] [hash:str] [recv:str] }"
 </pre>
 </div>
 </div>
 
-<div id="outline-container-orgf5c8d18" class="outline-2">
-<h2 id="orgf5c8d18">dot graph</h2>
-<div class="outline-text-2" id="text-orgf5c8d18">
+<div id="outline-container-org43cde03" class="outline-2">
+<h2 id="org43cde03">dot graph</h2>
+<div class="outline-text-2" id="text-org43cde03">
 <pre class="example">
-lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [spacename:str] [pubkey:str] :: { [create:str] [hash:str] [recv:str] }"
+lk --private watch --bare --mode ${2:-tree-desc} --no-new --write "stdout-expr:[group:str] [domain:str] [depth:str] [space:str] [pubkey:str] :: { [stamp:str] [hash:str] [recv:str] }"
 </pre>
 </div>
 </div>
 
 
-<div id="outline-container-orga55bddc" class="outline-2">
-<h2 id="orga55bddc">Reading/Writing large files</h2>
-<div class="outline-text-2" id="text-orga55bddc">
+<div id="outline-container-org9366610" class="outline-2">
+<h2 id="org9366610">Reading/Writing large files</h2>
+<div class="outline-text-2" id="text-org9366610">
 <pre class="example">
 export FILE=$2
 export CHAN=${3:-default}
@@ -79,9 +79,9 @@ lk --env watch "blobs:$LK_GROUP:/[env:CHAN]/[env:FILE]" --max 1 | \
 
 
 
-<div id="outline-container-org13a5a18" class="outline-2">
-<h2 id="org13a5a18">A poor man's REPL</h2>
-<div class="outline-text-2" id="text-org13a5a18">
+<div id="outline-container-org67707b5" class="outline-2">
+<h2 id="org67707b5">A poor man's REPL</h2>
+<div class="outline-text-2" id="text-org67707b5">
 <pre class="example">
 lk eval [argv:-1] argv -D'\n' --data-eval --data-stdin 
 </pre>
@@ -103,9 +103,9 @@ prints <code>The value of [1] = hello world</code>
 </div>
 </div>
 
-<div id="outline-container-org98dbb88" class="outline-2">
-<h2 id="org98dbb88">Single thread performance:</h2>
-<div class="outline-text-2" id="text-org98dbb88">
+<div id="outline-container-org63e9e04" class="outline-2">
+<h2 id="org63e9e04">Single thread performance:</h2>
+<div class="outline-text-2" id="text-org63e9e04">
 <p>
 FIXME: The debug build is significant slower - especially for keypoint:
 </p>
@@ -116,15 +116,15 @@ lk --version
 echo Datapoints
 lk data --data /dev/zero --data-reads 10000 | pv &gt; /dev/null
 echo Linkpoints  
-lk link :: --data-reads 10000 --create-int 0 --multi --data /dev/zero | pv &gt; /dev/null
+lk link :: --data-reads 10000 --stamp-int 0 --multi --data /dev/zero | pv &gt; /dev/null
 echo keypoints
-lk keypoint :: --password "my secret" --data-reads 1000 --create-int 0 --multi --data /dev/zero | pv &gt; /dev/null
+lk keypoint :: --password "my secret" --data-reads 1000 --stamp-int 0 --multi --data /dev/zero | pv &gt; /dev/null
 </pre>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-11-05 Sun 09:20</p>
+<p class="date">Created: 2024-01-18 Thu 14:14</p>
 </div>
 </body>
 </html>

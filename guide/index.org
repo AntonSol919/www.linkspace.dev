@@ -19,18 +19,18 @@ This is a technical document describing the linkspace packet format, and softwar
 * Introduction
 
 Linkspace is a open-source library and protocol to build event-driven applications using a distributed log as a source of truth.
-The linkspace packet format is designed to be extremely fast to read, write, and interpret.
-Depending on your use case, you can limit yourself to just those functions and write your event streams and network from scratch.
-The library has various tools to make developing increasingly complex systems much easier. 
+The linkspace packet format is designed to be extremely fast in accessing its fields.
+Depending on your use case, you can limit yourself to just those functions and emit packets as a dumb event streams over the network from scratch.
+The library has various tools to make developing complex systems much easier.
 
 The library is structured around 4 concepts.
 
-- [[Point]] - Plain bytes in any format, optionally with a spacename and links to other points. 
+- [[Point]] - A datagram containing application defined bytes with an optional spacename, links, and signature. 
 - [[ABE]] - Language agnostic (byte) templating for convenience.
-- [[Query]] - A list of predicates and options for selecting packets.
-- [[#runtime][Runtime]] - A runtime around a multi-reader single-writer database for saving and querying.
+- [[Query]] - A list of predicates and options for selecting a set of points.
+- [[#runtime][Runtime]] - A application driven runtime around a multi-reader single-writer database for saving and querying.
 
-With that foundation, common challenges are addressed by a set of [[Conventions]].
+Using those tools some common challenges are addressed by a set of [[Conventions]].
 
 * Setup
 :PROPERTIES:
@@ -75,7 +75,7 @@ It consists of the following:
   - [[#lk_datapoint][lk_datapoint]]
   - [[#lk_linkpoint][lk_linkpoint]]
   - [[lk_keypoint]]
-  - [[lk_write and lk_read]]
+  - [[lk_serialize and lk_deserialize]]
     
 - [[ABE]] - (Byte) templating for convenience
   - [[lk_eval]]
@@ -89,9 +89,9 @@ It consists of the following:
 
 - [[Runtime]] - A database to save packets and user-driven event loop to query for old and new packets.
   - [[lk_open]]
-  - [[lk_save]]
-  - [[lk_get]]
-  - [[lk_get_all]]
+  - [[lk_write]]
+  - [[lk_read]]
+  - [[lk_read_all]]
   - [[lk_watch]]
   - [[lk_process]]
   - [[lk_process_while]]
@@ -199,9 +199,9 @@ This following example shows that ~[#:pub]~ resolves to the bytes ~RD3ltOheG4CrB
 Furthermore, If no group was provided it defaults to ~[#:pub]~
 #+END_VERSE
 
-Datapoints do not have a 'create' field, so they get the same hash given the same data.
-If we had forced a specific 'create' stamp for both the python and bash example it would have produced the same hash for both.
-By default 'create' is set to the current time ( microseconds since epoch ) and thus the hashes are different.
+Datapoints do not have a 'stamp' field, so they get the same hash given the same data.
+If we had forced a specific stamp for both the python and bash example it would have produced the same hash for both.
+By default 'stamp' is set to the current time ( microseconds since epoch ) and thus the hashes are different.
 
 #+begin_ctabs
 #+begin_sh
@@ -341,7 +341,7 @@ e.g. ~[#:sales:mycomp:com]~ for groups and ~[@:alicekey:mycomp:com]~ for keys.
 #+END_VERSE
 
 
-** lk_write and lk_read
+** lk_serialize and lk_deserialize
 :PROPERTIES:
 :CUSTOM_ID: packet_layout
 :END:
@@ -355,13 +355,13 @@ The point is the content that is hashed, the packet is the a mutable network hea
   datap = lk_datapoint("hello")
   linkp = lk_linkpoint()
   keyp = lk_keypoint(key)
-  packet_bytes = lk_write(datap) + lk_write(linkp) + lk_write(keyp)
+  packet_bytes = lk_serialize(datap) + lk_serialize(linkp) + lk_serialize(keyp)
   print(len(packet_bytes),packet_bytes)
 
   # read the bytes as packets
-  (p1, packet_bytes)= lk_read(packet_bytes)
-  (p2, packet_bytes)= lk_read(packet_bytes)
-  (p3, packet_bytes)= lk_read(packet_bytes)
+  (p1, packet_bytes)= lk_deserialize(packet_bytes)
+  (p2, packet_bytes)= lk_deserialize(packet_bytes)
+  (p3, packet_bytes)= lk_deserialize(packet_bytes)
 
   assert(p1 == datap)
   assert(p2 == linkp)
@@ -606,7 +606,7 @@ e.g ~[hash/?b]~ encodes the hash in base 64.
 For convenience all packet fields accept 'str' and 'abe' as a first argument to print them in a default format.
 | ~[hash:str]~      | ~[hash/?b]~      |
 | ~[group:str]~     | ~[group/?b]~     |
-| ~[create:str]~    | ~[create/?u]~    |
+| ~[stamp:str]~    | ~[stamp/?u]~    |
 | ~[links_len:str]~ | ~[links_len/?u]~ |
 | ...               |                  |
 
@@ -812,7 +812,7 @@ By default [[lk_key]] sets up the ~[@:me:local]~ identity.
 #+END_VERSE
 
 A query is a list of predicates and options used to define a set of packets.
-They're used in various ways, most notably you can use them to read ([[lk_get]], [[lk_get_all]]), await ([[lk_watch]]) and request ([[lk_pull]]) packets.
+They're used in various ways, most notably you can use them to read ([[lk_read]], [[lk_read_all]]), await ([[lk_watch]]) and request ([[lk_pull]]) packets.
 
 ** lk_query
 :PROPERTIES:
@@ -830,10 +830,10 @@ group:=:[#:pub]
 domain:=:example
 spacename:=:/hello/world
 pubkey:=:[@:me:local]
-create:>:[now:-1D]
+stamp:>:[now:-1D]
 #+END_EXAMPLE
 
-A predicate can be set multiple times. In the example above we could add ~create:<:[now:+2D]~ to constrain it further.
+A predicate can be set multiple times. In the example above we could add ~stamp:<:[now:+2D]~ to constrain it further.
 Queries are designed such that you can concatenate their strings and get their union.
 If the result is the empty set an error is returned.
 
@@ -877,11 +877,14 @@ lk print-query "my:[#:pub]:/hello:*" --signed
 
 #+end_sh
 
+
 #+begin_py
+Queries are mutable. They're created or copied with lk_query()
 #+begin_src python :session lkpy :exports both :results value verbatim
-  template = lk_query_parse(lk_query(),"group:=:[#:pub]")
-  a_copy = lk_query(template)
-  lk_query_print(a_copy)
+  first = lk_query()
+  lk_query_parse(first,"group:=:[#:pub]")
+  second = lk_query(first)
+  lk_query_print(second)
 #+end_src
 
 #+end_py
@@ -892,8 +895,7 @@ lk print-query "my:[#:pub]:/hello:*" --signed
 :CUSTOM_ID: lk_query_parse
 :END:
 
-Add multiple constraints to a query.
-You can add multi line strings or per line.
+Add newline delimited constraints to a query.
 Each line is evaluated as an abe expression.
 You can set a pkt or argv context.
 
@@ -904,15 +906,15 @@ The full list of predicates and their byte size can be found [[#predicatelist][h
 #+begin_py
 #+begin_src python :session lkpy :exports both :results value verbatim
   q = lk_query()
-
-  stmt = """
-  group:=:[#:pub]
-  domain:=:example
-  """
-
-  q = lk_query_parse(q,stmt,
-                 "depth:<:[u8:4]",
-                 "data_size:<:[0]",argv=[int(10).to_bytes(2)]) 
+  lk_query_parse(
+      q,
+      stmt = """
+      group:=:[#:pub]
+      domain:=:example
+      depth:<:[u8:4]
+      data_size:<:[0]
+      """,
+      argv=[int(10).to_bytes(2)]) 
   lk_query_print(q,True)
 #+END_SRC
 
@@ -932,9 +934,9 @@ Similar to lk_query_parse, but only adds a single statement and the last field e
 
 #+begin_src python :session lkpy :exports both :results value verbatim
   q = lk_query()
-  q = lk_query_push(q,"data_size","<",bytes([0,4])) # less than 4
-  q = lk_query_push(q,"data_size","<",lk_eval("[u16:20]"))  # less than 20
-  q = lk_query_push(q,"data_size","<",int(3).to_bytes(2))  # less than 3
+  lk_query_push(q,"data_size","<",bytes([0,4])) # less than 4
+  lk_query_push(q,"data_size","<",lk_eval("[u16:20]"))  # less than 20
+  lk_query_push(q,"data_size","<",int(3).to_bytes(2))  # less than 3
   lk_query_print(q)
 #+END_SRC
 
@@ -942,10 +944,9 @@ Similar to lk_query_parse, but only adds a single statement and the last field e
 
 #+begin_src python :session lkpy :exports both :results value verbatim
   try:
-    r = lk_query_push(q,"data_size",">",bytes([0,100])) # greater than 100 and smaller than 3 can not both be true
+    lk_query_push(q,"data_size",">",bytes([0,100])) # greater than 100 and smaller than 3 can not both be true
   except Exception as e :
-    r = ("That's not possible",e)
-  r
+    return ("That's not possible",e)
 
 #+END_SRC
 
@@ -976,15 +977,15 @@ The boolean argument sets whether to create abe expressions or stick to a repres
 #+BEGIN_VERSE
 The ~b2~ function read a binary representation.
 The types are: datapoint=[b2:0000_0001], linkpoint [b2:0000_0011], keypoint [b2:0000_0111].
-Setting 'group', 'domain', 'spacename', 'links', or 'create' predicates automatically exclude the datapoint type.
+Setting 'group', 'domain', 'spacename', 'links', or 'stamp' predicates automatically exclude the datapoint type.
 Setting pubkey or signature excludes link and data points.
 #+END_VERSE
 
 ** More on predicates
 
 #+Begin_VERSE
-~group~ requires 32 bytes but will try to parse base64.
-~domain~ requires 16 bytes but will prepend '\0' if too few bytes are given
+~group~ requires 32 bytes or attempts to parse base64.
+~domain~ requires 16 bytes or **prepend** '\0' if too few bytes are given
 ~spacename~ and ~prefix~ only take the = op. Their value is the bytes ~spacename:=:[//hello/world]~, but they'll accept ~/hello/world~ as well
 #+end_VERSE
 
@@ -1016,7 +1017,7 @@ The final predicate is 'recv'. This is a 8 byte stamp for when the packets was f
 It can be used to filter such as ~recv:>:[now:-1D]~.
 
 It is considered bad design for applications to depend on this.
-They should use the ~create~ stamp to avoid depending on any group-exchange specific behavior.
+They should use ~stamp~ to avoid depending on any group-exchange specific behavior.
 
 The recv predicate depends on the context. 
 Reading from the database the recv is set to the time the packet was received:  ~lk watch-log --bare -- "recv:>:[now:-1D]"~
@@ -1082,7 +1083,7 @@ This allows other processes to add additional options it understands.
 
 A shorthand for getting a packet by hash.
 Can be used with [[lk_watch]].
-If you expect the value to be known locally [[lk_get_hash]] is faster.
+If you expect the value to be known locally [[lk_read_hashes]] is faster.
 
 
 
@@ -1100,8 +1101,8 @@ If given no directory it opens $LK_DIR or $HOME/linkspace.
 An instance is a handle to a multi-reader, single-writer database. 
 The instance is thread local. Each thread or process requires calling [[lk_open]].
 
-An application can save to the database ([[lk_save]]).
-To read from the database you can directly get a packet by hash ([[lk_get_hash]]) or using a query ([[lk_get]], [[lk_get_all]]).
+An application can write to the database ([[lk_write]]).
+To read from the database you can directly get a packet by hash ([[lk_read_hashes]]) or using a query ([[lk_read]], [[lk_read_all]]).
 
 A thread can register a watch ([[lk_watch]]).
 A watch is a query & function that is called for each new packet matching the query.
@@ -1111,7 +1112,7 @@ Whenever any thread saves a new packet all other threads receive a signal.
 
 By default nothing happens.
 A thread does not see the new packets untill its read transaction is updated.
-This includes calls to ~lk_get*~ and ~lk_watch~.  
+This includes calls to ~lk_read*~ and ~lk_watch~.  
 
 Update the transaction and process all the new packets ([[lk_process]],[[lk_process_while]]).
 This runs all functions registered as a watch.
@@ -1125,25 +1126,25 @@ The [[../docs/rust/linkspace/index.html][Rust docs]] are currently the most up t
 :END:
 
 
-** lk_save
+** lk_write
 :PROPERTIES:
-:CUSTOM_ID: lk_save
+:CUSTOM_ID: lk_write
 :END:
 
 
-** lk_get
+** lk_read
 :PROPERTIES:
-:CUSTOM_ID: lk_get
+:CUSTOM_ID: lk_read
 :END:
 
-** lk_get_all
+** lk_read_all
 :PROPERTIES:
-:CUSTOM_ID: lk_get_all
+:CUSTOM_ID: lk_read_all
 :END:
 
-** lk_get_hash
+** lk_read_hashes
 :PROPERTIES:
-:CUSTOM_ID: lk_get
+:CUSTOM_ID: lk_read
 :END:
 
 
@@ -1281,8 +1282,8 @@ That would give you space for ~85mb~. You can go infinitely large by adding ~("c
 #+BEGIN_SRC bash :session cli0 :exports both :results output verbatim
   python -c 'print("-" * 200000000,end="")' \
       | lk data \
-      | lk collect example:: --create [epoch] --collect-tag 'data' --chain-tag 'continue'\
-      | lk save -f \
+      | lk collect example:: --stamp [epoch] --collect-tag 'data' --chain-tag 'continue'\
+      | lk write -f \
       | lk filter example:: \
       | lk pktf "[hash:str] [links_len:str]"
 #+END_SRC
@@ -1301,13 +1302,13 @@ Note that to recreate the data you have to do a 'depth first' search starting fr
 
 #+BEGIN_SRC bash :session cli0 :exports both :results output verbatim
   lk watch-hash 1FAKPrMTY8nBQ4zeoXVvgn_ESQJcjJQ8l9fJDSmDEgA | lk get-links -R pause | lk pktf -d '' [data] > /tmp/bytes
-  python -c 'print("-"*200000000,end="")' > /tmp/bytes2
-  diff /tmp/bytes /tmp/bytes2 && echo ok
+  python -c 'print("-" * 200000000,end="")' > /tmp/bytes2
+  diff -q /tmp/bytes /tmp/bytes2  && echo Ok
 #+END_SRC
 
 
 #+BEGIN_VERSE
-Note the pktf -d '' to remove the delimiter between packets.
+Note the ~pktf -d''~ to remove the delimiter between packets.
 An alternative approach would be to use ~lk get-links --write file-expr:[/:/tmp/bytes]:[data] --forward null~
 #+END_VERSE
 

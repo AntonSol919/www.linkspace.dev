@@ -41,14 +41,13 @@ a timestamp in microseconds since epoch using `now` by default:
 #+NAME: point-create
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
   # 12 seconds in the past - we'll get back to the [..] syntax 
-  lk point ::/my/example/other_space --create [now:-12s] >> mylog 
+  lk point ::/my/example/other_space --stamp [now:-12s] >> mylog 
 #+END_SRC
 
 and a signature:
 
 #+NAME: point-signed
 #+BEGIN_SRC bash :exports code
-  # We don't have a linkspace instance yet - we can still sign packets by creating/providing an Argon2 encrypted key
   KEY=$(lk key --no-pubkey --no-lk --password 'my secret') 
   lk point ::/my/example/spacename/subspace --sign --enckey "$KEY" --password 'my secret' >> mylog
 #+END_SRC
@@ -66,7 +65,7 @@ All points are hashed using Blake3.
 
 #+NAME: pktf
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  cat mylog | lk pktf "Hash: [hash:str] is a point at '[spacename:str]' with data '[data]'"
+  cat mylog | lk pktf "Hash: [hash:str] is a point at '[space:str]' with data '[data]'"
 #+END_SRC
 
 Or output only data: `cat mylog | lk pktf "[data]"`.
@@ -77,13 +76,17 @@ Here we only take those with a spacename starting with `/my/example` and 1 addit
 
 #+NAME: filter
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  cat mylog | lk filter ::/my/example:* | lk pktf "[hash:str] [spacename:str]"
+  cat mylog | lk filter ::/my/example:* | lk pktf "[hash:str] [space:str]"
 #+END_SRC
+
+#+BEGIN_VERSE
+You can go build even more complex filters with `lk do -s --write stdout -- [..]`
+#+END_VERSE
 
 Points are addressable by their hash.
 To reference one point from another you add a link. 
 Each link is a 16 byte tag and 32 byte hash value.
-Tags can be anything. If less than 16 bytes are supplied it is left-padded with 0's.
+If less than 16 bytes are supplied it is left-padded with 0's.
 
 #+NAME: links
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -107,9 +110,9 @@ The answer is yes.
 Cryptographic signatures and hash addresses are difficult to get right, and infeasible to add retroactively. 
 #+END_VERSE
 
-A tool like `lk collect` has a few additional options for building points linking to other points.
-However, the `lk` binary is meant to do simple things.
-Use the library and a better programming language when doing non-trivial stuff.
+A tool like `lk collect` has a few additional options for linking points.
+However, the `lk` binary is meant to do simple things. 
+Consider using a better programming language when doing non-trivial stuff.
 
 #+BEGIN_HTML
 <details>
@@ -120,7 +123,7 @@ Click here to see a graphical representation of mylog
 
 #+name: make-dot
 #+BEGIN_SRC bash :session codeorg :exports none :results output verbatim :cache yes
-lk p --pkts ./mylog '"p[hash:str]"\[label=" { <hash> [hash/2mini] }  | { signed: [pubkey/2mini] | [spacename:str] } | data=[data] | [links_len:str] links [/links: | <[i:str]> [tag:str]\: [ptr/2mini] ] "\];
+lk p --pkts ./mylog '"p[hash:str]"\[label=" { <hash> [hash/2mini] }  | { signed: [pubkey/2mini] | [space:str] } | data=[data] | [links_len:str] links [/links: | <[i:str]> [tag:str]\: [ptr/2mini] ] "\];
      [/links: "p[hash:str]"\:[i:str] -> "p[ptr:str]"\:hash ;\n ]' ;
 #+END_SRC
 
@@ -190,7 +193,7 @@ The database and other tools exists to make it easier to build complex systems a
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
   export LK_DIR=/tmp/linkspace ; 
   lk init ; 
-  cat mylog | lk save > /dev/null ; 
+  cat mylog | lk write > /dev/null ; 
 #+END_SRC
 
 Instead of using `save` you can set a write destinations directly.
@@ -202,18 +205,18 @@ Instead of using `save` you can set a write destinations directly.
 
 The database has three indices. 
 A 'log', 'hash', and the 'tree' index. 
-The log-index is ordered by receive order, the hash-index by the point hash, and the tree-index primarily by a point's [spacename, create stamp] (see the guide for full details).
+The log-index is ordered by receive order, the hash-index by the point hash, and the tree-index primarily by a point's [space, create stamp] (see the guide for full details).
 
 The database is always accessed through the runtime. 
-The runtime lets multiple processes/threads can read, write, and watch for new points.
+The runtime lets multiple processes/threads read, write, and watch for new points.
 
 The library API uses callbacks and a user-driven eventloop ([[./guide/index.html#runtime][guide]]).
 `lk` is focused on piping packets.
-Commands are `watch-log`, `watch-tree`, `watch-hash`. These are shorthand for  `watch --mode ..`.
+Commands include `watch-log`, `watch-tree`, `watch-hash`. These are shorthand for  `watch --mode ..`.
 
 #+NAME: watchtree
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  lk watch-tree ::/my:** | lk pktf "[spacename:str]" > ./watching &
+  lk watch-tree ::/my:** | lk pktf "[space:str]" > ./watching &
 #+END_SRC
 #+BEGIN_SRC bash :session codeorg :exports none
   sleep 1
@@ -264,10 +267,6 @@ For example `imageboard`.
   lk linkpoint imageboard:: | lk p "[domain:str]"
 #+END_SRC
 
-Groups indicate the set of intended recipients.
-If a group exchange process is running, an application doesn't have to deal with sockets, (HTTP) endpoints, or other IO except for the user interface.
-The application can read, write, request from the group, and process packets using just the linkspace library. 
-
 Building an application is done by mapping an application state to and from linkspace packets (in the database).
 For example, a drawing application where multiple people can paint to a shared image board.
 A simple mapping could be: 
@@ -283,7 +282,7 @@ Adding an image might look something like:
   curl -s $IMG | lk datapoint > tux.pkt
   IMG_HASH=$(cat tux.pkt | lk p "[hash:str]")
   lk linkpoint imageboard:: -- $(printf "%08d%08d" "$X" "$Y"):$IMG_HASH >> tux.pkt
-  lk save --pkts ./tux.pkt # Instead of `cat` we can provide a file
+  lk write --pkts ./tux.pkt # Instead of `cat` we can provide a file
 #+END_SRC
 
 Building an image requires the program to watch for new packets in `imageboard::`, and on every (new) point draw over the image.
@@ -328,7 +327,8 @@ See the tutorial for an example on doing this and more.
 
 The final piece of the puzzle is the group field. 
 A group is 32 bytes to signal the intended set of recipients. 
-It is orthogonal to the domain field, as the application should not care which group its running in.
+It is orthogonal to the domain field.
+Well designed applications should not care which group its running in.
 
 #+name: group
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -343,6 +343,8 @@ If no group is specified (like we've been doing) the public group is used.
   lk linkpoint :[#:pub]:/example  | lk p "[group:str]" 
 #+END_SRC
 
+'creating' a group is as simple as picking 32 bytes, deciding who the members are, and ensuring they can exchange data.
+
 #+BEGIN_VERSE
 See [[./guide/index.html#ABE][ABE]] for more on the `[..]` syntax. 
 Its a small byte templating language included in the library for convenience with the syntax being the same for all programming language.
@@ -355,7 +357,7 @@ Functions/subcommands that read/write existing points skip and/or warn whenever 
 
 #+name: private
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  lk linkpoint domain:[#:0] | lk save 2>&1 # creating a packet is ok - but receving is not accepted by `lk save` without --private
+  lk linkpoint domain:[#:0] | lk write 2>&1 # creating a packet is ok - but receving is not accepted by `lk write` without --private
 #+END_SRC
 
 A system to exchange points in a group can be made from scratch.
@@ -366,10 +368,11 @@ For example, use `lk watch imageboard:$MYGROUP | ...` and forward the entire str
 or other way to exchange bytes. 
 
 Linkspace is designed to only ever be a streams of packets,
-without additional overhead of a (custom) serialization formats. 
-As evident by the 'mylog' file we have used thus far.
+without additional overhead of a nested serialization formats. 
 This keeps streams compatible with all tools that process streams.
 
+However, sometimes you'll need to add some context information to packets as they're shared around.
+Such as when/how and how.
 To that end, each packet has a mutable header excluded from the hash. 
 
 Filters work on these mutable bytes as well.
@@ -381,33 +384,34 @@ See [[./guide/index.html#mutable][the guide]] for the mutable field names.
 
 #+name: exchange
 #+BEGIN_SRC
-  netcat 10.0.0.1 -p 6000 | lk route ubits0:=:0000 | lk save & # get packets from a host and set their ubits0 to 0000
-  netcat 10.0.2.0 -p 6000 | lk route ubits0:=:0001 | lk save & # get packets from another host and set their ubits0 to 0001
-  lk linkpoint example::/hello | lk route ubits0:=:0002 | lk save # save my packets with ubits 0002
+  netcat 10.0.0.1 -p 6000 | lk route ubits0:=:0000 | lk write & # get packets from a host and set their ubits0 to 0000
+  netcat 10.0.2.0 -p 6000 | lk route ubits0:=:0001 | lk write & # get packets from another host and set their ubits0 to 0001
+  lk linkpoint example::/hello | lk route ubits0:=:0002 | lk write # write my packets with ubits 0002
   lk watch-log --asc example::/hello -- "ubits0:>:0000" | nc 10.0.0.1 -p 6000  & # forward all packets with ubits0 higher than 0000 back to host. 
 #+END_SRC
 
-A single linkspace instance can be used by multiple applications on device, and connect to others.
-To that end there are some conventions.
+A single linkspace instance is usually shared between multiple applications on a single device.
+This allows some level of interprocess communications.
+For various common requirements there are fixed functions called 'conventions'.
 These are functions that create/watch for point with some predefined spacename, links, and data format.
-Conventions enable interoperability between multiple applications and background processes.
-
-One such convention is the `pull` convention. This writes a query as a specific point.
+One such convention is the `pull` convention.
+An application calling pull signals that it wants matching packets retrieved from others if possible. 
 
 #+name: pull
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  lk pull imageboard:: --write stdout | lk p "[spacename:str]\n\n[data]"
+  lk pull imageboard:: --write stdout | lk p "[space:str]\n\n[data]"
 #+END_SRC
 
-The goal of `pull` is to allow one process, e.g. an application like [[./tutorial/imageboard.html][imageboard (bash)]] or [[./tutorial/mineweeper-1.html][mineweeper (python)]]
-to signal another process, e.g. a group exchange process like  [[./tutorial/bash.exchange.html][bash.exchange]],
-that it wants packets matching a query from the group.
+For example an application like [[./tutorial/imageboard.html][imageboard (bash)]] or [[./tutorial/mineweeper-1.html][mineweeper (python)]]
+pulls to signal to group exchange process like  [[./tutorial/bash.exchange.html][bash.exchange]].
 
-Queries define a 'set of points' in linkspace.
-The `filter` and `watch` commands are syntax sugar over queries.
-You can add `--print-query` to those commands to see the query used.
+Pull creates a point containing a query. 
+Queries define a 'set of points' in linkspace and are used in many places.
+The `lk filter` and `lk watch` commands are syntax sugar over queries.
+You can add `--print-query` to those commands to see the effective query.
 
-Queries are designed such that joining two query strings the result is the common subset of both or an error if the union is empty.
+Queries are multiline strings.
+They're designed such that the querystring1 ++ querystring2 results in the common subset of both (or an error if the result matches no packets). 
 
 #+name: q1
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -419,5 +423,5 @@ Queries are designed such that joining two query strings the result is the commo
 #+END_SRC
 
 That's it for this quick introduction.
-Some notes on high level algorithm [[https://www.linkspace.dev/tutorial/application-design.html][design]] are worth a read.  
 For a more in-depth technical guide or the library API see the [[./guide/index.html][Guide]].
+The show some of this in action. 

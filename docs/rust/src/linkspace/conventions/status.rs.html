@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/linkspace/src/conventions/status.rs`."><title>status.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-9ee3a5e31a2afa3e.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="linkspace" data-themes="" data-resource-suffix="" data-rustdoc-version="1.75.0-nightly (9d83ac217 2023-10-31)" data-channel="nightly" data-search-js="search-8fbf244ebcf71464.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-9dd44ab47b99a0fb.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/linkspace/src/conventions/status.rs`."><title>status.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-4e54bb2b497cc83f.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="linkspace" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.0-nightly (d78329b92 2024-01-13)" data-channel="nightly" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-f2adc0d6ca4d09fb.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-0b2e2def73e61cbe.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../linkspace/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -275,10 +277,10 @@ exchnage GROUP pull PULL PULL_HASH
 A request is a packet in the form DOMAIN:[#:0]:/\fstatus/GROUP/type(/instance?) , with no data and no links.
 A reply is of the form DOMAIN:[#:0]/\status/GROUP/type/instance with some data and at least some links.
 
-A request without &#39;instance&#39; should be answered by all instances.
+A request without 'instance' should be answered by all instances.
 
-The reply must have an &#39;instance&#39; set. It defaults to &#39;default&#39;.
-The reply data should be either &quot;OK\n&quot; or &quot;ERR\n&quot; followed by more info.
+The reply must have an 'instance' set. It defaults to 'default'.
+The reply data should be either "OK\n" or "ERR\n" followed by more info.
 The reply process links can start with init:[#:0] at first and should point to previous replies after that.
 
 A new request is not made if one was made after now-timeout.
@@ -288,42 +290,42 @@ A reply is accepted if it was made now-timeout.
 This might change
 **/
 </span><span class="kw">use crate</span>::<span class="kw-2">*</span>;
-<span class="doccomment">/// const &#39;/status&#39; spacename
-</span><span class="kw">pub static </span>STATUS_SPACE: RootedStaticSpace&lt;<span class="number">16</span>&gt; = rspace1::&lt;<span class="number">7</span>&gt;(<span class="macro">concat_bytes!</span>([<span class="number">255</span>], <span class="string">b&quot;status&quot;</span>));
+<span class="doccomment">/// const '/status' space
+</span><span class="kw">pub static </span>STATUS_SPACE: RootedStaticSpace&lt;<span class="number">16</span>&gt; = rspace1::&lt;<span class="number">7</span>&gt;(<span class="macro">concat_bytes!</span>([<span class="number">255</span>], <span class="string">b"status"</span>));
 
 <span class="attr">#[derive(Copy, Clone)]
 #[repr(C)]
 </span><span class="doccomment">/// Options for a local status request.
-</span><span class="kw">pub struct </span>LkStatus&lt;<span class="lifetime">&#39;o</span>&gt; {
+</span><span class="kw">pub struct </span>LkStatus&lt;<span class="lifetime">'o</span>&gt; {
     <span class="doccomment">/// the domain of interests
     </span><span class="kw">pub </span>domain: Domain,
     <span class="doccomment">/// the group of interests (NOT the group to query, see mod level doc on the usage)
     </span><span class="kw">pub </span>group: GroupID,
     <span class="doccomment">/// the object type of interests
-    </span><span class="kw">pub </span>objtype: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8],
+    </span><span class="kw">pub </span>objtype: <span class="kw-2">&amp;</span><span class="lifetime">'o </span>[u8],
     <span class="doccomment">/// the instance
-    </span><span class="kw">pub </span>instance: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8]&gt;,
+    </span><span class="kw">pub </span>instance: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'o </span>[u8]&gt;,
     <span class="doccomment">/// qid to use for query - reuse of qid will remove the listening query
-    </span><span class="kw">pub </span>qid: <span class="kw-2">&amp;</span><span class="lifetime">&#39;o </span>[u8],
+    </span><span class="kw">pub </span>qid: <span class="kw-2">&amp;</span><span class="lifetime">'o </span>[u8],
 }
-<span class="kw">impl </span>Default <span class="kw">for </span>LkStatus&lt;<span class="lifetime">&#39;static</span>&gt; {
+<span class="kw">impl </span>Default <span class="kw">for </span>LkStatus&lt;<span class="lifetime">'static</span>&gt; {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             domain: domain(),
             group: group(),
             objtype: <span class="kw-2">&amp;</span>[],
             instance: <span class="prelude-val">None</span>,
-            qid: <span class="string">b&quot;status&quot;</span>,
+            qid: <span class="string">b"status"</span>,
         }
     }
 }
-<span class="kw">impl</span>&lt;<span class="lifetime">&#39;o</span>&gt; std::fmt::Debug <span class="kw">for </span>LkStatus&lt;<span class="lifetime">&#39;o</span>&gt; {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">&#39;_</span>&gt;) -&gt; std::fmt::Result {
-        f.debug_struct(<span class="string">&quot;LkStatus&quot;</span>)
-            .field(<span class="string">&quot;domain&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.domain)
-            .field(<span class="string">&quot;group&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.group)
-            .field(<span class="string">&quot;objtype&quot;</span>, <span class="kw-2">&amp;</span>AB(<span class="kw-2">&amp;</span><span class="self">self</span>.objtype))
-            .field(<span class="string">&quot;instance&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.instance.map(AB))
+<span class="kw">impl</span>&lt;<span class="lifetime">'o</span>&gt; std::fmt::Debug <span class="kw">for </span>LkStatus&lt;<span class="lifetime">'o</span>&gt; {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        f.debug_struct(<span class="string">"LkStatus"</span>)
+            .field(<span class="string">"domain"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.domain)
+            .field(<span class="string">"group"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.group)
+            .field(<span class="string">"objtype"</span>, <span class="kw-2">&amp;</span>AB(<span class="kw-2">&amp;</span><span class="self">self</span>.objtype))
+            .field(<span class="string">"instance"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.instance.map(AB))
             .finish()
     }
 }
@@ -356,57 +358,57 @@ This might change
     <span class="kw">let </span>space = lk_status_space(status)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>q = lk_query(<span class="kw-2">&amp;</span>Q);
     <span class="kw">let </span>create_after = now().saturating_sub(max_age);
-    q = lk_query_push(q, <span class="string">&quot;group&quot;</span>, <span class="string">&quot;=&quot;</span>, <span class="kw-2">&amp;*</span>PRIVATE)<span class="question-mark">?</span>;
-    q = lk_query_push(q, <span class="string">&quot;domain&quot;</span>, <span class="string">&quot;=&quot;</span>, <span class="kw-2">&amp;*</span>domain)<span class="question-mark">?</span>;
-    q = lk_query_push(q, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;&gt;&quot;</span>, <span class="kw-2">&amp;*</span>create_after)<span class="question-mark">?</span>;
-    q = lk_query_push(q, <span class="string">&quot;prefix&quot;</span>, <span class="string">&quot;=&quot;</span>, space.space_bytes())<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"group"</span>, <span class="string">"="</span>, <span class="kw-2">&amp;*</span>PRIVATE)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"domain"</span>, <span class="string">"="</span>, <span class="kw-2">&amp;*</span>domain)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"stamp"</span>, <span class="string">"&gt;"</span>, <span class="kw-2">&amp;*</span>create_after)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"prefix"</span>, <span class="string">"="</span>, space.space_bytes())<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(q)
 }
 
-<span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+<span class="attr">#[cfg(any(feature = <span class="string">"lmdb"</span>, feature = <span class="string">"inmem"</span>))]
 </span><span class="doccomment">/// watch for any points matching
 </span><span class="kw">pub fn </span>lk_status_watch(
     lk: <span class="kw-2">&amp;</span>Linkspace,
     status: LkStatus,
     d_timeout: Stamp,
-    <span class="kw-2">mut </span>cb: <span class="kw">impl </span><span class="kw">crate</span>::runtime::cb::PktHandler + <span class="lifetime">&#39;static</span>,
+    <span class="kw-2">mut </span>cb: <span class="kw">impl </span><span class="kw">crate</span>::runtime::cb::PktHandler + <span class="lifetime">'static</span>,
 ) -&gt; LkResult&lt;bool&gt; {
-    <span class="kw">use </span><span class="kw">crate</span>::runtime::{lk_get_all, lk_watch2};
+    <span class="kw">use </span><span class="kw">crate</span>::runtime::{lk_read_all, lk_watch2};
     <span class="kw">use </span>linkspace_common::prelude::{U16, U32};
     <span class="kw">use </span>tracing::debug_span;
 
-    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">&quot;status_poll&quot;</span>, <span class="question-mark">?</span>status, <span class="question-mark">?</span>d_timeout);
+    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">"status_poll"</span>, <span class="question-mark">?</span>status, <span class="question-mark">?</span>d_timeout);
     <span class="kw">let _ </span>= span.enter();
     <span class="kw">let </span><span class="kw-2">mut </span>ok = <span class="bool-val">false</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>last_request = Stamp::ZERO;
     <span class="kw">let </span><span class="kw-2">mut </span>query: Query = lk_status_overwatch(status, d_timeout)<span class="question-mark">?</span>;
-    <span class="comment">// We want to capture any old request, so we first lk_get_all both requests and replies.
-    </span>lk_get_all(lk, <span class="kw-2">&amp;</span>query, <span class="kw-2">&amp;mut </span>|pkt| {
+    <span class="comment">// We want to capture any old request, so we first lk_read_all both requests and replies.
+    </span>lk_read_all(lk, <span class="kw-2">&amp;</span>query, <span class="kw-2">&amp;mut </span>|pkt| {
         <span class="kw">if </span>pkt.get_links().is_empty() &amp;&amp; pkt.data().is_empty() {
-            last_request = <span class="kw-2">*</span>pkt.get_create_stamp();
-            <span class="macro">tracing::debug!</span>(pkt=%PktFmt(<span class="kw-2">&amp;</span>pkt),<span class="string">&quot;recently requested&quot;</span>);
+            last_request = <span class="kw-2">*</span>pkt.get_stamp();
+            <span class="macro">tracing::debug!</span>(pkt=%PktFmt(<span class="kw-2">&amp;</span>pkt),<span class="string">"recently requested"</span>);
             <span class="bool-val">false
         </span>} <span class="kw">else </span>{
             ok = <span class="bool-val">true</span>;
             <span class="kw">let </span>cnt = (cb).handle_pkt(pkt, lk);
-            <span class="macro">tracing::debug!</span>(<span class="string">&quot;recently replied&quot;</span>);
+            <span class="macro">tracing::debug!</span>(<span class="string">"recently replied"</span>);
             cnt.is_break()
         }
     })<span class="question-mark">?</span>;
     <span class="kw">if </span>last_request == Stamp::ZERO {
-        <span class="macro">tracing::debug!</span>(<span class="string">&quot;creating new req&quot;</span>);
+        <span class="macro">tracing::debug!</span>(<span class="string">"creating new req"</span>);
         <span class="kw">let </span>req = lk_status_request(status).unwrap();
-        last_request = <span class="kw-2">*</span>req.get_create_stamp();
-        lk_save(lk, <span class="kw-2">&amp;</span>req)<span class="question-mark">?</span>;
+        last_request = <span class="kw-2">*</span>req.get_stamp();
+        lk_write(lk, <span class="kw-2">&amp;</span>req)<span class="question-mark">?</span>;
     }
     <span class="kw">let </span>wait_until = last_request.saturating_add(d_timeout);
-    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>wait_until, <span class="string">&quot;Waiting until&quot;</span>);
-    query = lk_query_push(query, <span class="string">&quot;data_size&quot;</span>, <span class="string">&quot;&gt;&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
-    query = lk_query_push(query, <span class="string">&quot;links_len&quot;</span>, <span class="string">&quot;&gt;&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
-    query = lk_query_push(query, <span class="string">&quot;recv&quot;</span>, <span class="string">&quot;&lt;&quot;</span>, <span class="kw-2">&amp;*</span>wait_until)<span class="question-mark">?</span>;
-    query = lk_query_push(query, <span class="string">&quot;i_db&quot;</span>, <span class="string">&quot;&lt;&quot;</span>, <span class="kw-2">&amp;*</span>U32::ZERO)<span class="question-mark">?</span>;
-    query = lk_query_push(query, <span class="string">&quot;&quot;</span>, <span class="string">&quot;qid&quot;</span>, status.qid)<span class="question-mark">?</span>;
-    lk_watch2(lk, <span class="kw-2">&amp;</span>query, cb, span)<span class="question-mark">?</span>;
+    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>wait_until, <span class="string">"Waiting until"</span>);
+    lk_query_push(<span class="kw-2">&amp;mut </span>query, <span class="string">"data_size"</span>, <span class="string">"&gt;"</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>query, <span class="string">"links_len"</span>, <span class="string">"&gt;"</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>query, <span class="string">"recv"</span>, <span class="string">"&lt;"</span>, <span class="kw-2">&amp;*</span>wait_until)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>query, <span class="string">"i_db"</span>, <span class="string">"&lt;"</span>, <span class="kw-2">&amp;*</span>U32::ZERO)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>query, <span class="string">""</span>, <span class="string">"qid"</span>, status.qid)<span class="question-mark">?</span>;
+    lk_watch2(lk, query, cb, span)<span class="question-mark">?</span>;
     <span class="prelude-val">Ok</span>(ok)
 }
 
@@ -414,27 +416,27 @@ This might change
     <span class="macro">anyhow::ensure!</span>(
         <span class="kw-2">*</span>pkt.get_domain() == status.domain
             &amp;&amp; <span class="kw-2">*</span>pkt.get_group() == PRIVATE
-            &amp;&amp; pkt.get_rooted_spacename() == rspace
+            &amp;&amp; pkt.get_rooted_space() == rspace
             &amp;&amp; !pkt.get_links().is_empty()
             &amp;&amp; !pkt.data().is_empty(),
-        <span class="string">&quot;invalid status update&quot;
+        <span class="string">"invalid status update"
     </span>);
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="doccomment">/// Insert a callback that is triggered on a request. Must yield a valid response. Don&#39;t forget to process
-</span><span class="attr">#[cfg(feature = <span class="string">&quot;runtime&quot;</span>)]
+<span class="doccomment">/// Insert a callback that is triggered on a request. Must yield a valid response. Don't forget to process
+</span><span class="attr">#[cfg(any(feature = <span class="string">"lmdb"</span>, feature = <span class="string">"inmem"</span>))]
 </span><span class="kw">pub fn </span>lk_status_set(
     lk: <span class="kw-2">&amp;</span>Linkspace,
     status: LkStatus,
     <span class="kw-2">mut </span>update: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>Linkspace, Domain, GroupID, <span class="kw-2">&amp;</span>RootedSpace, Link) -&gt; LkResult&lt;NetPktBox&gt;
-        + <span class="lifetime">&#39;static</span>,
+        + <span class="lifetime">'static</span>,
 ) -&gt; LkResult&lt;()&gt; {
     <span class="kw">use </span><span class="kw">crate</span>::runtime::lk_watch2;
     <span class="kw">use </span>linkspace_common::prelude::{U16, U32};
     <span class="kw">use </span>tracing::debug_span;
 
-    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">&quot;status_set&quot;</span>, <span class="question-mark">?</span>status);
+    <span class="kw">let </span>span = <span class="macro">debug_span!</span>(<span class="string">"status_set"</span>, <span class="question-mark">?</span>status);
     <span class="kw">let _ </span>= span.enter();
     <span class="kw">let </span>LkStatus {
         domain,
@@ -445,7 +447,7 @@ This might change
     } = status;
 
     <span class="kw">let </span>objtype = objtype.to_vec();
-    <span class="kw">let </span>instance = instance.or(<span class="prelude-val">Some</span>(<span class="string">b&quot;default&quot;</span>)).map(Vec::from);
+    <span class="kw">let </span>instance = instance.or(<span class="prelude-val">Some</span>(<span class="string">b"default"</span>)).map(Vec::from);
     <span class="kw">let </span>status = LkStatus {
         instance: instance.as_deref(),
         domain,
@@ -455,14 +457,14 @@ This might change
     };
     <span class="kw">let </span>space = lk_status_space(status)<span class="question-mark">?</span>;
     <span class="kw">let </span>link = Link {
-        tag: ab(<span class="string">b&quot;init&quot;</span>),
+        tag: ab(<span class="string">b"init"</span>),
         ptr: PRIVATE,
     };
     <span class="kw">let </span>initpkt = update(lk, status.domain, PRIVATE, <span class="kw-2">&amp;</span>space, link)<span class="question-mark">?</span>;
     is_status_reply(status, <span class="kw-2">&amp;</span>space, <span class="kw-2">&amp;</span>initpkt)<span class="question-mark">?</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>prev = initpkt.hash();
-    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>initpkt, <span class="string">&quot;init status&quot;</span>);
-    lk_save(lk, <span class="kw-2">&amp;</span>initpkt)<span class="question-mark">?</span>;
+    <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>initpkt, <span class="string">"init status"</span>);
+    lk_write(lk, <span class="kw-2">&amp;</span>initpkt)<span class="question-mark">?</span>;
     std::mem::drop(initpkt);
 
     <span class="kw">let </span><span class="kw-2">mut </span>q = lk_query(<span class="kw-2">&amp;</span>Q);
@@ -470,15 +472,15 @@ This might change
         instance: <span class="prelude-val">None</span>,
         ..status
     })<span class="question-mark">?</span>;
-    q = lk_query_push(q, <span class="string">&quot;data_size&quot;</span>, <span class="string">&quot;=&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
-    q = lk_query_push(q, <span class="string">&quot;links_len&quot;</span>, <span class="string">&quot;=&quot;</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
-    q = lk_query_push(q, <span class="string">&quot;prefix&quot;</span>, <span class="string">&quot;=&quot;</span>, prefix.space_bytes())<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"data_size"</span>, <span class="string">"="</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"links_len"</span>, <span class="string">"="</span>, <span class="kw-2">&amp;*</span>U16::ZERO)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"prefix"</span>, <span class="string">"="</span>, prefix.space_bytes())<span class="question-mark">?</span>;
     <span class="comment">// We only care about new packets. Worst case a request was received and timeout between our init and this cb.
-    </span>q = lk_query_push(q, <span class="string">&quot;i_db&quot;</span>, <span class="string">&quot;&lt;&quot;</span>, <span class="kw-2">&amp;*</span>U32::ZERO)<span class="question-mark">?</span>;
-    q = lk_query_push(q, <span class="string">&quot;&quot;</span>, <span class="string">&quot;qid&quot;</span>, qid)<span class="question-mark">?</span>;
+    </span>lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">"i_db"</span>, <span class="string">"&lt;"</span>, <span class="kw-2">&amp;*</span>U32::ZERO)<span class="question-mark">?</span>;
+    lk_query_push(<span class="kw-2">&amp;mut </span>q, <span class="string">""</span>, <span class="string">"qid"</span>, qid)<span class="question-mark">?</span>;
     lk_watch2(
         lk,
-        <span class="kw-2">&amp;</span>q,
+        q,
         try_cb(<span class="kw">move </span>|pkt: <span class="kw-2">&amp;</span><span class="kw">dyn </span>NetPkt, lk: <span class="kw-2">&amp;</span>Linkspace| -&gt; LkResult&lt;()&gt; {
             <span class="kw">let </span>status = LkStatus {
                 instance: instance.as_deref(),
@@ -487,19 +489,19 @@ This might change
                 objtype: <span class="kw-2">&amp;</span>objtype,
                 qid: <span class="kw-2">&amp;</span>[],
             };
-            <span class="kw">let </span>p = pkt.get_rooted_spacename();
+            <span class="kw">let </span>p = pkt.get_rooted_space();
             <span class="kw">if </span>p.depth() == space.depth() &amp;&amp; p.space() != space.as_ref() {
                 <span class="kw">return </span><span class="prelude-val">Ok</span>(());
             }
             <span class="kw">let </span>link = Link {
-                tag: ab(<span class="string">b&quot;prev&quot;</span>),
+                tag: ab(<span class="string">b"prev"</span>),
                 ptr: prev,
             };
             <span class="kw">let </span>reply = update(lk, status.domain, PRIVATE, <span class="kw-2">&amp;</span>space, link)<span class="question-mark">?</span>;
             is_status_reply(status, <span class="kw-2">&amp;</span>space, <span class="kw-2">&amp;</span>reply)<span class="question-mark">?</span>;
             prev = reply.hash();
-            <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>reply, <span class="string">&quot;Reply status&quot;</span>);
-            lk_save(lk, <span class="kw-2">&amp;</span>reply)<span class="question-mark">?</span>;
+            <span class="macro">tracing::debug!</span>(<span class="question-mark">?</span>reply, <span class="string">"Reply status"</span>);
+            lk_write(lk, <span class="kw-2">&amp;</span>reply)<span class="question-mark">?</span>;
             <span class="prelude-val">Ok</span>(())
         }),
         span,
