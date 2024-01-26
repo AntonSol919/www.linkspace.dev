@@ -1,10 +1,11 @@
 .PHONY: all homepage rust-docs tutorials guide 
 
-all: homepage rust-docs tutorials guide 
+all: clean homepage rust-docs tutorials guide 
 	echo "Use 'python -m http.server' before deadseeker"
 	./build-scripts/deadseeker.py
 
 rust-docs: 
+	mkdir -p build
 	cargo doc --manifest-path ../linkspace/Cargo.toml -p linkspace --target-dir ./build --no-deps
 	rsync -rvkP ./build/doc/ ./docs/rust
 
@@ -32,3 +33,8 @@ homepage: build-debug index.html about.html code_intro.html
 
 %.html: %.md template.pml
 	pandoc -f markdown-native_divs -s ./$< --template ./template.pml  --metadata title=$@ -o $@
+
+clean:
+	rm -r build || true
+	rm -r docs/rust || true
+	find . -name "*.html" -type f -delete

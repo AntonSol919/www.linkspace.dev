@@ -65,14 +65,14 @@ It asks the user for a list of player names.
 Players take turns entering which cell to reveal until someone reveals a mine or no more safe cells exist.
 
 #+begin_py
-#+INCLUDE: "../../linkspace/examples/mineweeper/mineweeper-hotseat.py" src python
+#+INCLUDE: "../../linkspace/examples/mineweeper.py/mineweeper-hotseat.py" src python
 #+end_py
 
 
 #+begin_verse
 To give it a try: clone the repository or download and extract latest release: https://github.com/AntonSol919/linkspace/releases.
 All paths and commands will be relative to this directory.
-You can try the code with ~python ./examples/mineweeper/mineweeper-hotseat.py~
+You can try the code with ~python ./examples/mineweeper.py/mineweeper-hotseat.py~
 #+end_verse
 
 Bob's a little disappointed with the graphics.
@@ -86,7 +86,7 @@ In case you're interested checkout the tab or open the code in ./app/mineweeper-
 #+end_info
 
 #+begin_py
-#+INCLUDE: "../../linkspace/examples/mineweeper/mineweeper.py" src python
+#+INCLUDE: "../../linkspace/examples/mineweeper.py/mineweeper.py" src python
 #+end_py
 #+end_ctabs
 
@@ -245,7 +245,7 @@ There is no host to orchestrate, and packets can arrive for each players in a di
 The solution is rather mundane. Adding a link to another packet is proof that one was created before the other.
 
 #+begin_py
-#+INCLUDE: "../../linkspace/examples/mineweeper/mineweeper-multiplayer.py" src python
+#+INCLUDE: "../../linkspace/examples/mineweeper.py/mineweeper-multiplayer.py" src python
 #+end_py
 
 #+begin_ctabs

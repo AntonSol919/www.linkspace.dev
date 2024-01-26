@@ -10,8 +10,8 @@ Things such as commercial use are allowed - if you follow the terms of the licen
 Linkspace is currently an unfunded project.
 I do other stuff to make a living and won't be available all the time.
 
-Contact me directly at <AntonSol919@gmail.com> if you're interested in supporting the project.
+Contact me directly at <sol@linkspace.dev> if you're interested in supporting the project.
 
 ## Trademark
 
-linkspace is a trademark of R.A.I.T. Solutions.
+linkspace is a trademark of R.A.I.T. Solutions in the European Union.

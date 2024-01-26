@@ -3,8 +3,7 @@
 #+OPTIONS: toc:nil
 
 This introduction uses the `lk` cli with bash.
-You can follow along by [[https://github.com/AntonSol919/linkspace/releases][downloading]] the latest release. 
-If you're more comfortable with Python or want a more detailed explanation check out the guide.  
+Follow along by [[https://github.com/AntonSol919/linkspace/releases][downloading]] the latest release. 
 
 #+NAME: init
 #+BEGIN_SRC bash :session codeorg :exports none
@@ -20,41 +19,41 @@ If you're more comfortable with Python or want a more detailed explanation check
 
 *** Point
 
-A single unit|event|message in linkspace is called a `point`.
-A point can hold just shy of 64kb.
+A single unit|event|message in linkspace is called a `point`. Each can hold ~64kb.
 
 #+NAME: point-hello
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
   echo "Hello, Sol!" | lk point > mylog
 #+END_SRC
 
-Points have a few of optional properties besides the data field.
+Points have optional properties besides the data field.
 
 a spacename:
 #+NAME: point-spacename
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  echo -n some data | lk point ::/my/example/spacename --data-stdin >> mylog
+  echo -n some data | lk point /my/example/spacename --data-stdin >> mylog
 #+END_SRC
 
 a timestamp in microseconds since epoch using `now` by default:
 
 #+NAME: point-create
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  # 12 seconds in the past - we'll get back to the [..] syntax 
-  lk point ::/my/example/other_space --stamp [now:-12s] >> mylog 
+  # 12minuites and 10 seconds in the past - the [..] syntax is touched on later
+  lk point /my/example/other_space --stamp [now:-12m10s] >> mylog 
 #+END_SRC
 
-and a signature:
+and a public key + signature:
 
 #+NAME: point-signed
 #+BEGIN_SRC bash :exports code
   KEY=$(lk key --no-pubkey --no-lk --password 'my secret') 
-  lk point ::/my/example/spacename/subspace --sign --enckey "$KEY" --password 'my secret' >> mylog
+  lk point /my/example/spacename/subspace --sign --enckey "$KEY" --password 'my secret' >> mylog
 #+END_SRC
 #+NAME: real-signed
 #+BEGIN_SRC bash :session codeorg :exports none :results output verbatim
+# By default the key is made expensive te decrypt
   KEY='$argon2d$v=19$m=8,t=1,p=1$tb0anwpH0rSbYe6JLd1Bgtf00QQUAYuhOcBqeSjAgW4$kYAtGyF78cfPjRqcm4Y/s1hgQTRysELK/L910P2u27c'
-  lk point ::/my/example/spacename/subspace --sign --enckey "$KEY" --password '' >> mylog
+  lk point /my/example/spacename/subspace --sign --enckey "$KEY" --password '' >> mylog
 #+END_SRC
 
 All points are hashed using Blake3. 
@@ -65,59 +64,52 @@ All points are hashed using Blake3.
 
 #+NAME: pktf
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  cat mylog | lk pktf "Hash: [hash:str] is a point at '[space:str]' with data '[data]'"
+  cat mylog | lk pktf "'[data]' hashes to: [hash:str]"
 #+END_SRC
 
-Or output only data: `cat mylog | lk pktf "[data]"`.
+The format string evaluates and substitutes '[..]' expressions.
+eg. output only data: `cat mylog | lk pktf "[data]"`.
 
-The other fields are readable by general purpose tools to index, address, and filter the packets. 
-For example, lk filter.
-Here we only take those with a spacename starting with `/my/example` and 1 additional component
+The limited set of fields with their fixed wire format makes them fast to process.
+For example using `lk filter`.
+
+This command only passes those with a spacename starting with `/my/example` and 1 additional space component
 
 #+NAME: filter
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  cat mylog | lk filter ::/my/example:* | lk pktf "[hash:str] [space:str]"
+  cat mylog | lk filter /my/example:* | lk pktf "[hash:str] [space:str]"
 #+END_SRC
 
 #+BEGIN_VERSE
-You can go build even more complex filters with `lk do -s --write stdout -- [..]`
+Advanced tip: Build even more complex filters by using `lk do`
 #+END_VERSE
 
 Points are addressable by their hash.
-To reference one point from another you add a link. 
-Each link is a 16 byte tag and 32 byte hash value.
-If less than 16 bytes are supplied it is left-padded with 0's.
+To reference one point from another add a link.
+Each link is a 16 byte tag and 32 byte hash.
+If fewer than 16 bytes are used in the tag it is left-padded with 0's.
 
 #+NAME: links
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
   HASH=($(cat mylog | lk pktf [hash:str]))
-  lk point "::/my/example/link" -- "my first link:${HASH[0]}" "other link:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk" >> mylog
+  lk point "/my/example/linkpoing" -- "my first link:${HASH[0]}" "other link:Yrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk" >> mylog
 #+END_SRC
 
-You can get fancy with `pktf` and `xargs`.
+Optionally get fancy with `pktf` and `xargs`.
 
 #+NAME: links-xargs
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  cat mylog | lk pktf "mytag:[hash:str]" | xargs lk point ::/my/example/link -- >> mylog
+  cat mylog | lk pktf "mytag:[hash:str]" | xargs lk point /my/example/link -- >> mylog
 #+END_SRC
 
-#+BEGIN_VERSE
-When building a log you should start with only using the data field, in a readable format like JSON.
-Only when required should you expand to use the more advanced features like spacenames, signatures, and links. 
-
-You can ask if cryptographic properties, like signatures or distributed event ordering by linking, are worth to add upfront if you want to focus on the data.
-The answer is yes.
-Cryptographic signatures and hash addresses are difficult to get right, and infeasible to add retroactively. 
-#+END_VERSE
-
-A tool like `lk collect` has a few additional options for linking points.
-However, the `lk` binary is meant to do simple things. 
+A tool like `lk collect` has a few additional options for linking points received on stdin.
+However, the `lk` cli has its limits.
 Consider using a better programming language when doing non-trivial stuff.
 
 #+BEGIN_HTML
 <details>
 <summary>
-Click here to see a graphical representation of mylog
+Click here to see a dot graphiv representation of `mylog`
 </summary>
 #+END_HTML
 
@@ -126,32 +118,6 @@ Click here to see a graphical representation of mylog
 lk p --pkts ./mylog '"p[hash:str]"\[label=" { <hash> [hash/2mini] }  | { signed: [pubkey/2mini] | [space:str] } | data=[data] | [links_len:str] links [/links: | <[i:str]> [tag:str]\: [ptr/2mini] ] "\];
      [/links: "p[hash:str]"\:[i:str] -> "p[ptr:str]"\:hash ;\n ]' ;
 #+END_SRC
-
-#+RESULTS[90d11a7c87fa683025d6aa42b5b58bed48095fed]: make-dot
-#+begin_example
-"pYrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk"[label=" { <hash> Yrs7iz::Tk }  | { signed: AAAAAA::AA |  } | data=Hello, Sol!
- | 0 links  "];
-     
-"pc77MvXKMDwHuw2DNSa57pW6byDx-CFKC71kJ_jZrp34"[label=" { <hash> c77MvX::34 }  | { signed: AAAAAA::AA | /my/example/spacename } | data=some data | 0 links  "];
-     
-"pG-soA9GJ-8GPPyqY3EH6ltNspmmxJ86hoeN1ZP-GikQ"[label=" { <hash> G-soA9::kQ }  | { signed: AAAAAA::AA | /my/example/other_spacename } | data= | 0 links  "];
-     
-"pkf3qA7I94kYzgkG6MDdUMBXKUbXuoXUQbndWhGLvcBo"[label=" { <hash> kf3qA7::Bo }  | { signed: tb0anw::W4 | /my/example/spacename/subspacename } | data= | 0 links  "];
-     
-"pLtlNcYXCdWAzRCXwMrPw0d8Jr6k4p8CXuxF1g13PjLY"[label=" { <hash> LtlNcY::LY }  | { signed: AAAAAA::AA | /my/example/link } | data= | 2 links  | <0> my first link: Yrs7iz::Tk  | <1> other link: Yrs7iz::Tk  "];
-      "pLtlNcYXCdWAzRCXwMrPw0d8Jr6k4p8CXuxF1g13PjLY":0 -> "pYrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk":hash ;
-  "pLtlNcYXCdWAzRCXwMrPw0d8Jr6k4p8CXuxF1g13PjLY":1 -> "pYrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk":hash ;
- 
-"pRCBO18gQylfbhpL-x7mmJK48mHU0cvGowqMDAdBXbTo"[label=" { <hash> RCBO18::To }  | { signed: AAAAAA::AA | /my/example/link } | data= | 5 links  | <0> mytag: Yrs7iz::Tk  | <1> mytag: c77MvX::34  | <2> mytag: G-soA9::kQ  | <3> mytag: kf3qA7::Bo  | <4> mytag: LtlNcY::LY  "];
-      "pRCBO18gQylfbhpL-x7mmJK48mHU0cvGowqMDAdBXbTo":0 -> "pYrs7iz3VznXh-ogv4aM62VmMNxXFiT4P24tIfVz9sTk":hash ;
-  "pRCBO18gQylfbhpL-x7mmJK48mHU0cvGowqMDAdBXbTo":1 -> "pc77MvXKMDwHuw2DNSa57pW6byDx-CFKC71kJ_jZrp34":hash ;
-  "pRCBO18gQylfbhpL-x7mmJK48mHU0cvGowqMDAdBXbTo":2 -> "pG-soA9GJ-8GPPyqY3EH6ltNspmmxJ86hoeN1ZP-GikQ":hash ;
-  "pRCBO18gQylfbhpL-x7mmJK48mHU0cvGowqMDAdBXbTo":3 -> "pkf3qA7I94kYzgkG6MDdUMBXKUbXuoXUQbndWhGLvcBo":hash ;
-  "pRCBO18gQylfbhpL-x7mmJK48mHU0cvGowqMDAdBXbTo":4 -> "pLtlNcYXCdWAzRCXwMrPw0d8Jr6k4p8CXuxF1g13PjLY":hash ;
- 
-"pmAXVJpE8ZCrTjZF40QI7LLH0Ss-_wEjxUlZt0Pm6fhU"[label=" { <hash> mAXVJp::hU }  | { signed: AAAAAA::AA |  } | data=hello world
- | 0 links  "];
-#+end_example
 
 #+NAME: graph-mylog
 #+BEGIN_SRC dot :file images/mylog-dot.svg :var input=make-dot :exports results :cache yes
@@ -162,32 +128,29 @@ lk p --pkts ./mylog '"p[hash:str]"\[label=" { <hash> [hash/2mini] }  | { signed:
  }
 #+END_SRC
 
-#+RESULTS[cbf22962d88abcdb1aafdfd83b79d0975e5ddfec]: graph-mylog
-[[file:images/mylog-dot.svg]]
-
 
 #+BEGIN_HTML
 </details>
 #+END_HTML
 
-Creating packets with `lk point` detects what kind you're trying to build.
-But it is better to be explicit. The 3 types of points are:
+Creating packets with `lk point` detects what type of packet is being created.
+However, it is better to be explicit. The 3 types of points are:
 `datapoint`, `linkpoint`, or `keypoint` (a signed linkpoint).
 
-NOTE: linkpoint and keypoint do not read data from stdin by default.
+For the linkpoint and keypoint command, data is not read from stdin by default.
 
 #+NAME: point-stdin
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  echo somedata | lk linkpoint ::/my/other_spacename --data-stdin | lk pktf "[hash:str] = [data]"
+  echo somedata | lk linkpoint /my/other_spacename --data-stdin | lk pktf "[hash:str] = [data]"
 #+END_SRC
 
 
 *** Database
 
+Up to this point packets were simply dumped to a file.
 Linkspace is primarily its packet format.
-Using the database is optional.
-
-The database and other tools exists to make it easier to build complex systems and packet flows.
+It can be used with plain files or any database.
+However, library also includes a database.
 
 #+NAME: db-init
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -196,27 +159,31 @@ The database and other tools exists to make it easier to build complex systems a
   cat mylog | lk write > /dev/null ; 
 #+END_SRC
 
-Instead of using `save` you can set a write destinations directly.
+Instead of piping into `lk write`, most commands take a write destinations such as 'db'.
 
 #+NAME: write
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
   echo hello world | lk point --write db --write file:mylog --write stdout | lk pktf [data]
 #+END_SRC
 
-The database has three indices. 
-A 'log', 'hash', and the 'tree' index. 
-The log-index is ordered by receive order, the hash-index by the point hash, and the tree-index primarily by a point's [space, create stamp] (see the guide for full details).
+The database has three indices.
 
-The database is always accessed through the runtime. 
-The runtime lets multiple processes/threads read, write, and watch for new points.
+- 'log' is indexed on the timestamp a point is written to the database.
+- 'hash' is indexed on the point's hash.
+- 'tree' is essentially indexed on a point's [space, create stamp] (see the guide for full details).
 
-The library API uses callbacks and a user-driven eventloop ([[./guide/index.html#runtime][guide]]).
-`lk` is focused on piping packets.
-Commands include `watch-log`, `watch-tree`, `watch-hash`. These are shorthand for  `watch --mode ..`.
+The database is accessed through the runtime.
+The runtime is notified whenever ANY process or thread saves to the database.
+Using the library this requires registering callbacks that are triggered by a user-driven eventloop ([[./guide/index.html#runtime][guide]]).
+
+The `lk` cli is focused on piping packets and handles most of the runtime.
+
+Getting points from the runtime uses functions: `read`, `watch`, and `tap`.
+`read` accesses the current database, `watch` reacts when new packet are written, and `tap` combines read and watch.
 
 #+NAME: watchtree
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  lk watch-tree ::/my:** | lk pktf "[space:str]" > ./watching &
+  lk tap-tree /my:** | lk pktf "[space:str]" > ./watching &
 #+END_SRC
 #+BEGIN_SRC bash :session codeorg :exports none
   sleep 1
@@ -226,17 +193,16 @@ Commands include `watch-log`, `watch-tree`, `watch-hash`. These are shorthand fo
   cat ./watching
 #+END_SRC
 
-Adding a new point
+The current packets are read from disk and piped to a file.
+When a (new) matching point is written to the database `lk tap-tree` is notified and writes it out.
 
 #+NAME: watch-write
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  lk linkpoint ::/my/my/my --write db
+  lk linkpoint /my/my/my --write db
 #+END_SRC
 #+BEGIN_SRC bash :session codeorg :exports none
   sleep 1
 #+END_SRC
-
-Wakes the watching threads to output the new point.
 
 #+NAME: react2
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -251,10 +217,12 @@ Wakes the watching threads to output the new point.
 
 *** Applications
 
-There are two optional fields included in the hash not yet shown. 
-The domain and group.
+Linkspace is designed for people to build distributed applications.
+Software that can function independent of any middleman.
 
-The domain is analogous to a IP port. 
+There are two fields not yet shown: domain and group.
+
+The domain is analogous to a IP port.
 An application pick a domain name (max 16 bytes).
 For example `imageboard`.
 
@@ -262,17 +230,40 @@ For example `imageboard`.
 `pktf` is common enough to have the alias `lk p`.
 #+END_VERSE
 
+The cli syntax is `domain:group:/space`.
+If one is left out or empty the default is the null domain and the public group. 
+
 #+NAME: domain
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
-  lk linkpoint imageboard:: | lk p "[domain:str]"
+  lk linkpoint imageboard::/spacename | lk p "[domain:str]"
 #+END_SRC
 
-Building an application is done by mapping an application state to and from linkspace packets (in the database).
-For example, a drawing application where multiple people can paint to a shared image board.
-A simple mapping could be: 
+Building an application is essentially defining a mapping from a UI state to-and-from linkspace points.
 
-- Images data are saved as data points
+#+BEGIN_VERSE
+This type of application design requires a different way of thinking.
+
+In network systems people are familiar with, a single authority holds the database and everyone is dependent on the order that authority defines.
+This is the 'special' case of networked applications.
+Most people see the digital space through the assumptions and limitations of this special case.
+This has enormous (social) implications.
+
+In the 'general' case of network applications, an order is defined with: hashes, links, and signatures.
+This allows for many interesting designs, and it provides a better abstraction for a physical reality (e.g. CAP, the speed of light).
+
+It is straightforward to emulate a classic app by having a single public key sign packets for clients to follow, thus creating a total order.
+#+END_VERSE
+
+As an example application consider a drawing application where multiple people paint to a single image without using a server.
+A mapping could look like:
+
+- Image data is saved in data points
 - Every link in a linkpoint is: a hash to an image, and a tag holding (x,y) coordinates.
+
+By choice we'll deal with the distributed challenges as follows to keep things simple:
+
+    We don't care about missing data, and we'll trust people to set an approximately right timestamp.
+    Every time we receive an update (even if newer updates were already added) we'll re-paint over our current picture by painting everything since that timestamp.
 
 Adding an image might look something like: 
 
@@ -282,26 +273,26 @@ Adding an image might look something like:
   curl -s $IMG | lk datapoint > tux.pkt
   IMG_HASH=$(cat tux.pkt | lk p "[hash:str]")
   lk linkpoint imageboard:: -- $(printf "%08d%08d" "$X" "$Y"):$IMG_HASH >> tux.pkt
-  lk write --pkts ./tux.pkt # Instead of `cat` we can provide a file
+  lk write --pkts ./tux.pkt # Instead of `cat tux.pkt |` reading directly from a pkts file
 #+END_SRC
 
-Building an image requires the program to watch for new packets in `imageboard::`, and on every (new) point draw over the image.
+Building an image requires the program to tap points in `imageboard::` and for each result over a image.
 
 #+name: watch-tree
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
- lk watch-tree "imageboard::" --max 1 \
+ lk tap-tree "imageboard::" --max 1 \
     | lk p "[hash:str] has the links:\n [links]" 
 #+END_SRC
 
 #+BEGIN_VERSE
-You should always quote your arguments.
+Always quote shell arguments.
 Otherwise, the previous example would not have worked.
 Without the quotes the characters `[lin` in "[links]" would be interpreted by the default bash shell.
 #+END_VERSE
 
-A link might reference a point that is not (yet) available on the device.
+A link might hold a point's hash that is not (yet) in the database.
 An application has to decide how to handle the situation.
-In this example we'll just wait. 
+In this example we'll just wait.
 Waiting can be done manually. e.g.
 
 #+name: watch-tree-links
@@ -323,12 +314,12 @@ Or use `lk get-links`. It has a few common strategies.
 #+END_SRC
 
 To complete the imageboard application we'll have to add a few more steps to merge the data into a single picture.
-See the tutorial for an example on doing this and more. 
+See the tutorial for an example on doing this and more.
 
-The final piece of the puzzle is the group field. 
-A group is 32 bytes to signal the intended set of recipients. 
+The final piece of the puzzle is the group field.
+A group is 32 bytes to signal the intended set of recipients.
 It is orthogonal to the domain field.
-Well designed applications should not care which group its running in.
+Well designed applications should not care what group is addressed.
 
 #+name: group
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -336,7 +327,7 @@ Well designed applications should not care which group its running in.
   lk linkpoint :$PUB:/example | lk p "[group:str]"
 #+END_SRC
 
-If no group is specified (like we've been doing) the public group is used.
+If no group is specified (either in an argument or $LK_GROUP environment variable) the public group is used.
 
 #+name: group-str
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
@@ -346,13 +337,13 @@ If no group is specified (like we've been doing) the public group is used.
 'creating' a group is as simple as picking 32 bytes, deciding who the members are, and ensuring they can exchange data.
 
 #+BEGIN_VERSE
-See [[./guide/index.html#ABE][ABE]] for more on the `[..]` syntax. 
-Its a small byte templating language included in the library for convenience with the syntax being the same for all programming language.
+See [[./guide/index.html#ABE][ABE]] for more on the `[..]` syntax.
+Its a tiny byte-templating language included in the library for convenience.
 ABE is also heavily used for CLI arguments, e.g. `lk linkpoint :: --stamp [now]` or `[now:+2h]`
 #+END_VERSE
 
 The other special group is `[0;32]`, also called the private group.
-You can refer to it with the expression `[#:0]`.
+It's usually referenced with the expression `[#:0]`.
 Functions/subcommands that read/write existing points skip and/or warn whenever a point from the private group is seen unless enabled with `--private`.
 
 #+name: private
@@ -360,23 +351,21 @@ Functions/subcommands that read/write existing points skip and/or warn whenever 
   lk linkpoint domain:[#:0] | lk write 2>&1 # creating a packet is ok - but receving is not accepted by `lk write` without --private
 #+END_SRC
 
-A system to exchange points in a group can be made from scratch.
+A network to exchange points in a group can be made from scratch.
 Linkspace does not prescribe a way to do so.
 Each group / network is different, and no single solution can cover every situation.
 
-For example, use `lk watch imageboard:$MYGROUP | ...` and forward the entire stream to another device using netcat/socat, ssh, email, http, a USB stick,
-or other way to exchange bytes. 
+An example for a network is to use `lk watch imageboard:$MYGROUP | ...` and forward the entire stream to another device using netcat/socat, ssh, email, http, a USB stick,
+or other way to exchange bytes.
 
-Linkspace is designed to only ever be a streams of packets,
-without additional overhead of a nested serialization formats. 
+Linkspace is designed to always be a streams of packets.
 This keeps streams compatible with all tools that process streams.
 
-However, sometimes you'll need to add some context information to packets as they're shared around.
-Such as when/how and how.
-To that end, each packet has a mutable header excluded from the hash. 
+However, sometimes packets should hold additional context information as they're shared around.
+For that, each packet has a mutable header excluded from the hash.
 
-Filters work on these mutable bytes as well.
-This let you quickly build specific network topologies.
+Filters also work on these fields.
+With this its possible to build for specific network topologies.
 
 #+BEGIN_VERSE
 See [[./guide/index.html#mutable][the guide]] for the mutable field names.
@@ -390,25 +379,29 @@ See [[./guide/index.html#mutable][the guide]] for the mutable field names.
   lk watch-log --asc example::/hello -- "ubits0:>:0000" | nc 10.0.0.1 -p 6000  & # forward all packets with ubits0 higher than 0000 back to host. 
 #+END_SRC
 
-A single linkspace instance is usually shared between multiple applications on a single device.
+A database is shared between multiple applications on a single device.
 This allows some level of interprocess communications.
-For various common requirements there are fixed functions called 'conventions'.
-These are functions that create/watch for point with some predefined spacename, links, and data format.
+
+Somethings are common enough that the library includes functions called 'conventions'.
+These create or watch for points with some predefined spacename, links, and data format.
+
 One such convention is the `pull` convention.
-An application calling pull signals that it wants matching packets retrieved from others if possible. 
+An application creating a pull point signals that it wants a set of packets retrieved from others if possible.
 
 #+name: pull
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim
   lk pull imageboard:: --write stdout | lk p "[space:str]\n\n[data]"
 #+END_SRC
 
-For example an application like [[./tutorial/imageboard.html][imageboard (bash)]] or [[./tutorial/mineweeper-1.html][mineweeper (python)]]
-pulls to signal to group exchange process like  [[./tutorial/bash.exchange.html][bash.exchange]].
-
-Pull creates a point containing a query. 
+Pull creates a point containing a query.
 Queries define a 'set of points' in linkspace and are used in many places.
-The `lk filter` and `lk watch` commands are syntax sugar over queries.
-You can add `--print-query` to those commands to see the effective query.
+
+This can be seen in action in an application like [[./tutorial/imageboard.html][imageboard (bash)]] or [[./tutorial/mineweeper-1.html][mineweeper (python)]] as they pull
+and an exchange process like [[./tutorial/bash.exchange.html][anyhost.exchange]] server/client ensures that set of packets is retrieved.
+
+The query is a structure used throught linkspace.
+The command line arguments for `lk filter`, `lk watch`, etc are syntax sugar over queries.
+Add `--print-query` to those commands to see the effective query.
 
 Queries are multiline strings.
 They're designed such that the querystring1 ++ querystring2 results in the common subset of both (or an error if the result matches no packets). 

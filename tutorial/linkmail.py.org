@@ -10,4 +10,4 @@ Available in the [[https://github.com/AntonSol919/linkspace/releases][pkg]] or i
 #+END_VERSE
 #+end_ctabs
 
-#+INCLUDE: "../../linkspace/examples/linkmail/linkmail.py" src p
+#+INCLUDE: "../../linkspace/examples/linkmail.py/linkmail.py" src p

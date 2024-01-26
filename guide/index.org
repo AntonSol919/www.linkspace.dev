@@ -90,9 +90,10 @@ It consists of the following:
 - [[Runtime]] - A database to save packets and user-driven event loop to query for old and new packets.
   - [[lk_open]]
   - [[lk_write]]
+  - [[lk_read_one]]
   - [[lk_read]]
-  - [[lk_read_all]]
   - [[lk_watch]]
+  - [[lk_tap]]
   - [[lk_process]]
   - [[lk_process_while]]
 
@@ -812,7 +813,7 @@ By default [[lk_key]] sets up the ~[@:me:local]~ identity.
 #+END_VERSE
 
 A query is a list of predicates and options used to define a set of packets.
-They're used in various ways, most notably you can use them to read ([[lk_read]], [[lk_read_all]]), await ([[lk_watch]]) and request ([[lk_pull]]) packets.
+They're used in various ways, most notably you can use them to read ([[lk_read_one]], [[lk_read]]), await ([[lk_watch]]) and request ([[lk_pull]]) packets.
 
 ** lk_query
 :PROPERTIES:
@@ -1029,24 +1030,24 @@ In both cases the predicate ~recv:<:[now:+1m]~ would stop the process after 1 mi
 
 Options are additional configurations for a set of predicates.
 
-They are of the form ~':' name ':' rest~. 
+They are of the form ~':' name ':' rest~.
 Depending on the context/function they are ignored.
-Developers are free to expand their meaning for their usecase like in a group exchange processes. 
+Developers are free to expand their meaning for their usecase like in a group exchange processes.
 
-Unlike predicates, options are not associative. 
+Unlike predicates, options are not associative.
 The order they are joined matters.
 When using lk_query_push or lk_query_parse, the options are added *to the front* of the string.
-i.e. finding the first matching option is done by reading from top to bottom. 
+i.e. finding the first matching option is done by reading from top to bottom.
 Extensions should clearly define the meaning when multiple appear.
 
-NOTE: These options will change somewhat in coming versions. 
+NOTE: These options will change somewhat in coming versions.
 
-| name          | value                      | use                                            | multiple         |
-|---------------+----------------------------+------------------------------------------------+------------------|
-| :mode:        | (tree/hash/log)-(asc/desc) | set the index to read from                     | Top most is used |
-| :follow       |                            | also output linked packets                     | N/A              |
-| :qid:         | <any>                      | identity/close an active query                 | Top most is used |
-| :notify-close |                            | send a final dummy packet when closing a query | N/A              |
+| name          | value                      | use                                            |
+|---------------+----------------------------+------------------------------------------------|
+| :read:        | (tree/hash/log)-(asc/desc) | set the index to read from                     |
+| :follow       |                            | also output linked packets                     |
+| :qid:         | <any>                      | query id                                       |
+| :notify-close |                            | send a final dummy packet when closing a query |
 
 
 ** Known predicates & options
@@ -1059,8 +1060,7 @@ The full list of options and predicates:
 #+begin_ctabs
 #+begin_rs
 
-Current set of [[../docs/rust/linkspace/query/enum.PredicateType.html][predicates]] and 
-[[../docs/rust/linkspace/query/enum.KnownOptions.html][options]].
+Current set of [[../docs/rust/linkspace/query/enum.PredicateType.html][predicates]] and [[../docs/rust/linkspace/query/enum.KnownOptions.html][options]].
 
 Unknown options are added but ignored by most library functions.
 This allows other processes to add additional options it understands.
@@ -1095,30 +1095,25 @@ If you expect the value to be known locally [[lk_read_hashes]] is faster.
 [[../docs/rust/linkspace/index.html][Rust docs]]
 #+END_VERSE
 
-You can open/create a instance with [[lk_open]].
-If given no directory it opens $LK_DIR or $HOME/linkspace.
+You can open/create a linkspace runtime with [[lk_open]].
+It uses $LK_DIR or $HOME/linkspace by default.
 
-An instance is a handle to a multi-reader, single-writer database. 
+A runtime is a handle to a multi-reader, single-writer database.
 The instance is thread local. Each thread or process requires calling [[lk_open]].
 
-An application can write to the database ([[lk_write]]).
-To read from the database you can directly get a packet by hash ([[lk_read_hashes]]) or using a query ([[lk_read]], [[lk_read_all]]).
+An application can write to the database [[lk_write]].
+To read from the database with a query use [[lk_read_one]], [[lk_read]].
 
-A thread can register a watch ([[lk_watch]]).
-A watch is a query & function that is called for each new packet matching the query.
-By default the function is immediatly called for each match in the database.
+You can register a query + callback with [[lk_watch]].
 
-Whenever any thread saves a new packet all other threads receive a signal.
+This callback is called for each newly written packet matching the query is written to the database.
+Regardless which process or thread did the writing.
 
-By default nothing happens.
-A thread does not see the new packets untill its read transaction is updated.
-This includes calls to ~lk_read*~ and ~lk_watch~.  
+[[lk_tap]] combines lk_read and lk_watch.
 
-Update the transaction and process all the new packets ([[lk_process]],[[lk_process_while]]).
-This runs all functions registered as a watch.
-Only after that is the thread's view of the database updated to the latest state.
-
-The [[../docs/rust/linkspace/index.html][Rust docs]] are currently the most up to date, but the python package has most functions typed and commented as well.
+The runtime is user driven.
+A newly written packet isn't acknowledged by the runtime instance until a call to process is made: [[lk_process]],or [[lk_process_while]].
+i.e.  ~lk_write; lk_process; lk_read;~ if you want to read back a packet you have just written.
 
 ** lk_open
 :PROPERTIES:
@@ -1132,19 +1127,19 @@ The [[../docs/rust/linkspace/index.html][Rust docs]] are currently the most up t
 :END:
 
 
+** lk_read_one
+:PROPERTIES:
+:CUSTOM_ID: lk_read_one
+:END:
+
 ** lk_read
 :PROPERTIES:
 :CUSTOM_ID: lk_read
 :END:
 
-** lk_read_all
-:PROPERTIES:
-:CUSTOM_ID: lk_read_all
-:END:
-
 ** lk_read_hashes
 :PROPERTIES:
-:CUSTOM_ID: lk_read
+:CUSTOM_ID: lk_read_one
 :END:
 
 
@@ -1153,6 +1148,12 @@ The [[../docs/rust/linkspace/index.html][Rust docs]] are currently the most up t
 :PROPERTIES:
 :CUSTOM_ID: lk_watch
 :END:
+
+** lk_tap
+:PROPERTIES:
+:CUSTOM_ID: lk_tap
+:END:
+
 
 
 ** lk_process
@@ -1181,11 +1182,9 @@ The [[../docs/rust/linkspace/index.html][Rust docs]] are currently the most up t
 #+END_VERSE
 
 Conventions are functions built on top of the other linkspace functions.
-They provide a standard way for unrelated processes to loosly couple/interface with each other by encoding data into linkspace packets.
+They provide a standard way for unrelated processes to loosly interface with each other by encoding data into linkspace packets.
 
-Generally they require the caller to also run [[lk_process]] or [[lk_process_while]]
-
-One general conventions is that domains and spacenames starting with \xff are for meta things such as status queries and packet exchange.
+One general conventions is that domains and space names starting with \xff are for meta things such as status queries and packet exchange.
 
 ** lk_status_set
 :PROPERTIES:

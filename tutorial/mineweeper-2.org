@@ -9,6 +9,6 @@
 
 
 #+begin_py
-#+INCLUDE: "../../linkspace/examples/mineweeper/mineweeper-lobby.py" src python
+#+INCLUDE: "../../linkspace/examples/mineweeper.py/mineweeper-lobby.py" src python
 #+end_py
 

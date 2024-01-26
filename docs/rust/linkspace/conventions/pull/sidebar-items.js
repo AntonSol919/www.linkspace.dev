@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["lk_pull","lk_pull_point"]};
