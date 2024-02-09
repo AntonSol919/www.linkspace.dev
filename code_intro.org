@@ -73,7 +73,7 @@ eg. output only data: `cat mylog | lk pktf "[data]"`.
 The limited set of fields with their fixed wire format makes them fast to process.
 For example using `lk filter`.
 
-This command only passes those with a spacename starting with `/my/example` and 1 additional space component
+This command only passes those with a spacename starting with `/my/example` and 1 additional space part 
 
 #+NAME: filter
 #+BEGIN_SRC bash :session codeorg :exports both :results output verbatim

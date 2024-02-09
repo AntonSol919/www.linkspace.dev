@@ -1,0 +1,23 @@
+<svg
+  viewBox="-256 -256 512 512"
+  xmlns="http://www.w3.org/2000/svg">
+  <style>
+    text{
+      font: bold 384px monospace;
+    }
+  </style>
+    <defs>
+      <mask id="hole">
+        <rect width="100%" height="100%" fill="black"/>
+        <circle r="170" fill="white"/>
+      </mask>
+    </defs>
+  <circle r="240" fill="black" />
+  <circle r="190" fill="white" />
+    <g mask="url(#hole)">
+<g transform="translate(-29,55)">
+<text>#</text>
+<text transform="translate(-175,165.5)">#</text>
+</g>
+</g>
+</svg>

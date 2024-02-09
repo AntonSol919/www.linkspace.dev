@@ -314,7 +314,7 @@ Fields are not writable because they are included in the hash.
   [attr for attr in dir(lk_linkpoint())  if not "__" in attr]
 #+END_SRC
 
-Where spacename[0..7] are the spacename components, 
+Where part[0..7] are the spacename components, 
 
 #+BEGIN_VERSE
 Some [[#predicatelist][fields]] we've not seen so far are writable, but they are not relevant for most applications.
@@ -454,11 +454,11 @@ All fields are arbitrary bytes, and lk_encode can print them as ab text
 
   lkp = lk_linkpoint(spacename=[b"hello",b"world/",multiline,b"open [ close ]"])
 
-  print(lk_encode(lkp.comp0),"\t",list(lkp.comp0))
-  print(lk_encode(lkp.comp1),"\t",list(lkp.comp1))
-  print(lk_encode(lkp.comp2),"\t",list(lkp.comp2))
-  print(lk_encode(lkp.comp3),"\t",list(lkp.comp3))
-  print(lk_encode(lkp.comp4),"\t",list(lkp.comp4), lkp.comp4.decode("utf-8"))
+  print(lk_encode(lkp.part0),"\t",list(lkp.part0))
+  print(lk_encode(lkp.part1),"\t",list(lkp.part1))
+  print(lk_encode(lkp.part2),"\t",list(lkp.part2))
+  print(lk_encode(lkp.part3),"\t",list(lkp.part3))
+  print(lk_encode(lkp.part4),"\t",list(lkp.part4), lkp.part4.decode("utf-8"))
 #+end_src
 
 #+end_py
@@ -870,7 +870,7 @@ If no depth is set the depth is constraint by default.
 Except for ~watch-tree~ which sets the depth to unconstrained by default
 #+END_VERSE 
 
-Here we look for the domain 'my' , the group [#:pub], with spacename starting at /hello and with one additional spacename component.
+Here we look for the domain 'my' , the group [#:pub], with spacename starting at /hello and with one additional spacename part.
 
 #+BEGIN_SRC bash :session cli0 :exports both :results output verbatim :cache no
 lk print-query "my:[#:pub]:/hello:*" --signed
@@ -1323,7 +1323,7 @@ An alternative approach would be to use ~lk get-links --write file-expr:[/:/tmp/
 
 
 **** Why Big Endian?
-The tree index is in the expected order when using the numbers as space components.
+The tree index is in the expected order when using the numbers as space parts.
 E.g. ~lk linkpoint ::/some/dir/[now]~ will come after ~lk linkpoint ::/some/dir/[now:-1D]~ because ~now > (now - one day)~
 
 **** Every user of my domain app needs X from my server/I want to add advertisements to my domain app.

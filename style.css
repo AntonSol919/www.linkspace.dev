@@ -1,4 +1,30 @@
+:root {
+    color-scheme: light dark; /* both supported */
+}
+/* Default colors */
+body {
+    --text-color: #222;
+    --bkg-color: #fff;
+}
+/* Dark theme colors */
+body.dark-theme {
+    --text-color: #eee;
+    --bkg-color: #121212;
+}
 
+/* Styles for users who prefer dark mode at the OS level */
+@media (prefers-color-scheme: dark) {
+    /* defaults to dark theme */
+    body { 
+        --text-color: #eee;
+        --bkg-color: #121212;
+    }
+    /* Override dark mode with light mode styles if the user decides to swap */
+    body.light-theme {
+        --text-color: #222;
+        --bkg-color: #fff;
+    }
+}
 
 body {
 
@@ -64,10 +90,12 @@ nav > hr {
 }
 
 #logo {
-    max-height: 0.93em;
-    max-width: 0.93em;
-    position: relative;
-    margin-bottom: -0.18em;
+    max-height: 1em;
+    max-width: 1em;
+    position:absolute;
+    top:0.1em;
+    right:0.1em;
+    background-image: url('./images/logoc.svg');
 }
 
 #name {
@@ -75,7 +103,7 @@ nav > hr {
     padding-top:1rem;
     padding-left:1rem;
     text-decoration: inherit;
-    color:black;
+    color:inherit;
     display: block;
     white-space: nowrap;
     line-height: 100%;
@@ -138,38 +166,6 @@ p {
 }
 
 .hash {color:#e3dedd;}
-#hh0 {
-    color:white;
-    background: #2d9574;
-}
-#hh1 {
-    background: #dc752f;
-}
-
-#hh2 {
-    background: #5e5079;
-}
-
-#hh3 {
-    background: #4363d8;
-}
-
-#hh4 {
-    background: #f58231;
-}
-
-#hh5 {
-    background: #ce537a;
-}
-
-#hh6 {
-    background: #911eb4;
-}
-
-#hh7 {
-    background: #f032e6;
-}
-
 
 #text-footnotes {
 
@@ -269,7 +265,6 @@ pre {
 
 .line-block {
     border-left: 5px solid #6AB0DE;
-    background-color: #E7F2FA;
     padding: 6px 20px;
     font-style: italic;
     margin:0.5em;

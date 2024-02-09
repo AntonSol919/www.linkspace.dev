@@ -50,13 +50,16 @@ Note that in this 'single summarizing peer' setup the effect is similar to how t
 A central host administrates what is part of their platform and what is not.
 
 # Event loops 
+At the most extreme you can lk_read during each gui draw phase. This can be straight forward and is surprisingly fast most of the time.
+
 For most applications you want a strict split between gui/interface state and the organization/process state encoded in packets.
+After processing packets you want a state, and you want to feed that state into a render function with minimal cross contamination.
 
-I've found a good approach is to:
+The design space for creating the process state in the first place is a spectrum.
 
-- have a single function process packets to update a the process' state.
-- Limit the gui to reading the process' state. Any modifications should be made by creating packets.
+At the most extreme you define a single function, and every callback is routed through it (Callbacks take the qid).
+This works for any language.
 
-You can use different threads, but a simple single-thread alternative is to have the gui thread call lk_process.
-
+At the other extreme is capturing a specific (sub) state you want updated by a query and do so in each callback.
+This works less well in langauges like Rust where ownership gets tricky, but works well enough for python and javascript where closures/lambdas capture any outer variables.
 

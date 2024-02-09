@@ -1,27 +1,20 @@
-# Linkspace
+# Introduction 
 
 Linkspace is a open-source MPL-2.0 library and protocol to build event-driven applications using a distributed log with bindings for Python, JS/Wasm, and Rust.
 
-Linkspace is designed for building distributed applications.
-i.e. software that can function independent of middlemen.
+Linkspace is a set of tools for building fast and efficient distributed systems.
 
----
+Most contemporary tools are focused on modeling and building programs using streams-of-data.
+The goal of linkspace is to make it easy to build using hashed packets that can be signed and named.
 
-Using a log of events as the source of truth is good design.
-As evident by the success of tools like Kafka and Git, and its proliferation in the backend of databases & filesystems.
+This perspective is more in tune with the physics of the CAP theorem, the speed of light, and data accessibility.
 
-Properly used: Events creation can be distributed, algorithms/structures are made to consider what network conditions they can handle, and state becomes reproducable.
+It lets us talk about data instead of at servers.
 
-Many log systems operate behind closed walls by necessity.
-Each event producer must be trusted and event authenticity is implied.
-In linkspace these properties are explicit.
+Tools like Git, nostr, bluesky, IPFS, and many others share some of these ideas.
+Linkspace is different in that its goal is a simple and clear API adaptable to any group and use-case.
 
-Linkspace uses Blake3 to hash events, optionally signed with Taproot Schnorr, and can link to older events.
-Finally, events are partitioned by group (the set of recipients) and domain (the type of application).
-
-This creates order and identities so networked applications can function without additional middlemen.
-
-The goal is to expand the log paradigm into the front-end and across organizational boundaries.
+It is my bet on re-usability, speed, and interlinking for the next generation of networked people.
 
 ## Project status
 
@@ -32,7 +25,7 @@ Any questions, feedback, or contributions are welcome!
 
 ## Links
 
-See [Quick Start](https://www.linkspace.dev/code_intro.html) for a bash introduction to the packet format and using the cli.
+See [Quick Start](https://www.linkspace.dev/code_intro.html) for a bash introduction to the packet format and using the cli tool.
 The [Guide](https://www.linkspace.dev/guide/index.html) goes into more depth on the API and technical design.
 [Tutorials](https://www.linkspace.dev/tutorial/index.html) has some annotated examples.
 
@@ -48,6 +41,3 @@ All bindings follow the same basic API explained in the [Guide](https://www.link
 - `cargo add linkspace --git "https://github.com/AntonSol919/linkspace"` - disable default features to compile for --target wasm32-unknown-unknown
 - `pip install linkspace`
 - `npm add linkspace-js` - Minimal JS bindings to read/write packets (including enckeys)
-
-
-
