@@ -1,38 +1,26 @@
-.PHONY: all homepage rust-docs tutorials guide 
+.PHONY: pkg all homepage rust-docs tutorials guide  clean
 
-all: clean homepage rust-docs tutorials guide 
-	echo "Use 'python -m http.server' before deadseeker"
-	./build-scripts/deadseeker.py
+all: clean homepage rust-docs tutorials guide
 
-rust-docs: 
+index.html: $(wildcard index/*)
+	pandoc ./index/*.md --template ./index/template.htm --metadata title="Linkspace" -t html5 -o $@
+
+
+
+rust-docs:
 	mkdir -p build
 	cargo doc --manifest-path ../linkspace/Cargo.toml -p linkspace --target-dir ./build --no-deps
 	rsync -rvkP ./build/doc/ ./docs/rust
 
-
-tutorials: build-debug 
-	make -C ./tutorial/
-
-# This requires the latest `lk` to be in path - for my setup build-debug is sufficient
-guide: build-debug 
-	make -C ./guide/
-
-build-debug: 
+build-debug:
 	make -C ../linkspace build-debug
 
-
-jspkg: 
-	rm -r ./pkg/latest || true
-	wasm-pack build ../linkspace/ffi/linkspace-js --target web -d $(CURDIR)/pkg/latest
+jspkg:
+	rm ./js/latest -r || true
+	make -C ../linkspace/ffi/linkspace-js 
+	rsync -rvkP --include "linkspace.js/***" --include "web-sign/***" --include "web-component/***" --exclude "*" ./../linkspace/examples/ ./js/latest
 
 homepage: build-debug index.html about.html code_intro.html
-
-# ORG PANDOC EXPORT 
-%.html: %.org template.pml org-utils.org
-	emacsclient --eval "(progn (switch-to-buffer (find-file-noselect \"./$<\")) (org-pandoc-export-to-html5))"
-
-%.html: %.md template.pml
-	pandoc -f markdown-native_divs -s ./$< --template ./template.pml  --metadata title=$@ -o $@
 
 clean:
 	rm -r build || true

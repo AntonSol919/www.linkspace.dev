@@ -1,3 +1,0 @@
-(function() {var implementors = {
-"linkspace":[["impl&lt;'o&gt; <a class=\"trait\" href=\"https://docs.rs/serde/1.0.196/serde/de/trait.Deserialize.html\" title=\"trait serde::de::Deserialize\">Deserialize</a>&lt;'static&gt; for <a class=\"struct\" href=\"linkspace/runtime/struct.LkInfo.html\" title=\"struct linkspace::runtime::LkInfo\">LkInfo</a>&lt;'o&gt;"]]
-};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
