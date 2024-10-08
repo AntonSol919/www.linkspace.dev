@@ -2,8 +2,12 @@
 <html>
   <head>
     <title>Linkspace</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <link rel="icon" type="image/x-icon" href="./js/latest/linkspace.js/mark.svg" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="./js/latest/linkspace.js/mark.svg"
+    />
     <style>
       :root {
         color-scheme: light dark;
@@ -33,373 +37,48 @@
         background-color: var(--bkg-color);
       }
 
-     details {
-         & summary {
-             max-width: 90ch;
-             margin-inline: auto;
-         }
-         & div {
-             max-width: 80ch;
-             margin-inline: auto;
-
-         }
-     }
-
-
+      details {
+        & summary {
+          max-width: 90ch;
+          margin-inline: auto;
+        }
+        & div {
+          max-width: 80ch;
+          margin-inline: auto;
+        }
+      }
 
       .logo {
         background-image: url("./js/latest/linkspace.js/mark.svg");
         height: 16em;
-          width: 16em;
-          margin-inline:auto;
+        width: 16em;
+        margin-inline: auto;
       }
-     #links-tools{
-         max-width:80ch;
-         margin-inline:auto;
-         display:flex;
-         & div {
-             margin-inline:auto;
-         }
-     }
+      #links-tools {
+        max-width: 80ch;
+        margin-inline: auto;
+        display: flex;
+        & div {
+          margin-inline: auto;
+        }
+      }
     </style>
   </head>
   <body>
-      <div class="logo"> 
-      </div>
-    <details open id="intro">
-      <summary>Introduction</summary>
-      <div><h1 id="digital-communications-and-platforms">Digital
-Communications and Platforms</h1>
-<p>In a podcast Yuval Noah Harari observed that he kept asking social
-media tech executives “to explain what is happening” but they never
-seemed to answer.</p>
-<p>I’ll give it a shot. Much of it stems from a slight of hand. Few
-people realize it and consequently fail to account for it when thinking
-of problems and solutions. To properly explain that slight of hand isn’t
-easy either. A lot of fundamental terminology has been co-opted, so i’ll
-do it in terms of linkspace.</p>
-<p>Linkspace is software library build with developers in mind. But I
-hope this introduction is within people’s ability to understand. Its
-gone require focus, but by the end I hope you’ll see the larger picture
-and why the executives rather not explain.</p>
-<p>Social platforms are build on a ‘stack’ of ideas. The core ideas are
-‘invented’ and implemented countless times in different forms, creating
-different arrangements on this stack of ideas. The ideas mix and match,
-but usually one stack order and set of implementations wins out over
-others by fulfilling 3 requirements: Solve a immediate problem,
-functions ‘well enough’ that other people can build on top of it, and be
-lucky.</p>
-<p>We’ve fallen in the trap of taking too much of the lower stack for
-granted. It warps how philosophers, lawmakers and even computer
-scientists talks and thinks about these platforms.</p>
-<p>Linkspace is a software library that implements the “linking by
-cryptographic hash” [fn::Supernet] idea. Simiarlly to software like Git
-(and github), Bitcoin, Torrents, etc. But with my personal
-idiosyncrasies and a focus on speed and adaptability.</p>
-<p>Its an experiment to reorder (parts) of the stack of ideas and see
-how far down I could take it, and the interplay between them when doing
-so. The library is available in Rust, Python, javascript, and a CLI. Its
-designed to be adaptable so anyone can easily build into a specific
-niche like git, bitcoin, or other usecase[#links-tools].</p>
-<p>However as a first introduction I’ll be more ambitious and walk
-through what the current stack of ideas looks like from the perspective
-of linkspace. From TCP/IP up to a platforms like MySpace, Twitter,
-TikTok, Uber, AirBNB, Reddit, etc.</p>
-<p>The first section is a short overview of the current stack of ideas
-we are using. The second section defines the linkspace protocol. The
-third section uses the linkspace protocol to describe go over the stack
-again from the first section. Finally i’ll come back to the platforms
-and expose the slight of hand you’ve been missing.</p>
-<p>Hopefully by the end, even if you’re not a developer, you have picked
-up a broader way to reason and talk about how we organize our digital
-space.</p>
-<p>You and everyone you know spends hours each day of their whole life
-interacting with the digital networks. Take a moment to sit down and
-learn about the basics.</p>
-<h2 id="a-stack-of-ideas">A stack of ideas</h2>
-<p>Lets talk through the stack of ideas as if we’re rebuilding the
-internet from scratch.</p>
-<p>To start we’ll take for granted: some hardware that is capable of
-sending packets of data between two points, storage to save data, and
-cryptography that allows public keys to securely sign messages data.</p>
-<p>I’m giving a very high level view of some of the ideas and leaving
-out others for brevity. The implementation listed in brackets are just
-one example of the idea in action you could look up. Each implementation
-is build of code that implement (parts of) the other ideas in its own
-quirky way. That is just how systems naturally develop. Perfectly clean
-abstractions are the ideal - not reality.</p>
-<h4 id="order-packets-tcp">Order Packets (TCP)</h4>
-<p>Packets do not always arrive in the order they are sent. Errors can
-pop up during transmission and packets have to be re-transmitted. A
-sender can add a number to each packet. The receiver just has to put
-them in the right order before handing them over to the program that
-wants ordered packets.</p>
-<h4 id="routing-packets-ip">Routing Packets (IP)</h4>
-<p>Adding new hardware between every two endpoints is expensive. Instead
-of driving from the factory right to your home, we can simplify by
-adding a distribution center. By giving every destination a number, we
-can reuse channels. A router checks which connection will put the packet
-closer to that destination number. No matter how many stops are along
-the way, a packet gets closer to its destination until it arrives.</p>
-<h5 id="security-bgp">Security (BGP)</h5>
-<p>You might fool a router by pretending all destinations are close to
-you and then get all the packets meant for somebody else. By agreeing
-how destination numbers are assigned, you can set policy that a numbers
-starting with A01235 should go to Country A and not C. Finally you set
-policy to associate the physical connection to Country A with their
-public key, so they can prove the end point is still connected to
-Country A.</p>
-<p>Nowadays this design is consider wholly inadequate (and in naming
-i’ll describe the solution), but it worked well enough. Most of the time
-[https://en.wikipedia.org/wiki/BGP_hijacking#Public_incidents].</p>
-<h4 id="naming-destinations-dns">Naming destinations (DNS)</h4>
-<p>A target destination can move. If they’d keep the destination number
-<em>everyone</em> would have to update their routing system. Even if
-they’ve never routed a packet to that destination. Just in case the
-someday do.</p>
-<p>As a solution we associate a name with a destination number. Then we
-use the name for the destination, and before transmitting lookup the
-current associated destination number. Now instead of bothering everyone
-by pushing the update, they can pulled on request.</p>
-<h5 id="security-tls">Security (TLS)</h5>
-<p>The routing security described a system that did ‘well enough’ by
-planning out physical connections, destination numbers, and setting
-policy. Naming should be valid beyond direct neighbors. The whole world
-has to (mostly) agree while everybody is constantly moving. The speed of
-light (and consequently the CAP theorem) limits what is possible.</p>
-<p>We can’t communicate with a single destination to get the associated
-number. That would be too slow when dealing with a million lookups per
-second.</p>
-<p>A solution is to delagate to sub providers. When you then ask for the
-association, the sub-provider gives two messages. The first was signed
-by the root provider giving them the authority to be a delegate, and the
-second was a signed message by them on the current name &amp; number
-association.</p>
-<p>There are additional complications do not worry if the cause and
-effect go over your head on first (or 100th) reading. This is decades of
-insight compressed into two sentences for completeness sake.</p>
-<ul>
-<li>When a sub-provider’s public key is stolen the thief can fake
-messages: Most systems just accept the initial risk in favor of speed
-and throw an error a little while later if the ‘root’ provider publishes
-a retraction of that public key’s authority.</li>
-<li>The ‘root’ provider is less time sensitive and needs more security:
-instead of a single key a bunch of separately secured systems create a
-graph of signed declarations about delegation’s and each other so that
-they can kick out compromised keys.</li>
-</ul>
-<h4 id="address-per-application-ip-ports">Address per application (IP
-Ports)</h4>
-<p>Packets are arriving, but at each destination there is more than one
-application that wants to send and receive packets. By adding a tag to
-each packet, different applications can use the same network and talk in
-their own language to similar applications. Completely separate for
-different applications that don’t speak the language.</p>
-<h4 id="address-within-applications-http">Address within applications
-(HTTP)</h4>
-<p>As a user interacting with an application there is a bunch of
-possible actions to take or information to reference. We might organize
-those in a structure that looks like “/post/1/comment/12”. This idea
-achieves two things:</p>
-<ul>
-<li>Together with an application name people can share the reference
-elsewhere</li>
-<li>The application doesn’t open what isn’t requested. i.e. it can avoid
-opening /post/99/comment/1</li>
-</ul>
-<h3 id="a-note-on-encryption">A note on encryption</h3>
-<p>I’m leaving encryption out of scope because it is straightforward and
-mostly orthogonal to the story.</p>
-<p>Any two endpoints, at any time, can choose their preferred method to
-encrypting messages. Its also trivially to double up on. You can encrypt
-messages before sending them over an encrypted channel.</p>
-<p>The majority of data leaks to worry about are not somebody decrypting
-data being transmitted, but wether it should be send to the destination
-in the first place.</p>
-<p>That is part of naming and routing security and the policies in
-place.</p>
-<h3 id="the-platform">The Platform</h3>
-<p>We’ve covered the basics of the internet and I could start explaining
-what is happening on a social media platform. The problem is, many
-people have tried before and self evidently failed.</p>
-<p>Whenever the actions of a platform is put into question, they’re not
-asking for accountability. Instead the question can practically always
-be prefaced with the words “Do i understand correctly that ….?”.</p>
-<p>That is a problem.</p>
-<p>My working thesis is that the order we’ve developed the network ideas
-(and the limits of their implementation) is at fault. Without a
-fundamental understanding and studying the consequences of the way they
-are stacked, explaining and thus understanding what is happening is too
-difficult to be agree on. Especially having cartographic signatures as
-an appendage to secure other ideas makes the story a mess.</p>
-<p>Give me a chapter to describe linkspace, and a chapter to walk
-through the ideas again. I think It will be easier to graph the slight
-of hand you’ve missed.</p>
-<h2 id="linkspace-point-format">Linkspace point format</h2>
-<p>In the previous section I gave a brief rundown of ideas at the core
-of our communication networks, but tripped over just before the end.
-This section describes the linkspace point. The unit of data i’ll reason
-about. After that i’ll describes the functionality of the previous ideas
-in terms of linkspace packets to build up your intuition, and finally
-i’ll explain what social media companies are doing.</p>
-<p>A linkspace point contains:</p>
-<ul>
-<li>upto 2^16 - 520 bytes of data</li>
-<li>32 byte cryptographic hash of the fields - it uniquely identifies
-the point.</li>
-</ul>
-<p>Optionally it holds:</p>
-<ul>
-<li>16 byte Domain</li>
-<li>32 byte GroupID</li>
-<li>upto 250 bytes path name</li>
-<li>8 byte time stamp</li>
-<li>a list of links (16 byte Tags, 32 byte point hash) (Secure
-ordering)</li>
-<li>publickey (32byte) and signature(64byte) (Cryptographic
-identity).</li>
-</ul>
-<p>In development there is a technical distinction between 3 kinds of
-points:</p>
-<ul>
-<li>datapoints: are only data and hash</li>
-<li>linkpoints also holds: a domain, a group, a pathname, a list of
-links</li>
-<li>keypoints also holds: a public key and signature</li>
-</ul>
-<p>When describing a system i’ll use the ‘linkpoint’ as a general term
-and occasionally ‘signed linkpoint’ when I want to emphasize the
-cryptographic signature inherent in the message.</p>
-<p>Now we can talk about data and people <em>before</em> talking at
-servers.</p>
-<p>That might be too abstract and the consequences too vague. So lets
-first describe the ideas so far in terms of linkspace points.</p>
-<h2 id="the-stack-in-terms-of-linkspace">The stack in terms of
-linkspace</h2>
-<p>Lets walk through the same stack of ideas again. The goal is to
-familiarizes you with thinking in terms of linkpoints. As an added
-benefit it demonstrates that anything designed for our current stack
-could also work using linkpoints.</p>
-<p>That is not to say its always a good or efficient idea to do so.
-Conversely, there are a lot of designs and rituals that are
-over-complicated or even entirely superfluous when you do.</p>
-<p>I’ll also discuss some properties you might have not thought about
-yet. Specifically a lot of them become ‘transative’. i.e. Not just
-usable at one place at one time, but also when for whoever subsequently
-receives a copy of a linkpoint.</p>
-<h4 id="ordering-packets">Ordering Packets</h4>
-<p>Ordering is done by the stamp field. By having a signature it is
-valid for any subsequent receiver, not just the first. By using the
-current time (by default) the ordering is maintained between
-sessions.</p>
-<p>Ordering of linkpoints between multiple destinations is also
-possible. Because a hash is unique to each linkpoint, by adding a link
-with the hash of a previous linkpoint it is shown that it came
-before.</p>
-<h4 id="routing-packets">Routing Packets</h4>
-<p>The GroupID indicates the intended set of receivers. By convention
-using Your key XOR their key is the GroupID used for linkpoints meant
-for just these two.</p>
-<p>(We’ll come back to membership in larger groups later.)</p>
-<h5 id="security">Security</h5>
-<p>Routing is still a case of policy and cryptography. To ensure a
-channel is the intended destination for a linkpoint in a group, send
-them a newly signed linkpoint by you and ask them to reply with a signed
-linkpoint referencing your message. If they can do you know they are the
-right destination.</p>
-<h4 id="naming-destinations">Naming destinations</h4>
-<h5 id="security-1">Security</h5>
-<h4 id="address-per-application">Address per application</h4>
-<p>The domain field indicates the ‘language’ being spoken. When building
-an application that talks with linkpoints you’d pick a name and use
-that.</p>
-<h4 id="address-within-applications">Address within applications</h4>
-<p>The path name field allows an application to structure and reference
-data (even when its changed). This idea is usually implemented in the
-context of a indexing of a centralized service.</p>
-<p>Linkspace is strictly more powerful than that, but to simply emulate
-this centralized behavior it is enough to only read linkpoints signed by
-a specific public key.</p>
-<h2 id="the-platform-retry">The Platform (Retry)</h2>
-<p>Lets now (re)construct what happens for a typical Social Media
-Company (SMC) to providing you a timeline of you and your friends in
-terms of linkspace.</p>
-<p>You open a browser or phone app and the following happens
-(automatically) on your device:</p>
-<p>It asks for the number to contact the social media company to lookup
-their GroupID. The social media has a cryptograhipc identity agreed on
-by a network of trusted third parties, so you can be certain they are
-who they claim to be. Unlike the platform’s persistent globally agreed
-on identity - you generate a one-time use cryptographic key with - and
-are told a password they save is what identifies you. You use some math
-to start encrypting your communication. The destination creates a
-keypoint that links your ‘hi’ and another keypoint signed by a root
-authority for their publicke.</p>
-<p>You create a datapoint containing your plain text username and
-password and send it (over the encrypted wire). They give you a number
-to reference when writing. Next they send a bunch of points that create
-the interface (html/js) for you to interact with. When your interface
-requests a message the server resigns the linkpoint with their key and
-reference you by your username instead. (forgetting your key) They count
-each such request, and ever few moments they publish a keypoint with a
-list of what is popular.</p>
-<p>This is the “online community” nowadays. A very narrow set of
-rules:</p>
-<p>A single host-administrator who:</p>
-<ul>
-<li>dictates the graphical interface</li>
-<li>defines who is part of the users - including random bots to pad the
-numbers -</li>
-<li>Publishes their signed linkpoint to set the current ‘popular’
-posts.</li>
-<li>Removes the user’s signature from posts and republishes them as
-unsigned linkpoints</li>
-</ul>
-<p>I think people are generally more aware of the first and second. The
-third is something still thought of as an incidental and abstract tool
-(tiktok heat lamp). This is wrong. It is a fundamental consequence of
-the user’s choice to give the choice away. The forth is an epic slight
-of hand. By removing the original signature it moves the ownership from
-the creator to the platform entirely.</p>
-<p>Host-administrator’s desires are only partially aligned with the
-members. When goals diverge and the trust between the host-administrator
-and a member is breached (as it always has), the host-administrator has
-effective ownership - 9/10ths of the law - and a member has none. No
-link can show they existed, no recourse to move and continue the
-community with different rules, no possibility to publish their own
-‘popular list’ .</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>I answering the question: “What is happening?”. Harari likely had a
-broader context in mind when he asked “what is happening” - but I think
-without understanding the basics and the slight of hand it becomes
-difficult to answer.</p>
-<p>A bunch of basic ideas, impelmented and stacked on top of eacother
-give developers the abililty to build platforms, where they reign
-supreme as host-administrators. They provide multiple services in a
-single package. By welding them together are able to dictate and control
-their users and effectivly steal the user’s posts and contributions
-while holding the community hostage.</p>
-<p>Laid out as such its almost incredulous that slight of hand underpins
-some of the most valuable companies on the planet that actively shape
-society.</p>
-<p>I’ve spend a lot of time developing, experimenting, and tweaking
-linkspace so any developer can jump in and start build cool stuff or
-relativly easily adopt existing systems. Its a fun challange, but I also
-see this - or another implementation taking the same idea - as an
-absolute necessity. Extrapolate our course forward and I fear the most
-distopian scifi was off.</p></div>
-    </details>
+    <div class="logo"></div>
 
     <details open>
       <summary>Links & Tools</summary>
       <div id="links-tools">
         <div>
-          <h3>Javascript Apps</h3>
+          <h3>Browser Apps</h3>
           <nav>
-              <li>
-                  <a href="./js/latest/web-sign/index.html"
-                  >Web-Sign.js</a>
-              </li>
+            <li>
+              <a href="./web-sign/index.html">web-sign</a>
+            </li>
+            <li>
+              <a href="./pipo/index.html">pipo</a>
+            </li>
           </nav>
         </div>
         <div>

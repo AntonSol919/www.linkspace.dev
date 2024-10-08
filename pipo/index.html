@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script type="module" src="../web-component/point.js" async></script>
+    <script type="module" src="../web-component/point-builder.js" async></script>
+    <script type="module" src="../web-component/swipe-list.js" async></script>
+    
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="UTF-8" />
+    <title>Point-In Point-Out</title>
+    </head>
+    
+    <body>
+        <button id="ctrl" disabled>Loading JS</button>
+        <details id="builder">
+            <summary>misc</summary>
+            <input placeholder="address" id="addr" /><input type="password" placeholdre="pass" id="pass"/>
+            <button id="save" >Save</button>
+            <lkwc-point-builder></lkwc-point-builder>
+            <details><summary>history</summary>
+            <swipe-list id="history"></swipe-list>
+            <hr>
+            </details>
+        </details>
+        <div id="status"></div>
+        <swipe-list id="main"></swipe-list>
+    
+        <script type="module">
+            let $ = document.querySelector.bind(document);
+            const sp = new URLSearchParams(window.location.search);
+         $("#addr").value = sp.get("addr") || localStorage.getItem("pipo-addr") || `ws://127.0.0.1:${sp.get("port") || 5021}`;
+         $("#pass").value = sp.get("pass") || localStorage.getItem("pipo-pass") || "";
+         $("#save").onclick=()=>{
+             localStorage.setItem("pipo-addr", $("#addr").value);
+             localStorage.setItem("pipo-pass", $("#pass").value);
+         }
+
+            import LkWebSocket from "../web-component/LkWebSocket.js";
+
+      
+      import init from "../linkspace.js/linkspace.js";
+      await init();
+      let ws;
+
+     let list = $("#main");
+     let history = $("#history");
+     list.addEventListener("swipe-left",(ev) =>{
+         let swItem = ev.detail.parentElement;
+         history.appendChild(swItem);
+
+     });
+     list.addEventListener("swipe-right",(ev) =>{
+         ws.send(ev.detail.point);
+         let swItem = ev.detail.parentElement;
+         history.prepend(swItem);
+     });
+         $("lkwc-point-builder").addEventListener("point",(e) => onPoint(e.detail));
+
+      function onPoint(p) {
+        let el = document.createElement("lkwc-point");
+        el.point = p;
+        list.appendChild(el);
+      }
+      let ctr = $("#ctrl");
+
+      async function connect() {
+          ctr.disabled = true;
+          ctr.innerText = "Connecting";
+
+        try {
+            ws = new LkWebSocket($("#addr").value , "ws-pipe+"+ $("#pass").value );
+            ws.onpoint = onPoint;
+            ws.onerror = (e) => $("#status").innerText += e.message;
+             ws.onclose = (e) => {
+                 ctr.onclick = connect;
+                 ctr.innerText="Connect";
+             };
+             ws.addEventListener("empty", ()=>{
+                 ctr.innerText = "Finished sending (Close)";
+             });
+            ctr.onclick = () => ws.close();
+            ctr.innerText = "Close";
+        } catch (e) {
+            console.error(e);
+            ctr.onclick = connect;
+            ctr.innerText = "Retry ";
+        }
+        ctr.disabled = false;
+      }
+      connect();
+    </script>
+  </body>
+</html>

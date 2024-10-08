@@ -9,18 +9,23 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="../web-component/point-min.css" />
 
     <script type="module" src="../web-component/identity.js"></script>
+    <script type="module" src="../web-component/point.js"></script>
     <script type="module" src="../web-component/lkrctr.js"></script>
     <script type="module" src="../web-component/point-builder.js"></script>
     <script type="module" src="../web-component/runtime-inspect.js"></script>
     <script type="module" src="../web-component/fset.js"></script>
+    <script type="module" src="../web-component/params-prompt.js" async></script>
+
   </head>
+
 
   <body>
     <div id="main-with">
       <div id="main">
-        <div id="preview"></div>
+        <lkwc-point fmt="html" data="true"></lkwc-point>
       </div>
       <div id="aside">
         <div id="steps">
@@ -34,27 +39,38 @@
               <button id="unlock-id">ID</button>
             </summary>
             <div class="fit">
-              <elk-identity></elk-identity>
+              <lkwc-identity></lkwc-identity>
             </div>
           </details>
+          <details id="prompt" style="display: none">
+            <summary>
+               <params-prompt></params-prompt>
+            </summary>
+          </details>
+
           <details>
             <summary>
               <input
                 id="accept"
-                placeholder="Auto Accept"
+                placeholder="No Auto Accept"
                 spellcheck="false"
                 disabled
               />
               <button id="accept-btn">Accept</button>
             </summary>
             <div class="fit">
-              <elk-fset></elk-fset>
+              <lkwc-fset></lkwc-fset>
               <button id="add-alike">Add Alike</button>
             </div>
           </details>
           <details>
             <summary>
-              <textarea id="dests" rows="1" spellcheck="false"></textarea>
+              <textarea
+                id="dests"
+                rows="1"
+                spellcheck="false"
+                placeholder="Add a http(s):// or ws(s):// endpoint"
+              ></textarea>
               <button id="submit">Submit</button>
             </summary>
             <div class="fit">
@@ -67,7 +83,7 @@
           <fieldset>
             <legend>Point Builder</legend>
 
-            <elk-point-builder linkpoint="false"></elk-point-builder>
+            <lkwc-point-builder linkpoint="false"></lkwc-point-builder>
           </fieldset>
 
           <form id="generate-href">
@@ -78,13 +94,13 @@
               <span style="overflow: hidden"> <a></a></span>
             </fieldset>
           </form>
-          <span id="elk-build-info">Loading</span>
+          <span id="lkwc-build-info">Loading</span>
         </details>
       </div>
     </div>
   </body>
   <script type="module">
-    let $$ = document.querySelector.bind(document);
+    let $ = document.querySelector.bind(document);
     const sp = new URLSearchParams(window.location.search);
 
     import init, {
@@ -98,65 +114,93 @@
       lk_serialize,
       lk_deserialize,
     } from "../linkspace.js/linkspace.js";
-    await init();
-    $$("#elk-build-info").innerText = CONSTS.BUILD_INFO;
+    window.lk = await init();
+    $("#lkwc-build-info").innerText = CONSTS.BUILD_INFO;
 
-    let idEl = $$("elk-identity");
-    let builderEl = $$("elk-point-builder");
-    let fsetEl = $$("elk-fset");
-    document.body.addEventListener("elk-error", (e) => {
-      $$("status").innerText += e.detail;
+    let idEl = $("lkwc-identity");
+    let builderEl = $("lkwc-point-builder");
+    builderEl.space = sp.get("space");
+    builderEl.links = sp.get("links");
+
+    let fsetEl = $("lkwc-fset");
+
+
+
+   document.body.addEventListener("error", (e) => {
+      $("status").innerText += e.detail;
     });
+    $("#unlock-id").addEventListener("click", () => idEl.unlock());
 
-    $$("#unlock-id").addEventListener("click", () => idEl.unlock());
     idEl.addEventListener("start-unlock", () => {
       idEl.closest("details").classList.add("bussy");
     });
     idEl.addEventListener("unlock", (e) => {
-      $$("#enckey-pass").disabled = true;
-      builderEl.setKey(e.detail);
-      builderEl.emitBuild("keypoint");
+      $("#enckey-pass").disabled = true;
       let step = idEl.closest("details");
       step.classList.add("done");
       step.classList.remove("bussy");
       step.querySelector("summary button").disabled = true;
+
+      builderEl.setKey(e.detail);
+      buildPoint();
+
     });
-    idEl.mirrorSecretInput($$("#enckey-pass"));
+    idEl.mirrorSecretInput($("#enckey-pass"));
     builderEl.addEventListener("point", (e) => {
       let point = e.detail;
-      $$("#preview").innerHTML = point.toHTML(true);
-      fsetEl.test_point(point);
+      $("lkwc-point").point = point;
+      let isMatch = fsetEl.test(point);
+        if (isMatch && sp.get("auto")) {
+            submit(fsetEl.point);
+        }
     });
     builderEl.addEventListener("preview-space", (e) => {
-      fsetEl.test_values({ ...e.detail, pubkey: idEl.pubkey() });
+      fsetEl.test({ ...e.detail, pubkey: idEl.pubkey() });
     });
-    fsetEl.init();
-    fsetEl.addEventListener("test-result", (e) => {
-      $$("#accept").value = e.detail.line || "";
-      fsetAccept(e.detail.isMatch);
+
+
+
+
+let pp = $("params-prompt")
+ 
+let template = pp.length > 0 && sp.get("template");
+function buildPoint() {
+    if (pp.length > 0){
+        if (!pp.valid){throw new Error("missing input");}
+        builderEl.data = template ? pp.template(template) : JSON.stringify(pp.keyValues)
+    }
+    builderEl.emitBuild(builderEl.key ? "keypoint" : "linkpoint");
+}
+if (pp.length > 0){
+    $("#prompt").style.display = "block";
+    pp.addEventListener("validity",(e)=>{
+        if(e.detail) {buildPoint();}
     });
-    let isAccepted = () => fsetEl.closest("details").classList.contains("done");
-    $$("#accept-btn").addEventListener("click", () => fsetAccept(true));
-    function fsetAccept(isMatch) {
+}
+
+
+    $("#accept-btn").addEventListener("click", () => fsetAccept(true));
+fsetEl.addEventListener("test-result", (e) => fsetAccept(e.detail.isMatch));
+function fsetAccept(isMatch) {
       let step = fsetEl.closest("details");
       step.classList.toggle("done", isMatch);
-      $$("#accept-btn").disabled = isMatch;
+      $("#accept-btn").disabled = isMatch;
     }
-    $$("#add-alike").addEventListener("click", () => fsetEl.addAlike());
+    $("#add-alike").addEventListener("click", () => fsetEl.addAlike());
 
     let dests = [...sp.getAll("dest")];
-    let dl = $$("#dests");
+    let dl = $("#dests");
     dl.rows = dests.length;
     dl.value = dests.join("\n");
     dl.addEventListener("input", () => {
-      $$("#submit").disabled = dl.value.trim() == "";
+      $("#submit").disabled = dl.value.trim() == "";
       dl.closest("details").classList.remove("done");
     });
     function destinations() {
       return dl.value.split("\n").filter((o) => o != "");
     }
-    $$("#submit").disabled = dl.value.trim() == "";
-    $$("#submit").addEventListener("click", async (e) => {
+    $("#submit").disabled = dl.value.trim() == "";
+    $("#submit").addEventListener("click", async (e) => {
       e.target.disabled = true;
       let step = e.target.closest("details");
       step.classList.add("bussy");
@@ -173,38 +217,20 @@
         let ok = await submit(fsetEl.point);
         step.classList.toggle("done", ok);
       } catch (e) {
-        $$("#status").innerText = e.message;
-        $$("#submit").disabled = false;
+        $("#status").innerText = e.message;
+        $("#submit").disabled = false;
       } finally {
         step.classList.remove("bussy");
       }
     });
 
-    builderEl.space = sp.get("space");
-    builderEl.links = sp.get("links");
-    try {
-      builderEl.data = lka_eval2str(sp.get("data") || "");
-    } catch (e) {
-      console.warn(e);
-    }
-    builderEl.emitBuild("linkpoint");
-    function propegate() {
-      if (fsetEl.isMatch && sp.get("auto")) {
-        submit(fsetEl.point);
-      }
-    }
-    if (sp.get("auto")) {
-      builderEl.addEventListener("lk_point", propegate);
-      await idEl.unlock();
-      builderEl.removeEventListener("lk_point", propegate);
-    }
-
+    
     async function submit(point) {
-      $$("#dest-status").innerHTML = "";
+      $("#dest-status").innerHTML = "";
       let setStatus = (msg) =>
-        $$("#dest-status").insertAdjacentHTML("beforeend", `<li>${msg}</li>`);
+        $("#dest-status").insertAdjacentHTML("beforeend", `<li>${msg}</li>`);
       setStatus("submitting " + b64(point.hash));
-      $$("#submit").disabled = true;
+      $("#submit").disabled = true;
       let ok = true;
       let dests = destinations();
       let body = lk_serialize(point);
@@ -233,12 +259,12 @@
       }
       dl.value = dests.join("\n");
 
-      $$("#submit").disabled = ok;
+      $("#submit").disabled = ok;
       return ok;
     }
 
-    let ahref = $$("#generate-href a");
-    $$("#generate-href").addEventListener("submit", (e) => {
+    let ahref = $("#generate-href a");
+    $("#generate-href").addEventListener("submit", (e) => {
       e.preventDefault();
       let point = builderEl.build_linkpoint();
       let params = new URLSearchParams();
@@ -280,5 +306,10 @@
         params.toString();
       ahref.innerText = ahref.href;
     });
+if (sp.get("auto") !== undefined) {
+    idEl.unlock();
+}
+
+
   </script>
 </html>
