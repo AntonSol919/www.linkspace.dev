@@ -43,6 +43,15 @@ class ParamsPrompt extends HTMLElement {
             width: 100%;
             box-sizing: border-box;
           }
+input.passlike{
+   text-security:disc;
+    -webkit-text-security:disc;
+ &:hover{
+   text-security: unset;
+   -webkit-text-security:unset;
+  }
+
+}
 
           input:user-invalid {
             background-color: lch(83% 112 58 / 19%);
@@ -79,16 +88,23 @@ class ParamsPrompt extends HTMLElement {
       labelElement.textContent = label;
       labelElement.setAttribute("for", key);
       const inputElement = document.createElement("input");
-      inputElement.type = type;
-      inputElement.placeholder = label;
-      inputElement.name = key;
-      inputElement.id = key;
-      if (!("optional" in options)) {
-        inputElement.setAttribute("required", "true");
-      }
       for (let [key, val] of Object.entries(options)) {
         inputElement.setAttribute(key, val);
       }
+      if (!("optional" in options)) {
+        inputElement.setAttribute("required", "true");
+      }
+      if (type == "password") {
+        inputElement.type = "text";
+          inputElement.classList.add("passlike");
+        inputElement.setAttribute("autocomplete", "off");
+      } else {
+        inputElement.type = type;
+      }
+      inputElement.placeholder = label;
+      inputElement.name = key;
+      inputElement.id = key;
+
       labelElement.appendChild(inputElement);
       formContainer.appendChild(labelElement);
       this.replaceMap[key] = inputElement;

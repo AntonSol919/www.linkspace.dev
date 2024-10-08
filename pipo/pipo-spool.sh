@@ -1,7 +1,7 @@
 #!/bin/sh -xe
 exec 4>&1 1>&2 # make sure echo's go to stderr and not stdout
 
-. "$(basename "$0")/set-env.sh"
+. "$(dirname "$0")/set-env.sh"
 
 echo "$PASS"
 echo "$URL"

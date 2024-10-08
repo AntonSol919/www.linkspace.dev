@@ -11,10 +11,11 @@
     </head>
     
     <body>
-        <button id="ctrl" disabled>Loading JS</button>
+        
         <details id="builder">
-            <summary>misc</summary>
-            <input placeholder="address" id="addr" /><input type="password" placeholdre="pass" id="pass"/>
+            <summary><button id="ctrl" disabled>Loading JS</button><span id="status">Loading</span></summary>
+            <input placeholder="address" id="addr" />
+            <input id="pass" placeholder="pass" type="text" name="password" style="text-security:disc; -webkit-text-security:disc;" autocomplete="off">
             <button id="save" >Save</button>
             <lkwc-point-builder></lkwc-point-builder>
             <details><summary>history</summary>
@@ -22,13 +23,14 @@
             <hr>
             </details>
         </details>
-        <div id="status"></div>
+        
         <swipe-list id="main"></swipe-list>
     
         <script type="module">
-            let $ = document.querySelector.bind(document);
-            const sp = new URLSearchParams(window.location.search);
-         $("#addr").value = sp.get("addr") || localStorage.getItem("pipo-addr") || `ws://127.0.0.1:${sp.get("port") || 5021}`;
+         let $ = document.querySelector.bind(document);
+         const sp = new URLSearchParams(window.location.search);
+         let isHttps = window.location.protocol == "https:" ? "s" : "";
+         $("#addr").value = sp.get("addr") || localStorage.getItem("pipo-addr") || `ws${isHttps}://127.0.0.1:${sp.get("port") || 5021}`;
          $("#pass").value = sp.get("pass") || localStorage.getItem("pipo-pass") || "";
          $("#save").onclick=()=>{
              localStorage.setItem("pipo-addr", $("#addr").value);
@@ -66,12 +68,13 @@
       async function connect() {
           ctr.disabled = true;
           ctr.innerText = "Connecting";
-
+          $("#status").innerText = "";
         try {
             ws = new LkWebSocket($("#addr").value , "ws-pipe+"+ $("#pass").value );
             ws.onpoint = onPoint;
-            ws.onerror = (e) => $("#status").innerText += e.message;
+            ws.onerror = (e) => $("#status").innerText = e.message || "Error connecting to " + $("#addr").value;
              ws.onclose = (e) => {
+                 if (e.reason) $("#status").innerText = e.reason;
                  ctr.onclick = connect;
                  ctr.innerText="Connect";
              };
@@ -82,6 +85,13 @@
             ctr.innerText = "Close";
         } catch (e) {
             console.error(e);
+
+          $("#status").innerText = e.message;
+             if (e.message.indexOf("insecure") != -1) {
+            let href = "http" + window.location.toString().slice(5);
+            $("#status").innerHTML += ` try downgrading to <a href="${href}">http</a>`;
+            }
+
             ctr.onclick = connect;
             ctr.innerText = "Retry ";
         }

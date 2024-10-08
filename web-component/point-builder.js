@@ -38,12 +38,17 @@ class PointBuilder extends HTMLElement {
     emitPreviewSpace(){
         try{
             let [domain, group, path] = lka_space_expr(this.formdata().get("space"));
+            this.patternEl.setCustomValidity("");
+            this.patternEl.reportValidity();
             this.dispatchEvent(new CustomEvent("preview-space", {
                 composed: true,
                 bubbles: true,
-                detail: {domain,group,path,pubkey: this.key && this.key.pubkey}
+                detail: { domain, group, path, pubkey: this.key && this.key.pubkey }
             }));
-        }catch(e){
+
+        } catch (e) {
+            this.patternEl.setCustomValidity(e);
+            this.patternEl.reportValidity();
             console.warn(e);
         }
     }
@@ -80,14 +85,27 @@ grid-template-columns: max-content 1fr;
 <span id="status"></status>
 </form>
 `;
-        let $ = this.shadowRoot.querySelector.bind(this.shadowRoot);
-        this.$=$;
-        $(".point-builder").addEventListener("submit",(e)=>{
+        this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot);
+
+    }
+    connectedCallback(){
+        this.$(".point-builder").addEventListener("submit",(e)=>{
             e.preventDefault();
-            $("#status").innerText = "";
+            this.$("#status").innerText = "";
             this.emitBuild(e.submitter.value);
         });
         this.$("[name='space']").addEventListener("change",()=>this.emitPreviewSpace());
+
+        let linkEl = this.$("[name='links']");
+        linkEl.addEventListener("input", () =>{
+            try {
+                linkEl.setCustomValidity("");
+                getLinks(this.formdata());
+            } catch(e) {
+                linkEl.setCustomValidity(e);
+            }
+            linkEl.reportValidity();
+        });
     }
     emitBuild(kind = "linkpoint"){
         this.point = undefined;

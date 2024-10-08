@@ -2,7 +2,7 @@
 /bin/sh -c "cd ~/Projects/linkspace ; cargo build -p ws-stdio"
 WS_STDIO=~/Projects/linkspace/target/debug/ws-stdio
 
-. "$(basename "$0")/set-env.sh"
+. "$(dirname "$0")/set-env.sh"
 
 echo $URL >&2
 xdg-open $URL
