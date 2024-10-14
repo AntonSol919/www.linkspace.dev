@@ -24,7 +24,7 @@ const ACCEPTED_OPTIONS = new Set([
 ]);
 
 class ParamsPrompt extends HTMLElement {
-  constructor() {
+  constructor(params) {
     super();
 
     this.attachShadow({
@@ -43,44 +43,72 @@ class ParamsPrompt extends HTMLElement {
             width: 100%;
             box-sizing: border-box;
           }
-input.passlike{
-   text-security:disc;
-    -webkit-text-security:disc;
- &:hover{
-   text-security: unset;
-   -webkit-text-security:unset;
-  }
-
-}
+          input.passlike {
+            text-security: disc;
+            -webkit-text-security: disc;
+            &:hover {
+              text-security: unset;
+              -webkit-text-security: unset;
+            }
+          }
 
           input:user-invalid {
             background-color: lch(83% 112 58 / 19%);
           }
         </style>
-        <form id="prompts" action="#"></form> `;
-    this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot);
-    this.replaceMap = {};
-    const sp = new URLSearchParams(window.location.search);
-    this.setup = {};
-    sp.forEach((promptOptions, keyName) => {
-      if (!keyName.startsWith("input")) {
-        return;
-      }
-      const [_prompt, key = "input"] = keyName.split(/:(.*)/s);
-      const [type = "text", ...options] = promptOptions.split("_");
-      if (this.setup[key] !== undefined) console.error(key + " key used twice");
+        <form id="prompts" action="#">
+<input disabled id='config' style='display:none;'/>
 
-      let optionsList = options
-        .map((opt) => opt.split(":"))
-        .filter(([k, _]) =>
-          ACCEPTED_OPTIONS.has(k) ? true : console.warn(`${k} is not accepted`),
-        );
+</form> `;
+    this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot);
+      this.config = this.$("#config");
+    if (params == undefined) {
+      params = this.getAttribute("params") || window.location.search;
+    }
+
+    this.setFromSearchParams(params);
+  }
+  setFromSearchParams(string) {
+      this.config.value = string;
+    let list = [...new URLSearchParams(string).entries()].filter(([key, val]) =>
+        key.startsWith("input:"),
+    ).map(([key, val]) => [key.split(/:(.*)/s)[1],val]);
+    this.trySetPrompt(list);
+  }
+  trySetPrompt(obj) {
+    try {
+        this.setPromptEntries(obj);
+    } catch (e) {
+        this.config.display = "block";
+        this.config.setCustomValidity("Can't build form - bad options:"+ e.toString());
+        this.config.reportValidity();
+    }
+  }
+  setPromptEntries(list) {
+      this.setupList =[];
+      this.setup = {};
+      this.inputElements = {};
+      const formContainer = this.$("#prompts");
+      formContainer.replaceChildren(this.config);
+
+      if (list.length == 0)return;
+      if (typeof list ==='string') list = list.split(/[\n&]/).map((line)=>line.split(/=(.*)/s));
+
+      list.forEach(([key, promptOptions= ""]) => {
+        this.setupList.push([key,promptOptions]);
+        key= key|| "input";
+      const [type = "text", ...options] = promptOptions.split("_");
+      if (this.setup[key] !== undefined)
+        throw new Error(key + " key used twice ");
+
+      let optionsList = options.map((opt) => opt.split(":"));
+      for (let [k, _] of optionsList) {
+        if (!ACCEPTED_OPTIONS.has(k)) throw new Error(`${k} is not accepted`);
+      }
 
       this.setup[key] = { key, type, options: Object.fromEntries(optionsList) };
     });
-  }
-  connectedCallback() {
-    const formContainer = this.$("#prompts");
+
     // Loop through parameters looking for "prompt" keys
     for (let [key, { type, options }] of Object.entries(this.setup)) {
       let label = options["label"] || key;
@@ -96,7 +124,7 @@ input.passlike{
       }
       if (type == "password") {
         inputElement.type = "text";
-          inputElement.classList.add("passlike");
+        inputElement.classList.add("passlike");
         inputElement.setAttribute("autocomplete", "off");
       } else {
         inputElement.type = type;
@@ -107,7 +135,7 @@ input.passlike{
 
       labelElement.appendChild(inputElement);
       formContainer.appendChild(labelElement);
-      this.replaceMap[key] = inputElement;
+      this.inputElements[key] = inputElement;
       inputElement.addEventListener("input", () => this.emitValidity());
     }
     this.emitValidity();
@@ -122,17 +150,17 @@ input.passlike{
     );
   }
   get valid() {
-    return Object.values(this.replaceMap).every((el) => el.validity.valid);
+    return Object.values(this.inputElements).every((el) => el.validity.valid) && this.config.validity.valid;
   }
   get keyValues() {
     return Object.fromEntries(
-      Object.entries(this.replaceMap)
+      Object.entries(this.inputElements)
         .filter(([k, el]) => el.value || el.getAttribute("required") != null)
         .map(([k, el]) => [k, el.value]),
     );
   }
   get length() {
-    return Object.keys(this.replaceMap).length;
+    return Object.keys(this.inputElements).length;
   }
 
   template(templateStr) {

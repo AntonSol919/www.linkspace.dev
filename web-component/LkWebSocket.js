@@ -1,7 +1,8 @@
 import {
-  CONSTS,
-  lk_deserialize,
-  lk_serialize,
+    initShared,
+    CONSTS,
+    lk_deserialize,
+    lk_serialize,
 } from "../linkspace.js/linkspace.js";
 
 export default class LkWebSocket extends WebSocket {
@@ -11,10 +12,10 @@ export default class LkWebSocket extends WebSocket {
   constructor(...args) {
     super(...args);
     this.addEventListener("message", async (msg) => {
-
+        await initShared();
         if (msg.data.size == 0){
-            console.log("EMPTY");
             if (!this.receivedEmpty) {
+                console.log("websocket signals empty");
                 this.receivedEmpty = true;
                 // depending on the server - this can indicate it has stopped sending
                 this.dispatchEvent(new CustomEvent("empty"));

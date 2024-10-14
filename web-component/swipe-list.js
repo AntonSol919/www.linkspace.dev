@@ -51,15 +51,13 @@ class SwipeState {
 class SwipeList extends HTMLElement {
   constructor() {
     super();
-    // Initialize a MutationObserver to observe child nodes
     this.observer = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
         if (mutation.type === "childList") {
-          // Wrap any newly added child nodes
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
-                if (node.classList.contains("swipe-item-wrapper")) return;
-                this.wrapItem(node);
+              if (node.classList.contains("swipe-item-wrapper")) return;
+              this.wrapItem(node);
             }
           });
         }
@@ -77,20 +75,20 @@ class SwipeList extends HTMLElement {
   }
 
   render() {
-    if (!document.getElementById("swipe-list")) {
+    if (!document.getElementById("swipe-list-css")) {
       document.head.insertAdjacentHTML(
         "beforeend",
-        /* HTML */ `<style class="swipe-list">
+        /* HTML */ `<style id="swipe-list-css">
           swipe-list {
             width: 100%;
             height: 100%;
+            display: block;
           }
           .swipe-item-wrapper {
             width: fit-content;
             margin-inline: auto;
             padding: 20px;
             box-sizing: border-box;
-            background-color: white;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -103,10 +101,10 @@ class SwipeList extends HTMLElement {
               justify-content: space-around;
             }
           }
-        </style> `,
+        </style>`,
       );
     }
-    Array.from(this.children).forEach(child => this.wrapItem(child));
+    Array.from(this.children).forEach((child) => this.wrapItem(child));
   }
 
   wrapItem(item) {

@@ -1,4 +1,5 @@
-import init, {
+import {
+  initShared,
   lka_encode,
   lkp_fset,
   lkp_fset_test,
@@ -24,25 +25,18 @@ class FSet extends HTMLElement {
           background-color: lch(83% 112 58 / 19%);
         }
       </style>
-      <div>
-        <div id="matching-line"></div>
-        <textarea disabled style="display:block;margin:0 auto"></textarea>
-        <div id="status"></div>
-      </div>
+      <textarea disabled style="display:block;margin:0 auto"></textarea>
     `;
     this.$ = this.shadowRoot.querySelector.bind(this.shadowRoot);
     this.patternEl = this.$("textarea");
-    this.matchingLineEl = this.$("#matching-line");
   }
 
   catch_status(fnc) {
-    this.$("#status").innerText = "";
     try {
       this.patternEl.setCustomValidity("");
       this.patternEl.reportValidity();
       return fnc();
     } catch (e) {
-      this.$("#status").innerText = e.toString();
       this.patternEl.setCustomValidity(e.toString());
       this.patternEl.reportValidity();
     }
@@ -51,18 +45,15 @@ class FSet extends HTMLElement {
 
   test(value) {
     if (!value.group || !value.domain) throw new Error("Expected point ");
-    this.matchingLineEl.innerText = "No match";
     this.value = value;
     let testMethod = this.value.hash ? lkp_fset_test : lkp_fset_test_values;
     this.matchIdx = this.catch_status(() => testMethod(this.fset, value));
     this.isMatch = this.matchIdx !== undefined;
 
-    this.matchingLineEl.innerText = this.matchingPattern || "no matching entry";
-
-      if (this.isMatch){
-          this.patternEl.setCustomValidity("");
-          this.patternEl.reportValidity();
-      }
+    if (this.isMatch) {
+      this.patternEl.setCustomValidity("");
+      this.patternEl.reportValidity();
+    }
 
     this.dispatchEvent(
       new CustomEvent("test-result", {
@@ -82,12 +73,26 @@ class FSet extends HTMLElement {
     return this.isMatch ? this.fset_str.split("\n")[this.matchIdx] : undefined;
   }
 
-  addAlike(value = this.value) {
-    let argv = [value.domain, value.group];
-    let line = lka_eval2str("[0/?a0]:[/~?:[1]/#/@/b]:*", {
-      argv,
-    });
-    let newStr = line + (this.fset_str != "" ? "\n" : "") + this.fset_str;
+  generateMatchingEntry(
+    value = this.value,
+    anyMatch = { domain: false, group: false, pubkey: true },
+  ) {
+    let domain = anyMatch.domain
+      ? "*"
+      : lka_eval2str("[0/?a0]", { argv: [value.domain] });
+    let group = anyMatch.group
+      ? "*"
+      : lka_eval2str("[/~?:[0]/#/@/b]", { argv: [value.group] });
+    let pubkey = anyMatch.pubkey
+      ? "*"
+      : lka_eval2str("[/~?:[0]/@/b]", { argv: [value.pubkey] });
+    return `${domain}:${group}:${pubkey}`;
+  }
+  addAlike(value = this.value, anyMatch) {
+    let newStr =
+      this.generateMatchingEntry(value, anyMatch) +
+      (this.fset_str != "" ? "\n" : "") +
+      this.fset_str;
     this.patternEl.value = newStr;
     this.updatePattern(newStr);
   }
@@ -109,7 +114,7 @@ class FSet extends HTMLElement {
     this.patternEl.addEventListener("input", (e) =>
       this.updatePattern(e.target.value),
     );
-    init().then(() => this.updatePattern(this.patternEl.value));
+    initShared().then(() => this.updatePattern(this.patternEl.value));
   }
 }
 

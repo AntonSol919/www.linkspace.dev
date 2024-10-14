@@ -1,4 +1,5 @@
-import init, {
+import {
+  initShared,
   lki_generate,
   lki_decrypt,
   lki_encrypt,
@@ -10,6 +11,7 @@ class Identity extends HTMLElement {
   mirrorSecretInput(el) {
     el.value = this.ePass.value;
     this.ePass.addEventListener("input", (e) => (el.value = e.target.value));
+    this.ePass.addEventListener("change", (e) => (el.value = e.target.value));
     el.addEventListener("input", (e) => (this.ePass.value = e.target.value));
   }
   constructor() {
@@ -27,12 +29,39 @@ class Identity extends HTMLElement {
           position: absolute;
           color: lch(50% 0 0 / 0.5);
           font-size: 0.75em;
-          transform: translate(0, -56%);
+          transform: translate(0, -66%);
+          &::after {
+            position: absolute;
+            content: "Copied!";
+            font-size: 14px;
+            visibility: hidden;
+            opacity: 0;
+            transition:
+              opacity 0.1s ease,
+              visibility 0.1s ease;
+          }
+          &.show::after {
+            visibility: visible;
+            opacity: 1;
+          }
+        }
+        <!-- firefox eats disabled input clicks -->
+        input[disabled] {
+          pointer-events: none;
+        }
+input.passlike
+{
+          text-security: disc;
+          -webkit-text-security: disc;
+          &:hover {
+            text-security: unset;
+            -webkit-text-security: unset;
+          }
         }
       </style>
       <form id="identity" method="dialog">
         <span>
-          <label for="enckey">Encrypted Key</label>
+          <label for="enckey" class="copyable">Encrypted Key </label>
           <input
             id="enckey"
             name="enckey"
@@ -42,7 +71,7 @@ class Identity extends HTMLElement {
         </span>
 
         <span>
-          <label for="pubkey">Public Key</label>
+          <label class="copyable" for="pubkey">Public Key</label>
           <input
             id="pubkey"
             name="pubkey"
@@ -53,7 +82,7 @@ class Identity extends HTMLElement {
 
         <span>
           <label for="pass">Secret</label>
-          <input type="password" id="enckey-pass" name="enckey-pass" />
+          <input class="passlike" id="enckey-pass" name="enckey-pass" />
         </span>
 
         <span>
@@ -63,6 +92,7 @@ class Identity extends HTMLElement {
 
         <div class="status"></div>
         <button id="unlock">ID</button>
+        <button id="encrypt" style="display:none;">New Secret</button>
       </form>
     `;
 
@@ -92,20 +122,54 @@ class Identity extends HTMLElement {
     this.eSavePass.checked = this.ePass.value != "";
 
     $("#unlock").addEventListener("click", (e) => this.unlock());
+    $("#encrypt").addEventListener("click", (e) => {
+      let newPass = prompt("New password");
+      if (newPass !== prompt("Repeat password"))
+        return alert("different passwords - try again");
+      this.ePass.value = newPass;
+      // Between the hassle of dealing with lost keys or potential breaches of localStorage
+      // the policy is that the overlap between "really needs security" and "uses this web interface" should be empty.
+      let hist = localStorage.getItem("lkv_enckey_history") || "";
+      localStorage.setItem("lkv_enckey_history", this.eKey.value + "\n" + hist);
+
+      this.eKey.value = lki_encrypt(this.key, this.ePass.value);
+
+      localStorage.setItem("lkv_enckey", this.eKey.value);
+      localStorage.removeItem("lkv_password");
+      if (this.eSavePass.checked)
+        localStorage.setItem("lkv_password", this.ePass.value);
+    });
+
+    function copy() {
+      let input = this.querySelector("input");
+      if (!input.disabled) return;
+      navigator.clipboard.writeText(input.value);
+      let cm = this.closest("span").querySelector(".copyable");
+      cm.classList.add("show");
+      setTimeout(() => cm.classList.remove("show"), 1000);
+    }
+    for (let cMsg of this.shadowRoot.querySelectorAll(".copyable")) {
+      cMsg.parentElement.addEventListener("click", copy);
+    }
   }
   async connectedCallback() {
-    await init();
+    await initShared();
     this.eKey.dispatchEvent(new Event("input"));
   }
   status(msg) {
     this.$(".status").innerText = msg;
   }
-  async unlock() {
+  // unlocking a strongly encrypted key is expensive. if speculative set to true avoids attempts with an empty password
+  async unlock(speculative = false) {
     this.$("#unlock").disabled = true;
     if (this.key) return this.key;
     let pass = this.ePass.value;
     let enckey = this.eKey.value;
     let save_pass = this.eSavePass.checked;
+
+    if (speculative && pass == "" && enckey.indexOf("$m=8,t=1") == -1) {
+      return undefined;
+    }
     this.dispatchEvent(cev("start-unlock", this.key));
     this.dispatchEvent(cev("next-stage", ["unlocking", this.ePubkey.value]));
 
@@ -123,6 +187,7 @@ class Identity extends HTMLElement {
     } else {
       this.status("Generating Key");
       this.key = lki_generate();
+      this.ePubkey.value = b64(this.key.pubkey);
       this.status("Encrypting Key");
       enckey = lki_encrypt(this.key, pass);
       this.eKey.value = enckey;
@@ -136,6 +201,7 @@ class Identity extends HTMLElement {
     }
     this.dispatchEvent(cev("unlock", this.key));
     this.dispatchEvent(cev("next-stage", ["unlocked", this.ePubkey.value]));
+    this.$("#encrypt").style.display = "block";
     return this.key;
   }
   pubkey() {
@@ -149,3 +215,5 @@ customElements.define("lkwc-identity", Identity);
 function cev(name, detail) {
   return new CustomEvent(name, { composed: true, bubbles: true, detail });
 }
+
+

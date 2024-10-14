@@ -1,5 +1,5 @@
-import init, { CONSTS, lkr_save } from "../linkspace.js/linkspace.js";
-await init();
+import { initShared, CONSTS, lkr_save } from "../linkspace.js/linkspace.js";
+await initShared();
 
 import "./identity.js";
 import "./lkrctr.js";

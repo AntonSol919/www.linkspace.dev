@@ -1,4 +1,4 @@
-import init, {
+import {
     b64,
     lkr_save_all,
     lkr_scan,
